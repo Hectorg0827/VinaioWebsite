@@ -1,14 +1,13 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { PRODUCTS } from "@/data/products";
-import AdminDashboard from "./AdminDashboard";
+import { cookies }             from "next/headers";
+import { redirect }            from "next/navigation";
+import { createClient }        from "@/lib/supabase/server";
+import { isAdminAuthenticated } from "@/lib/admin/auth";
+import { PRODUCTS }            from "@/data/products";
+import AdminDashboard          from "./AdminDashboard";
 
 export default async function AdminPage() {
-  // Auth check
   const cookieStore = await cookies();
-  const adminAuth = cookieStore.get("admin_auth");
-  if (adminAuth?.value !== "true") redirect("/admin/login");
+  if (!(await isAdminAuthenticated(cookieStore))) redirect("/admin/login");
 
   // Load products from Supabase if available, else use seed data
   let products = PRODUCTS.map((p) => ({

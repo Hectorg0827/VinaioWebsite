@@ -1,19 +1,16 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+import { NextResponse }        from "next/server";
+import { cookies }             from "next/headers";
+import { createClient }        from "@/lib/supabase/server";
+import { isAdminAuthenticated } from "@/lib/admin/auth";
 
-function unauthorized() {
+async function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-}
-
-async function checkAuth() {
-  const cookieStore = await cookies();
-  return cookieStore.get("admin_auth")?.value === "true";
 }
 
 // PUT /api/admin/products/[id] — update a product
 export async function PUT(req, { params }) {
-  if (!(await checkAuth())) return unauthorized();
+  const cookieStore = await cookies();
+  if (!(await isAdminAuthenticated(cookieStore))) return unauthorized();
 
   const { id } = await params;
   const body = await req.json();
@@ -50,7 +47,8 @@ export async function PUT(req, { params }) {
 
 // DELETE /api/admin/products/[id] — delete a product
 export async function DELETE(req, { params }) {
-  if (!(await checkAuth())) return unauthorized();
+  const cookieStore = await cookies();
+  if (!(await isAdminAuthenticated(cookieStore))) return unauthorized();
 
   const { id } = await params;
 

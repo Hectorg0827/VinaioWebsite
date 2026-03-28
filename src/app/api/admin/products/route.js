@@ -1,19 +1,16 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+import { NextResponse }        from "next/server";
+import { cookies }             from "next/headers";
+import { createClient }        from "@/lib/supabase/server";
+import { isAdminAuthenticated } from "@/lib/admin/auth";
 
-function unauthorized() {
+async function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-}
-
-async function checkAuth() {
-  const cookieStore = await cookies();
-  return cookieStore.get("admin_auth")?.value === "true";
 }
 
 // POST /api/admin/products — create a new product
 export async function POST(req) {
-  if (!(await checkAuth())) return unauthorized();
+  const cookieStore = await cookies();
+  if (!(await isAdminAuthenticated(cookieStore))) return unauthorized();
 
   const body = await req.json();
   const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags, imageUrl } = body;
@@ -29,16 +26,16 @@ export async function POST(req) {
       .insert({
         name,
         sku,
-        price: parseFloat(price) || 0,
-        unit: unit || "750ml",
-        categories: categories ?? [],
-        origin: origin || "",
-        region: region || "",
-        in_stock:  inStock ?? true,
-        featured:  featured ?? false,
+        price:       parseFloat(price) || 0,
+        unit:        unit || "750ml",
+        categories:  categories ?? [],
+        origin:      origin || "",
+        region:      region || "",
+        in_stock:    inStock ?? true,
+        featured:    featured ?? false,
         description: description || "",
-        tags:      tags ?? [],
-        image_url: imageUrl ?? null,
+        tags:        tags ?? [],
+        image_url:   imageUrl ?? null,
       })
       .select()
       .single();

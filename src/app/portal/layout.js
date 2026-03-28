@@ -2,7 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import PortalShell from "./PortalShell";
 
 export const metadata = {
-  title: "Customer Portal — Vinaio Imports",
+  title:  "Customer Portal — Vinaio Imports",
+  robots: { index: false, follow: false },
 };
 
 export default async function PortalLayout({ children }) {

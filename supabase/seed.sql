@@ -99,30 +99,46 @@ alter table invoices enable row level security;
 alter table licenses enable row level security;
 alter table contact_submissions enable row level security;
 
--- Products: public read
-create policy "products_public_read" on products for select using (true);
+-- ── Products ─────────────────────────────────────────────────────────────────
+-- Public: anyone (including anonymous) can read products
+create policy "products_public_read"   on products for select using (true);
+-- Writes are blocked from the anon/authenticated keys; only the service role
+-- (used by the admin API routes) can insert/update/delete products.
 
--- Customers: own row only
-create policy "customers_own" on customers for all using (auth.uid() = id);
+-- ── Customers ────────────────────────────────────────────────────────────────
+-- Customers may only SELECT their own profile row.
+-- INSERT/UPDATE/DELETE is reserved for the service role (staff onboarding).
+-- This prevents customers from inflating their own credit_limit or credit_terms.
+create policy "customers_select_own"   on customers for select using (auth.uid() = id);
 
--- Orders: own orders only
-create policy "orders_own" on orders for all using (
-  auth.uid() = customer_id
+-- ── Orders ───────────────────────────────────────────────────────────────────
+-- Customers can read their own orders
+create policy "orders_select_own"      on orders for select
+  using (auth.uid() = customer_id);
+-- Customers can place new orders (customer_id must equal their own uid)
+create policy "orders_insert_own"      on orders for insert
+  with check (auth.uid() = customer_id);
+-- Customers cannot update or delete orders once placed (contact staff to amend)
+
+-- ── Order Items ──────────────────────────────────────────────────────────────
+create policy "order_items_select_own" on order_items for select using (
+  exists (select 1 from orders where orders.id = order_id and orders.customer_id = auth.uid())
 );
-
--- Order items: via order ownership
-create policy "order_items_own" on order_items for all using (
+create policy "order_items_insert_own" on order_items for insert with check (
   exists (select 1 from orders where orders.id = order_id and orders.customer_id = auth.uid())
 );
 
--- Invoices: own invoices only
-create policy "invoices_own" on invoices for all using (auth.uid() = customer_id);
+-- ── Invoices ─────────────────────────────────────────────────────────────────
+-- Read-only for customers; only staff (service role) can create/modify invoices
+create policy "invoices_select_own"    on invoices for select using (auth.uid() = customer_id);
 
--- Licenses: own licenses only
-create policy "licenses_own" on licenses for all using (auth.uid() = customer_id);
+-- ── Licenses ─────────────────────────────────────────────────────────────────
+-- Read-only for customers; only staff (service role) can create/modify licenses
+create policy "licenses_select_own"    on licenses for select using (auth.uid() = customer_id);
 
--- Contact: insert only (anonymous)
-create policy "contact_insert" on contact_submissions for insert with check (true);
+-- ── Contact Submissions ──────────────────────────────────────────────────────
+-- Anonymous users may insert (submit the contact form); no reads allowed
+create policy "contact_insert"         on contact_submissions for insert with check (true);
 
 -- ─── Seed: Products ───────────────────────────────────────────────────────────
 insert into products (slug, name, sku, price, unit, categories, origin, region, in_stock, featured, description, tags) values
