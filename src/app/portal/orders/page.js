@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Badge from "@/components/Badge";
-import { PRODUCTS, CATEGORIES } from "@/data/products";
+import { PRODUCTS, ACTIVE_CATEGORIES } from "@/data/products";
 import { createClient } from "@/lib/supabase/client";
 
 export default function OrdersPage() {
@@ -23,7 +23,7 @@ export default function OrdersPage() {
 
   const filtered = products.filter(
     (p) =>
-      (catFilter === "All" || p.category === catFilter) &&
+      (catFilter === "All" || (p.categories ?? [p.category]).includes(catFilter)) &&
       p.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -109,7 +109,7 @@ export default function OrdersPage() {
           style={{ padding: "12px 16px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "6px", fontFamily: ff.b, fontSize: "13px", color: T.ink, outline: "none", width: "260px" }}
         />
         <div style={{ display: "flex", gap: "4px", background: T.cream, borderRadius: "6px", padding: "3px" }}>
-          {CATEGORIES.map((c) => (
+          {ACTIVE_CATEGORIES.map((c) => (
             <button
               key={c}
               onClick={() => setCatFilter(c)}
@@ -149,7 +149,7 @@ function ProductOrderCard({ product, addToCart, cartItem }) {
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <span style={{ fontFamily: ff.h, fontSize: "22px", fontWeight: 500, color: T.wine }}>${product.price}</span>
-        <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.muted }}>{product.category}</span>
+        <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.muted }}>{(product.categories ?? [product.category]).join(", ")}</span>
       </div>
       {product.inStock ? (
         <div style={{ display: "flex", gap: "8px" }}>

@@ -1,0 +1,37 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { PRODUCTS } from "@/data/products";
+import AdminDashboard from "./AdminDashboard";
+
+export default async function AdminPage() {
+  // Auth check
+  const cookieStore = await cookies();
+  const adminAuth = cookieStore.get("admin_auth");
+  if (adminAuth?.value !== "true") redirect("/admin/login");
+
+  // Load products from Supabase if available, else use seed data
+  let products = PRODUCTS.map((p) => ({
+    ...p,
+    categories: p.categories ?? [p.category],
+  }));
+
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("products")
+      .select("*")
+      .order("name", { ascending: true });
+    if (data?.length) {
+      products = data.map((p) => ({
+        ...p,
+        inStock: p.in_stock,
+        categories: p.categories ?? (p.category ? [p.category] : []),
+      }));
+    }
+  } catch {
+    // Supabase not configured — use seed data
+  }
+
+  return <AdminDashboard initialProducts={products} />;
+}

@@ -1,25 +1,22 @@
 // ─── Vinaio Imports — Product Catalog ────────────────────────────────────────
 //
-// HOW TO UPDATE:
-//   • To add a product, copy an existing entry, change the values, and add it
-//     to the PRODUCTS array below.
-//   • If Supabase is configured, edit via the Supabase Table Editor dashboard —
-//     changes appear on the site instantly without any code deploy.
-//   • This file is used as fallback / seed data if Supabase is unavailable.
+// This file is the fallback/seed data. In production, products are managed
+// through the Admin Panel at /admin — no editing of this file is needed.
 //
 // FIELDS:
-//   id          — unique slug (used as URL/key)
-//   name        — display name
+//   id          — unique slug (no spaces, e.g. "bermudez-rum")
+//   name        — display name shown to customers
 //   sku         — internal SKU code
 //   price       — wholesale unit price (USD)
-//   unit        — bottle/can size (e.g. "750ml")
-//   category    — one of: Wine | Rum | Beer | Spirits
+//   unit        — bottle/can size (e.g. "750ml", "355ml")
+//   categories  — array of categories (a product can belong to more than one)
+//                 use any of: Wine | Rum | Beer | Spirits | Whisky | Rosé | Sparkling
 //   origin      — country of origin
-//   region      — broader region (Caribbean | South America | Europe)
-//   inStock     — true/false
-//   featured    — show in "Featured Products" section on Portfolio page
+//   region      — broader region (Caribbean | South America | Europe | North America)
+//   inStock     — true = available to order, false = out of stock
+//   featured    — true = shown in "Featured Products" section on Portfolio page
 //   description — 1–2 sentence tasting/product note for public catalog
-//   tags        — array of searchable tags
+//   tags        — extra searchable keywords (optional)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const PRODUCTS = [
@@ -29,7 +26,7 @@ export const PRODUCTS = [
     sku: "BRM-750",
     price: 18.99,
     unit: "750ml",
-    category: "Rum",
+    categories: ["Rum", "Spirits"],
     origin: "Dominican Republic",
     region: "Caribbean",
     inStock: true,
@@ -44,7 +41,7 @@ export const PRODUCTS = [
     sku: "CDL-750",
     price: 22.50,
     unit: "750ml",
-    category: "Spirits",
+    categories: ["Spirits"],
     origin: "Dominican Republic",
     region: "Caribbean",
     inStock: true,
@@ -59,7 +56,7 @@ export const PRODUCTS = [
     sku: "CRT-355",
     price: 2.49,
     unit: "355ml",
-    category: "Beer",
+    categories: ["Beer"],
     origin: "Dominican Republic",
     region: "Caribbean",
     inStock: true,
@@ -74,7 +71,7 @@ export const PRODUCTS = [
     sku: "MLS-750",
     price: 16.99,
     unit: "750ml",
-    category: "Spirits",
+    categories: ["Spirits"],
     origin: "Dominican Republic",
     region: "Caribbean",
     inStock: false,
@@ -89,7 +86,7 @@ export const PRODUCTS = [
     sku: "DLP-750",
     price: 9.99,
     unit: "750ml",
-    category: "Wine",
+    categories: ["Wine"],
     origin: "Dominican Republic",
     region: "Caribbean",
     inStock: true,
@@ -104,7 +101,7 @@ export const PRODUCTS = [
     sku: "VDN-750",
     price: 14.50,
     unit: "750ml",
-    category: "Wine",
+    categories: ["Wine"],
     origin: "Dominican Republic",
     region: "Caribbean",
     inStock: true,
@@ -119,7 +116,7 @@ export const PRODUCTS = [
     sku: "VMP-750",
     price: 11.99,
     unit: "750ml",
-    category: "Wine",
+    categories: ["Wine"],
     origin: "Chile",
     region: "South America",
     inStock: true,
@@ -134,7 +131,7 @@ export const PRODUCTS = [
     sku: "BGA-750",
     price: 13.99,
     unit: "750ml",
-    category: "Wine",
+    categories: ["Wine"],
     origin: "Italy",
     region: "Europe",
     inStock: true,
@@ -149,7 +146,7 @@ export const PRODUCTS = [
     sku: "VLF-750",
     price: 12.50,
     unit: "750ml",
-    category: "Wine",
+    categories: ["Wine"],
     origin: "Spain",
     region: "Europe",
     inStock: true,
@@ -164,7 +161,7 @@ export const PRODUCTS = [
     sku: "MAW-750",
     price: 34.99,
     unit: "750ml",
-    category: "Spirits",
+    categories: ["Spirits", "Whisky"],
     origin: "Europe",
     region: "Europe",
     inStock: true,
@@ -175,8 +172,17 @@ export const PRODUCTS = [
   },
 ];
 
-// ─── Category list (derived — do not edit manually) ──────────────────────────
-export const CATEGORIES = ["All", ...new Set(PRODUCTS.map((p) => p.category))];
+// ─── All available categories ─────────────────────────────────────────────────
+// Edit this list to add new category filter options on the Portfolio page.
+export const ALL_CATEGORIES = ["Wine", "Spirits", "Rum", "Beer", "Whisky", "Rosé", "Sparkling"];
+
+// Derived list of categories actually used by current products (for filter tabs)
+export const ACTIVE_CATEGORIES = [
+  "All",
+  ...ALL_CATEGORIES.filter((c) =>
+    PRODUCTS.some((p) => (p.categories ?? [p.category]).includes(c))
+  ),
+];
 
 // ─── Origin regions ───────────────────────────────────────────────────────────
 export const ORIGINS = [

@@ -6,7 +6,7 @@ import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
 import Badge from "@/components/Badge";
-import { PRODUCTS, CATEGORIES, ORIGINS } from "@/data/products";
+import { PRODUCTS, ACTIVE_CATEGORIES, ORIGINS } from "@/data/products";
 import { createClient } from "@/lib/supabase/client";
 
 export default function PortfolioPage() {
@@ -37,7 +37,7 @@ export default function PortfolioPage() {
 
   const filtered = products.filter(
     (p) =>
-      (category === "All" || p.category === category) &&
+      (category === "All" || (p.categories ?? [p.category]).includes(category)) &&
       (p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.origin.toLowerCase().includes(search.toLowerCase()) ||
         (p.description || "").toLowerCase().includes(search.toLowerCase()))
@@ -128,7 +128,7 @@ export default function PortfolioPage() {
                   }}
                 />
                 <div style={{ display: "flex", gap: "4px", background: T.cream, borderRadius: "6px", padding: "3px" }}>
-                  {CATEGORIES.map((c) => (
+                  {ACTIVE_CATEGORIES.map((c) => (
                     <button
                       key={c}
                       onClick={() => setCategory(c)}
@@ -225,7 +225,7 @@ function FeaturedCard({ product }) {
     <div style={{ padding: "32px 28px", background: T.ink, borderRadius: "10px", position: "relative", overflow: "hidden", minHeight: "260px", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
       <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 80% 20%, ${T.wineDeep}60 0%, transparent 60%)` }} />
       <div style={{ position: "relative" }}>
-        <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>{product.category} · {product.origin}</span>
+        <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>{(product.categories ?? [product.category]).join(" · ")} · {product.origin}</span>
         <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "8px", lineHeight: 1.2 }}>{product.name}</h3>
         <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7, marginBottom: "20px" }}>{product.description}</p>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -249,7 +249,7 @@ function ProductCard({ product }) {
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.wine, background: T.wineGlow, padding: "4px 10px", borderRadius: "4px" }}>
-          {product.category}
+          {(product.categories ?? [product.category]).join(" · ")}
         </span>
         {!product.inStock && <Badge status="outofstock" />}
       </div>
