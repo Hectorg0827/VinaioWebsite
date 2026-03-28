@@ -1,17 +1,18 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/safe";
 import InvoicesClient from "./InvoicesClient";
 
 export default async function InvoicesPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/portal/login");
+  const { user, supabase } = await getUser();
 
-  const { data: invoices } = await supabase
-    .from("invoices")
-    .select("*")
-    .eq("customer_id", user.id)
-    .order("created_at", { ascending: false });
+  let invoices = [];
+  if (supabase && user) {
+    const { data } = await supabase
+      .from("invoices")
+      .select("*")
+      .eq("customer_id", user.id)
+      .order("created_at", { ascending: false });
+    invoices = data ?? [];
+  }
 
-  return <InvoicesClient invoices={invoices ?? []} />;
+  return <InvoicesClient invoices={invoices} />;
 }

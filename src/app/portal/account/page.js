@@ -1,17 +1,18 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/safe";
 import AccountClient from "./AccountClient";
 
 export default async function AccountPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/portal/login");
+  const { user, supabase } = await getUser();
 
-  const { data: customer } = await supabase
-    .from("customers")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+  let customer = null;
+  if (supabase && user) {
+    const { data } = await supabase
+      .from("customers")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+    customer = data;
+  }
 
   return <AccountClient customer={customer} user={user} />;
 }

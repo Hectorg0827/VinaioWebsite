@@ -1,17 +1,18 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/safe";
 import LicensesClient from "./LicensesClient";
 
 export default async function LicensesPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/portal/login");
+  const { user, supabase } = await getUser();
 
-  const { data: licenses } = await supabase
-    .from("licenses")
-    .select("*")
-    .eq("customer_id", user.id)
-    .order("expiry", { ascending: true });
+  let licenses = [];
+  if (supabase && user) {
+    const { data } = await supabase
+      .from("licenses")
+      .select("*")
+      .eq("customer_id", user.id)
+      .order("expiry", { ascending: true });
+    licenses = data ?? [];
+  }
 
-  return <LicensesClient licenses={licenses ?? []} />;
+  return <LicensesClient licenses={licenses} />;
 }

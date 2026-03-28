@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import PortalShell from "./PortalShell";
 
@@ -7,10 +6,16 @@ export const metadata = {
 };
 
 export default async function PortalLayout({ children }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // Gracefully handle missing Supabase config (e.g. during local dev without .env.local)
+  let user = null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data?.user ?? null;
+  } catch {
+    // Supabase not configured — portal pages will show demo/mock data
+  }
 
-  // login page renders its own full-screen layout without the shell
   return (
     <PortalShell user={user}>
       {children}

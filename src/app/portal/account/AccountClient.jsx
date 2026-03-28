@@ -20,7 +20,7 @@ export default function AccountClient({ customer, user }) {
           </h3>
           {[
             ["Company",  co.company  ?? "—"],
-            ["Email",    user.email  ?? "—"],
+            ["Email",    user?.email ?? "—"],
           ].map(([k, v]) => (
             <div key={k} style={{ marginBottom: "18px" }}>
               <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "4px" }}>{k}</p>
