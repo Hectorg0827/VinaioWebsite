@@ -16,7 +16,7 @@ export async function POST(req) {
   if (!(await checkAuth())) return unauthorized();
 
   const body = await req.json();
-  const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags } = body;
+  const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags, imageUrl } = body;
 
   if (!name || !sku) {
     return NextResponse.json({ error: "name and sku are required" }, { status: 400 });
@@ -34,10 +34,11 @@ export async function POST(req) {
         categories: categories ?? [],
         origin: origin || "",
         region: region || "",
-        in_stock: inStock ?? true,
-        featured: featured ?? false,
+        in_stock:  inStock ?? true,
+        featured:  featured ?? false,
         description: description || "",
-        tags: tags ?? [],
+        tags:      tags ?? [],
+        image_url: imageUrl ?? null,
       })
       .select()
       .single();

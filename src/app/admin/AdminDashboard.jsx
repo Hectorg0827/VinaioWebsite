@@ -12,6 +12,7 @@ const EMPTY_FORM = {
   name: "", sku: "", price: "", unit: "750ml",
   categories: [], origin: "", region: "Caribbean",
   inStock: true, featured: false, description: "",
+  imageUrl: "",
 };
 
 export default function AdminDashboard({ initialProducts }) {
@@ -48,9 +49,10 @@ export default function AdminDashboard({ initialProducts }) {
       categories:  product.categories  ?? [],
       origin:      product.origin      ?? "",
       region:      product.region      ?? "Caribbean",
-      inStock:     product.inStock     ?? true,
+      inStock:     product.inStock     ?? product.in_stock ?? true,
       featured:    product.featured    ?? false,
       description: product.description ?? "",
+      imageUrl:    product.imageUrl    ?? product.image_url ?? "",
     });
     setEditingId(product.id ?? product.slug);
     setShowForm(true);
@@ -74,9 +76,10 @@ export default function AdminDashboard({ initialProducts }) {
 
     const payload = {
       ...form,
-      price:   parseFloat(form.price),
-      inStock: form.inStock,
-      id:      editingId,
+      price:    parseFloat(form.price),
+      inStock:  form.inStock,
+      imageUrl: form.imageUrl.trim() || null,
+      id:       editingId,
     };
 
     const res = await fetch(
@@ -257,6 +260,28 @@ export default function AdminDashboard({ initialProducts }) {
                   <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.orange, marginTop: "6px" }}>
                     Please select at least one category.
                   </p>
+                )}
+              </div>
+
+              {/* Image URL */}
+              <div style={{ gridColumn: "1 / -1" }}>
+                <label style={labelStyle}>Product Image URL</label>
+                <input
+                  value={form.imageUrl}
+                  onChange={(e) => set("imageUrl", e.target.value)}
+                  style={inputStyle}
+                  placeholder="https://... (optional — paste a direct image link)"
+                />
+                {form.imageUrl && (
+                  <div style={{ marginTop: "10px", display: "flex", alignItems: "center", gap: "12px" }}>
+                    <img
+                      src={form.imageUrl}
+                      alt="preview"
+                      style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "6px", border: `1px solid ${T.cream}` }}
+                      onError={(e) => { e.currentTarget.style.display = "none"; }}
+                    />
+                    <span style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>Image preview</span>
+                  </div>
                 )}
               </div>
 

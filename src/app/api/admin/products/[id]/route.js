@@ -17,7 +17,7 @@ export async function PUT(req, { params }) {
 
   const { id } = await params;
   const body = await req.json();
-  const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags } = body;
+  const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags, imageUrl } = body;
 
   try {
     const supabase = await createClient();
@@ -26,15 +26,16 @@ export async function PUT(req, { params }) {
       .update({
         name,
         sku,
-        price: parseFloat(price) || 0,
+        price:       parseFloat(price) || 0,
         unit,
-        categories: categories ?? [],
+        categories:  categories ?? [],
         origin,
         region,
-        in_stock: inStock,
+        in_stock:    inStock,
         featured,
         description,
-        tags: tags ?? [],
+        tags:        tags ?? [],
+        image_url:   imageUrl ?? null,
       })
       .eq("id", id)
       .select()

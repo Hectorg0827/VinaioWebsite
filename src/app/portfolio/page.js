@@ -220,9 +220,12 @@ export default function PortfolioPage() {
 
 // ─── Featured card ────────────────────────────────────────────────────────────
 function FeaturedCard({ product }) {
-  const slug = product.id || product.slug;
+  const imageUrl = product.imageUrl || product.image_url;
   return (
     <div style={{ padding: "32px 28px", background: T.ink, borderRadius: "10px", position: "relative", overflow: "hidden", minHeight: "260px", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+      {imageUrl && (
+        <img src={imageUrl} alt={product.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.25 }} />
+      )}
       <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 80% 20%, ${T.wineDeep}60 0%, transparent 60%)` }} />
       <div style={{ position: "relative" }}>
         <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>{(product.categories ?? [product.category]).join(" · ")} · {product.origin}</span>
@@ -243,10 +246,20 @@ function FeaturedCard({ product }) {
 function ProductCard({ product }) {
   return (
     <div
-      style={{ padding: "24px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "8px", display: "flex", flexDirection: "column", gap: "12px" }}
+      style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "8px", display: "flex", flexDirection: "column", overflow: "hidden" }}
       onMouseEnter={(e) => (e.currentTarget.style.borderColor = T.taupe)}
       onMouseLeave={(e) => (e.currentTarget.style.borderColor = T.cream)}
     >
+      {(product.imageUrl || product.image_url) && (
+        <div style={{ height: "160px", overflow: "hidden" }}>
+          <img
+            src={product.imageUrl || product.image_url}
+            alt={product.name}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </div>
+      )}
+      <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.wine, background: T.wineGlow, padding: "4px 10px", borderRadius: "4px" }}>
           {(product.categories ?? [product.category]).join(" · ")}
@@ -268,6 +281,7 @@ function ProductCard({ product }) {
             Order
           </Link>
         </div>
+      </div>
       </div>
     </div>
   );
