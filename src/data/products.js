@@ -19,7 +19,7 @@
 //   tags        — extra searchable keywords (optional)
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const PRODUCTS = [
+const RAW_PRODUCTS = [
   {
     id: "bermudez",
     name: "Bermúdez Ron Añejo",
@@ -171,6 +171,11 @@ export const PRODUCTS = [
     tags: ["whisky", "blended", "europe", "premium", "on-premise"],
   },
 ];
+
+export const PRODUCTS = RAW_PRODUCTS.map(p => ({
+  ...p,
+  portfolios: ["all"]
+}));
 
 // ─── All available categories ─────────────────────────────────────────────────
 // Edit this list to add new category filter options on the Portfolio page.
