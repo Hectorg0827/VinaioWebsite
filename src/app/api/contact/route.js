@@ -14,9 +14,9 @@ export async function POST(request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey  = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (supabaseUrl && serviceKey) {
+    if (supabaseUrl && serviceKey && serviceKey !== "YOUR_SERVICE_ROLE_KEY_HERE") {
       const supabase = createClient(supabaseUrl, serviceKey);
-      await supabase.from("contact_submissions").insert({
+      const { error } = await supabase.from("contact_submissions").insert([{
         name,
         company:        company        || null,
         license_number: license_number || null,
@@ -24,7 +24,8 @@ export async function POST(request) {
         phone:          phone          || null,
         inquiry_type:   inquiry_type   || "general",
         message,
-      });
+      }]);
+      if (error) console.error("Supabase Contact Error:", error);
     }
 
     // Send notification email via Resend

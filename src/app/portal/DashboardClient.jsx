@@ -4,8 +4,10 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Badge from "@/components/Badge";
+import { createClient } from "@/lib/supabase/client";
 
-export default function DashboardClient({ customer, invoices, orders, licenses, user }) {
+export default function DashboardClient({ customer, invoices, orders, licenses, catalogs, user }) {
+  const supabase = createClient();
   const displayName = customer?.company || user?.email?.split("@")[0] || "Customer";
   const firstName   = user?.email?.split("@")[0] ?? "there";
 
@@ -23,6 +25,14 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
 
   const fmt = (n) =>
     typeof n === "number" ? `$${n.toLocaleString("en-US", { minimumFractionDigits: 2 })}` : n;
+
+  const logCatalogDownload = async (catalog) => {
+    await supabase.from("portal_logs").insert([{
+      customer_id: user.id,
+      action: "download",
+      details: { catalog_id: catalog.id, catalog_name: catalog.name }
+    }]);
+  };
 
   return (
     <>
@@ -95,7 +105,7 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
 
       {/* ── Recent orders ── */}
       <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.ink, marginBottom: "16px" }}>Recent Orders</h3>
-      {orders.length > 0 ? (
+      {orders.length > 0 && (
         <div style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "8px", overflow: "hidden" }}>
           {orders.slice(0, 5).map((o, i) => (
             <div key={o.id} style={{ padding: "18px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: i < Math.min(orders.length, 5) - 1 ? `1px solid ${T.cream}` : "none" }}>
@@ -115,12 +125,32 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
             </div>
           ))}
         </div>
+      )}
+
+      {/* ── Catalogs ── */}
+      <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.ink, marginTop: "40px", marginBottom: "16px" }}>Latest Catalogs</h3>
+      {catalogs.length > 0 ? (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
+          {catalogs.map((c) => (
+            <div key={c.id} style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "8px", padding: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <p style={{ fontFamily: ff.b, fontSize: "14px", fontWeight: 600, color: T.ink }}>{c.name}</p>
+                <p style={{ fontSize: "11px", color: T.muted }}>{c.category_filter || "Full Portfolio"}</p>
+              </div>
+              <a 
+                href={c.file_url} 
+                target="_blank" 
+                onClick={() => logCatalogDownload(c)}
+                style={{ fontSize: "18px", textDecoration: "none" }}
+              >
+                📥
+              </a>
+            </div>
+          ))}
+        </div>
       ) : (
         <div style={{ padding: "40px 24px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "8px", textAlign: "center" }}>
-          <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, marginBottom: "16px" }}>No orders yet.</p>
-          <Link href="/portal/orders" style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.wine, fontWeight: 600 }}>
-            Place Your First Order →
-          </Link>
+          <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted }}>No catalogs available yet.</p>
         </div>
       )}
     </>

@@ -14,7 +14,12 @@ export async function PUT(req, { params }) {
 
   const { id } = await params;
   const body = await req.json();
-  const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags, imageUrl } = body;
+  const { 
+    name, sku, brand, vintage, format, type, category, categories, 
+    origin, region, description_en, description_es, 
+    price_case, price_bottle, tier_pricing, portfolios,
+    inStock, featured, imageUrl, tags 
+  } = body;
 
   try {
     const supabase = await createClient();
@@ -22,17 +27,25 @@ export async function PUT(req, { params }) {
       .from("products")
       .update({
         name,
-        sku,
-        price:       parseFloat(price) || 0,
-        unit,
-        categories:  categories ?? [],
-        origin,
-        region,
-        in_stock:    inStock,
+        product_code:   body.product_code || sku,
+        brand:          brand          || null,
+        vintage:        vintage        || null,
+        format:         format         || null,
+        type:           type           || null,
+        category:       category       || categories?.[0] || null,
+        categories:     categories     ?? [],
+        origin:         origin         || "",
+        region:         region         || "",
+        description_en: description_en || null,
+        description_es: description_es || null,
+        price_case:     parseFloat(price_case)   || 0,
+        price_bottle:   parseFloat(price_bottle) || 0,
+        tier_pricing:   tier_pricing   ?? [],
+        portfolios:     portfolios     ?? [],
+        in_stock:       inStock,
         featured,
-        description,
-        tags:        tags ?? [],
-        image_url:   imageUrl ?? null,
+        image_url:      imageUrl       ?? null,
+        tags:           tags           ?? [],
       })
       .eq("id", id)
       .select()

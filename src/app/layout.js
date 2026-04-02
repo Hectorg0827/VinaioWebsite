@@ -1,10 +1,11 @@
 import { T } from "@/lib/theme";
 import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Vinaio Imports — Fine Wine & Spirits Importer & Distributor",
+  title: "Vinaio Imports | Premium Spirits, Wines & Beers Distributor",
   description:
-    "Vinaio Imports is a full-service beverage alcohol importer and distributor. Self-distribution in NY, NJ & FL. 26-state network. White label, logistics, compliance, and exclusive US importer for Spain & European brands.",
+    "New York's premier beverage alcohol importer and distributor. Specializing in authentic Dominican rums, craft spirits, and exclusive international wine portfolios.",
   keywords: [
     "wine importer", "spirits distributor", "beverage alcohol", "white label wine",
     "Dominican Republic rum", "Spanish wine importer", "TTB licensed", "Park Street alternative",
@@ -15,7 +16,21 @@ export const metadata = {
     description: "Full-service beverage alcohol importer & distributor.",
     url: "https://www.vinaioimports.com",
     siteName: "Vinaio Imports",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 1200,
+        alt: "Vinaio Imports - Fine Wine & Spirits",
+      },
+    ],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vinaio Imports",
+    description: "Full-service beverage alcohol importer & distributor.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -43,7 +58,8 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Nav />
-        {children}
+        <div style={{ minHeight: "calc(100vh - 80px)" }}>{children}</div>
+        <Footer />
       </body>
     </html>
   );

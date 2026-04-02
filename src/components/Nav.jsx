@@ -38,17 +38,28 @@ export default function Nav() {
 
   const bgColor = isPortal
     ? T.ink
-    : hero
-    ? "transparent"
     : menuOpen
     ? T.bg
-    : "rgba(248,246,243,0.92)";
+    : "rgba(248,246,243,0.96)";
 
   return (
     <>
       <style>{`
         .nav-desktop { display: flex; }
         .nav-hamburger { display: none; }
+        .nav-link { color: ${dark ? "rgba(255,255,255,0.5)" : T.muted}; transition: all 0.3s; }
+        .nav-link:hover { color: ${T.wine} !important; }
+        .square-tile {
+          width: 50px; height: 50px; background: ${T.bg}; border: 1px solid ${T.cream};
+          display: flex; align-items: center; justify-content: center;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none; cursor: pointer; position: relative; overflow: hidden;
+        }
+        .square-tile:hover { background: ${T.wine}; border-color: ${T.wine}; color: ${T.paper} !important; }
+        .square-tile span {
+          font-family: ${ff.b}; font-size: 8px; letter-spacing: 1px; text-transform: uppercase;
+          font-weight: 600; text-align: center; color: inherit;
+        }
         @media (max-width: 768px) {
           .nav-desktop { display: none; }
           .nav-hamburger { display: flex; }
@@ -61,9 +72,10 @@ export default function Nav() {
           top: 0, left: 0, right: 0,
           zIndex: 900,
           background: bgColor,
-          backdropFilter: dark || menuOpen ? "none" : "blur(24px) saturate(1.6)",
-          borderBottom: dark && !menuOpen ? "none" : `1px solid ${T.cream}`,
-          transition: "background 0.4s, border 0.4s",
+          backdropFilter: isPortal || menuOpen ? "none" : "blur(24px) saturate(1.6)",
+          borderBottom: isPortal && !menuOpen ? "none" : `1px solid ${T.cream}`,
+          transform: scrolled && !menuOpen ? "translateY(-100%)" : "translateY(0%)",
+          transition: "background 0.4s, border 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         {/* ── Main bar ── */}
@@ -75,18 +87,17 @@ export default function Nav() {
           transition: "padding 0.4s",
         }}>
           {/* Wordmark */}
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <span style={{
-              fontFamily: ff.h,
-              fontSize: "22px",
-              fontWeight: 500,
-              color: dark || menuOpen ? (menuOpen && !isPortal ? T.ink : T.paper) : T.ink,
-              letterSpacing: "6px",
-              textTransform: "uppercase",
-              transition: "color 0.4s",
-            }}>
-              Vinaio
-            </span>
+          <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+            <img 
+              src="/logo.png" 
+              alt="Vinaio Imports" 
+              style={{ 
+                height: scrolled ? "32px" : "40px",
+                width: "auto",
+                filter: isPortal && !menuOpen ? "brightness(0) invert(1)" : "none",
+                transition: "height 0.4s, filter 0.4s",
+              }} 
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -94,17 +105,14 @@ export default function Nav() {
             {LINKS.map(({ href, label }) => {
               const active = pathname === href;
               return (
-                <Link key={href} href={href} style={{
+                <Link key={href} href={href} className="nav-link" style={{
                   fontFamily: ff.b,
                   fontSize: "10px",
                   fontWeight: active ? 600 : 400,
                   letterSpacing: "2.5px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active
-                    ? dark ? T.paper : T.wine
-                    : dark ? "rgba(255,255,255,0.5)" : T.muted,
-                  transition: "color 0.3s",
+                  color: active ? (isPortal ? T.paper : T.wine) : (isPortal ? "rgba(255,255,255,0.5)" : T.muted),
                 }}>
                   {label}
                 </Link>
@@ -120,8 +128,9 @@ export default function Nav() {
               padding: "8px 18px",
               borderRadius: "4px",
               background: isPortal ? T.wine : "transparent",
-              border: `1px solid ${isPortal ? T.wine : dark ? "rgba(255,255,255,0.25)" : T.taupe}`,
-              color: isPortal ? T.paper : dark ? T.paper : T.wine,
+              background: isPortal ? T.wine : "transparent",
+              border: `1px solid ${isPortal ? T.wine : T.taupe}`,
+              color: isPortal ? T.paper : T.wine,
               transition: "all 0.3s",
             }}>
               Customer Portal
@@ -164,9 +173,11 @@ export default function Nav() {
         <div style={{
           maxHeight: menuOpen ? "400px" : "0",
           overflow: "hidden",
-          transition: "max-height 0.35s ease",
+          transition: "max-height 0.35s ease, visibility 0.35s",
           background: T.bg,
           borderTop: menuOpen ? `1px solid ${T.cream}` : "none",
+          visibility: menuOpen ? "visible" : "hidden",
+          pointerEvents: menuOpen ? "auto" : "none",
         }}>
           <nav style={{
             display: "flex",
@@ -211,6 +222,8 @@ export default function Nav() {
           </nav>
         </div>
       </header>
+      {/* ── Squares Navigation (Ensured safe removal) ── */}
+
     </>
   );
 }

@@ -5,10 +5,60 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
+import { createClient } from "@/lib/supabase/client";
+
+// Fallback branding logos if DB is empty
+const FALLBACK_LOGOS = [
+  "brand-1.png", "brand-10.png", "brand-11.png", "brand-12.svg", "brand-13.png", 
+  "brand-14.png", "brand-15.png", "brand-16.png", "brand-17.png", "brand-18.png"
+];
 
 export default function HomePage() {
+  const supabase = createClient();
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => { setTimeout(() => setLoaded(true), 80); }, []);
+  const [hero, setHero] = useState({
+    url: "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-vineyard-at-sunset-1148-large.mp4",
+    type: "video",
+    title: "",
+    subtitle: "The bridge between terroir & the market"
+  });
+  const [partners, setPartners] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => setLoaded(true), 80);
+    fetchContent();
+  }, []);
+
+  const fetchContent = async () => {
+    try {
+      // 1. Fetch Hero (Most recent active)
+      const { data: heroData } = await supabase
+        .from("site_hero")
+        .select("*")
+        .eq("active", true)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .single();
+      
+      if (heroData) setHero(heroData);
+
+      // 2. Fetch Partners
+      const { data: partnersData } = await supabase
+        .from("site_partners")
+        .select("*")
+        .eq("active", true)
+        .order("order", { ascending: true });
+      
+      if (partnersData && partnersData.length > 0) {
+        setPartners(partnersData.map(p => p.logo_url));
+      } else {
+        setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+      }
+    } catch (err) {
+      console.warn("Failed to fetch dynamic content, using defaults.");
+      setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+    }
+  };
 
   return (
     <>
@@ -18,16 +68,30 @@ export default function HomePage() {
           height: "100vh",
           position: "relative",
           overflow: "hidden",
-          background: T.ink,
+          background: `url('https://images.unsplash.com/photo-1506377247377-2a5b3b0ca706?auto=format&fit=crop&q=80&w=2000') center/cover no-repeat`,
         }}
       >
+        {hero.type === "video" ? (
+          <video
+            src={hero.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
+          />
+        ) : (
+          <div style={{ position: "absolute", inset: 0, background: `url(${hero.url}) center/cover no-repeat`, opacity: 0.6 }} />
+        )}
+
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(ellipse 80% 70% at 50% 50%, ${T.wineDeep}55 0%, transparent 60%), linear-gradient(175deg, #0F0D0B 0%, ${T.ink} 40%, #1F1B17 100%)`,
+            background: `linear-gradient(to bottom, transparent 0%, ${T.ink} 100%)`,
           }}
         />
+
         <div
           style={{
             position: "relative",
@@ -66,34 +130,55 @@ export default function HomePage() {
             <Hr w="40px" c={T.gold} />
           </div>
 
-          <h1
+          <div
             style={{
-              fontFamily: ff.h,
-              fontSize: "clamp(64px, 11vw, 140px)",
-              fontWeight: 400,
-              color: T.paper,
-              lineHeight: 0.88,
-              letterSpacing: "-3px",
               opacity: loaded ? 1 : 0,
               transition: "all 1.4s ease 0.2s",
-              marginBottom: "24px",
+              marginBottom: "40px",
+              background: "rgba(255,255,255,0.9)",
+              padding: "32px 64px",
+              borderRadius: "8px",
+              backdropFilter: "blur(12px)",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
+              border: "1px solid rgba(255,255,255,0.4)",
             }}
           >
-            Vinaio
-          </h1>
+            <img 
+              src="/logo.png" 
+              alt="Vinaio" 
+              style={{ height: "clamp(60px, 8vw, 100px)", width: "auto" }} 
+            />
+          </div>
 
           <p
             style={{
               fontFamily: ff.h,
-              fontSize: "clamp(17px, 2.2vw, 22px)",
-              fontStyle: "italic",
-              color: "rgba(255,255,255,0.35)",
+              fontSize: "clamp(32px, 5vw, 64px)",
+              color: T.paper,
               opacity: loaded ? 1 : 0,
-              transition: "all 1.2s ease 0.6s",
-              marginBottom: "56px",
+              transition: "all 1.2s ease 0.5s",
+              marginBottom: "16px",
+              textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+              maxWidth: "800px",
+              lineHeight: 1.1
             }}
           >
-            The bridge between terroir &amp; the market
+            {hero.title}
+          </p>
+
+          <p
+            style={{
+              fontFamily: ff.b,
+              fontSize: "clamp(17px, 2.2vw, 22px)",
+              fontStyle: "italic",
+              color: "rgba(255,255,255,0.8)",
+              opacity: loaded ? 1 : 0,
+              transition: "all 1.2s ease 0.7s",
+              marginBottom: "56px",
+              textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+            }}
+          >
+            {hero.subtitle || "The bridge between terroir & the market"}
           </p>
 
           <div
@@ -109,7 +194,7 @@ export default function HomePage() {
             {[
               { href: "/portfolio", label: "Explore Portfolio", primary: false },
               { href: "/portal",    label: "Customer Portal",   primary: true  },
-              { href: "/spain",     label: "Spain & Europe",    primary: false },
+              { href: "/services",  label: "Our Services",      primary: false },
             ].map(({ href, label, primary }) => (
               <Link
                 key={href}
@@ -119,12 +204,22 @@ export default function HomePage() {
                   fontSize: "10.5px",
                   letterSpacing: "3px",
                   textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: primary ? T.ink : T.paper,
-                  background: primary ? T.gold : "transparent",
-                  border: `1px solid ${primary ? T.gold : "rgba(255,255,255,0.2)"}`,
+                  fontWeight: 600,
+                  color: primary ? T.paper : T.paper,
+                  background: primary ? T.wine : "transparent",
+                  border: `1px solid ${primary ? T.wine : "rgba(255,255,255,0.4)"}`,
                   padding: "16px 36px",
                   transition: "all 0.4s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = T.wine;
+                  e.currentTarget.style.borderColor = T.wine;
+                }}
+                onMouseLeave={(e) => {
+                  if (!primary) {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+                  }
                 }}
               >
                 {label}
@@ -148,10 +243,56 @@ export default function HomePage() {
             style={{
               width: "1px",
               height: "48px",
-              background: `linear-gradient(to bottom, transparent, ${T.gold})`,
+              background: `linear-gradient(to bottom, transparent, ${T.paper})`,
               margin: "0 auto",
             }}
           />
+        </div>
+      </section>
+
+      {/* ── Brand Marquee ────────────────────────────────────────────────── */}
+      <section style={{ background: T.bg, padding: "40px 0", borderBottom: `1px solid ${T.cream}`, overflow: "hidden" }}>
+        <style>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
+        <div 
+          style={{ 
+            display: "flex", 
+            width: "max-content", 
+            animation: "marquee 120s linear infinite",
+            alignItems: "center",
+            gap: "80px",
+          }}
+        >
+          {/* Duplicate set for seamless looping */}
+          {[...Array(2)].map((_, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: "80px" }}>
+              {partners.map((url, idx) => (
+                <img 
+                  key={`${url}-${idx}`}
+                  src={url}
+                  alt="Partner Brand" 
+                  style={{ 
+                    height: "45px", 
+                    width: "auto", 
+                    filter: "grayscale(1) opacity(0.5)",
+                    transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.filter = "grayscale(0) opacity(1)";
+                    e.currentTarget.style.transform = "scale(1.1)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.filter = "grayscale(1) opacity(0.5)";
+                    e.currentTarget.style.transform = "scale(1)";
+                  }}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       </section>
 
@@ -472,62 +613,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer
-        style={{
-          background: T.ink,
-          padding: "48px 56px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "16px",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: ff.h,
-            fontSize: "18px",
-            color: T.paper,
-            letterSpacing: "5px",
-            textTransform: "uppercase",
-          }}
-        >
-          Vinaio
-        </span>
-        <p
-          style={{
-            fontFamily: ff.b,
-            fontSize: "11px",
-            color: T.warm,
-            letterSpacing: "0.5px",
-          }}
-        >
-          © {new Date().getFullYear()} Vinaio Imports. All rights reserved.
-        </p>
-        <div style={{ display: "flex", gap: "24px" }}>
-          {[
-            ["/portfolio", "Portfolio"],
-            ["/spain",     "Spain & Europe"],
-            ["/services",  "Services"],
-            ["/contact",   "Contact"],
-          ].map(([href, label]) => (
-            <Link
-              key={href}
-              href={href}
-              style={{
-                fontFamily: ff.b,
-                fontSize: "10px",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                color: T.warm,
-              }}
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
-      </footer>
     </>
   );
 }

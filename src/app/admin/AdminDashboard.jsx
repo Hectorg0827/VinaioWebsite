@@ -2,28 +2,47 @@
 
 import { useState } from "react";
 import { T, ff } from "@/lib/theme";
+import AdminSidebar from "@/components/AdminSidebar";
+import AdminMediaManager from "@/components/AdminMediaManager";
+import AdminCatalogManager from "@/components/AdminCatalogManager";
+import AdminAnalytics from "@/components/AdminAnalytics";
 import Hr from "@/components/Hr";
-import { ALL_CATEGORIES } from "@/data/products";
+import { ALL_CATEGORIES, ORIGINS } from "@/data/products";
+import { createClient } from "@/lib/supabase/client";
+import { uploadFile } from "@/lib/supabase/storage";
 
 const REGIONS = ["Caribbean", "South America", "Europe", "North America", "Asia", "Other"];
 const UNITS   = ["750ml", "1L", "1.75L", "375ml", "355ml", "330ml", "500ml", "Other"];
 
+const PORTFOLIOS = [
+  { id: "all",               label: "All Products" },
+  { id: "elite",             label: "Vinaio Elite" },
+  { id: "caribbean",         label: "Vinaio Caribbean" },
+  { id: "beer_low_alc",      label: "Beer & Low Alcohol" },
+  { id: "kosher",            label: "Kosher" },
+  { id: "intl_wines_spirits", label: "International Wines & Spirits" },
+];
+
 const EMPTY_FORM = {
-  name: "", sku: "", price: "", unit: "750ml",
-  categories: [], origin: "", region: "Caribbean",
-  inStock: true, featured: false, description: "",
+  name: "", sku: "", product_code: "", brand: "", vintage: "", format: "", type: "",
+  category: "", categories: [], origin: "", region: "Caribbean",
+  inStock: true, featured: false, description_en: "", description_es: "",
+  price_case: "", price_bottle: "", tier_pricing: [],
+  portfolios: ["all"],
   imageUrl: "",
 };
 
 export default function AdminDashboard({ initialProducts }) {
+  const [activeTab, setActiveTab] = useState("products");
   const [products, setProducts]   = useState(initialProducts);
   const [form, setForm]           = useState(EMPTY_FORM);
-  const [editingId, setEditingId] = useState(null); // null = add mode, id = edit mode
+  const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm]   = useState(false);
   const [saving, setSaving]       = useState(false);
-  const [msg, setMsg]             = useState(null); // { type: 'success'|'error', text }
+  const [msg, setMsg]             = useState(null);
   const [search, setSearch]       = useState("");
   const [deleting, setDeleting]   = useState(null);
+  const supabase = createClient();
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -31,6 +50,12 @@ export default function AdminDashboard({ initialProducts }) {
     set("categories", form.categories.includes(cat)
       ? form.categories.filter((c) => c !== cat)
       : [...form.categories, cat]
+    );
+
+  const togglePortfolio = (portId) =>
+    set("portfolios", form.portfolios.includes(portId)
+      ? form.portfolios.filter((id) => id !== portId)
+      : [...form.portfolios, portId]
     );
 
   const openAdd = () => {
@@ -42,17 +67,26 @@ export default function AdminDashboard({ initialProducts }) {
 
   const openEdit = (product) => {
     setForm({
-      name:        product.name        ?? "",
-      sku:         product.sku         ?? "",
-      price:       product.price       ?? "",
-      unit:        product.unit        ?? "750ml",
-      categories:  product.categories  ?? [],
-      origin:      product.origin      ?? "",
-      region:      product.region      ?? "Caribbean",
-      inStock:     product.inStock     ?? product.in_stock ?? true,
-      featured:    product.featured    ?? false,
-      description: product.description ?? "",
-      imageUrl:    product.imageUrl    ?? product.image_url ?? "",
+      name:           product.name           ?? "",
+      sku:            product.sku            ?? "",
+      product_code:   product.product_code   ?? "",
+      brand:          product.brand          ?? "",
+      vintage:        product.vintage        ?? "",
+      format:         product.format         ?? "",
+      type:           product.type           ?? "",
+      category:       product.category       ?? "",
+      categories:     product.categories     ?? [],
+      origin:         product.origin         ?? "",
+      region:         product.region         ?? "Caribbean",
+      inStock:        product.in_stock       ?? product.inStock ?? true,
+      featured:       product.featured       ?? false,
+      description_en: product.description_en ?? product.description ?? "",
+      description_es: product.description_es ?? "",
+      price_case:     product.price_case     ?? "",
+      price_bottle:   product.price_bottle   ?? "",
+      tier_pricing:   product.tier_pricing   ?? [],
+      portfolios:     product.portfolios     ?? ["all"],
+      imageUrl:       product.image_url      ?? product.imageUrl ?? "",
     });
     setEditingId(product.id ?? product.slug);
     setShowForm(true);
@@ -60,418 +94,279 @@ export default function AdminDashboard({ initialProducts }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const cancelForm = () => {
-    setShowForm(false);
-    setEditingId(null);
-    setMsg(null);
-  };
-
-  const save = async () => {
-    if (!form.name.trim())               return setMsg({ type: "error", text: "Product name is required." });
-    if (!form.price || isNaN(form.price)) return setMsg({ type: "error", text: "Enter a valid price." });
-    if (form.categories.length === 0)    return setMsg({ type: "error", text: "Select at least one category." });
-
+  const handleProductImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
     setSaving(true);
-    setMsg(null);
-
-    const payload = {
-      ...form,
-      price:    parseFloat(form.price),
-      inStock:  form.inStock,
-      imageUrl: form.imageUrl.trim() || null,
-      id:       editingId,
-    };
-
-    const res = await fetch(
-      editingId ? `/api/admin/products/${editingId}` : "/api/admin/products",
-      {
-        method:  editingId ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(payload),
-      }
-    );
-
-    const data = await res.json();
-
-    if (res.ok) {
-      if (editingId) {
-        setProducts((prev) =>
-          prev.map((p) => (p.id ?? p.slug) === editingId ? { ...p, ...payload } : p)
-        );
-        setMsg({ type: "success", text: `"${form.name}" updated successfully.` });
-      } else {
-        setProducts((prev) => [...prev, { ...payload, id: data.id ?? Date.now().toString() }]);
-        setMsg({ type: "success", text: `"${form.name}" added to the catalog.` });
-        setForm(EMPTY_FORM);
-      }
-      setEditingId(null);
-      setShowForm(false);
-    } else {
-      setMsg({ type: "error", text: data.error ?? "Something went wrong. Please try again." });
+    const publicUrl = await uploadFile(file, "products");
+    if (publicUrl) {
+      set("imageUrl", publicUrl);
+      setMsg({ type: "success", text: "Image uploaded!" });
     }
-
     setSaving(false);
   };
 
-  const deleteProduct = async (product) => {
-    if (!confirm(`Remove "${product.name}" from the catalog? This cannot be undone.`)) return;
-    setDeleting(product.id ?? product.slug);
-    const res = await fetch(`/api/admin/products/${product.id ?? product.slug}`, { method: "DELETE" });
+  const saveProduct = async () => {
+    if (!form.name.trim()) return setMsg({ type: "error", text: "Name required." });
+    
+    setSaving(true);
+    const res = await fetch(editingId && isUUID(editingId) ? `/api/admin/products/${editingId}` : "/api/admin/products", {
+      method: editingId && isUUID(editingId) ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, id: isUUID(editingId) ? editingId : undefined }),
+    });
+
     if (res.ok) {
-      setProducts((prev) => prev.filter((p) => (p.id ?? p.slug) !== (product.id ?? product.slug)));
+       setMsg({ type: "success", text: "Product saved!" });
+       setShowForm(false);
+       window.location.reload(); 
+    } else {
+       const err = await res.json();
+       setMsg({ type: "error", text: err.error || "Failed to save." });
     }
-    setDeleting(null);
+    setSaving(false);
   };
 
-  const filtered = products.filter(
-    (p) =>
-      p.name?.toLowerCase().includes(search.toLowerCase()) ||
-      p.origin?.toLowerCase().includes(search.toLowerCase()) ||
-      p.sku?.toLowerCase().includes(search.toLowerCase())
-  );
-
-  // ── Styles ────────────────────────────────────────────────────────────────
-  const inputStyle = {
-    width: "100%", padding: "11px 14px",
-    background: T.bg, border: `1px solid ${T.cream}`,
-    borderRadius: "6px", fontFamily: ff.b, fontSize: "14px",
-    color: T.ink, outline: "none", boxSizing: "border-box",
-  };
-  const labelStyle = {
-    fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px",
-    textTransform: "uppercase", color: T.warm, display: "block", marginBottom: "6px",
+  const deleteProduct = async (id) => {
+    if (!confirm("Permanently delete this product?")) return;
+    const res = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
+    if (res.ok) window.location.reload();
   };
 
-  return (
-    <div style={{ minHeight: "100vh", background: T.bg, paddingTop: "80px" }}>
+  const isUUID = (str) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
 
-      {/* ── Top Bar ── */}
-      <div style={{ background: T.ink, padding: "20px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: "80px", zIndex: 50 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <span style={{ fontFamily: ff.h, fontSize: "20px", color: T.paper, letterSpacing: "4px", textTransform: "uppercase" }}>Vinaio</span>
-          <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm }}>· Admin · Product Catalog</span>
+  const renderProducts = () => (
+    <div style={{ maxWidth: "1200px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px" }}>
+        <div>
+          <Hr w="40px" c={T.wine} style={{ marginBottom: "20px" }} />
+          <h1 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink }}>Portfolio Management</h1>
         </div>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <a href="/portfolio" target="_blank" style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm }}>
-            View Portfolio ↗
-          </a>
-          <button
-            onClick={openAdd}
-            style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 600, color: T.paper, background: T.wine, border: "none", borderRadius: "6px", padding: "10px 20px", cursor: "pointer" }}
-          >
-            + Add Product
-          </button>
-          <a href="/api/admin/logout" style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm }}>
-            Sign Out
-          </a>
-        </div>
+        <button onClick={openAdd} style={{ padding: "12px 24px", background: T.wine, color: T.paper, border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}>
+          + Add Product
+        </button>
       </div>
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 48px" }}>
-
-        {/* ── Global message ── */}
-        {msg && (
-          <div style={{ padding: "14px 20px", background: msg.type === "success" ? T.greenLight : T.redLight, border: `1px solid ${msg.type === "success" ? T.green : T.red}30`, borderRadius: "8px", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontFamily: ff.b, fontSize: "13px", color: msg.type === "success" ? T.green : T.red }}>{msg.type === "success" ? "✓" : "⚠"} {msg.text}</span>
-            <button onClick={() => setMsg(null)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "16px" }}>×</button>
-          </div>
-        )}
-
-        {/* ── Add / Edit Form ── */}
-        {showForm && (
-          <div style={{ background: T.paper, border: `2px solid ${T.wine}30`, borderRadius: "12px", padding: "40px", marginBottom: "40px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-              <div>
-                <Hr w="24px" c={T.wine} style={{ marginBottom: "12px" }} />
-                <h2 style={{ fontFamily: ff.h, fontSize: "26px", color: T.ink }}>
-                  {editingId ? "Edit Product" : "Add New Product"}
-                </h2>
-              </div>
-              <button onClick={cancelForm} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: ff.b, fontSize: "12px", color: T.muted }}>
-                Cancel ×
-              </button>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-
-              {/* Name */}
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>Product Name *</label>
-                <input value={form.name} onChange={(e) => set("name", e.target.value)} style={{ ...inputStyle, fontSize: "16px" }} placeholder="e.g. Casa Nova Tempranillo" />
-              </div>
-
-              {/* SKU + Price */}
-              <div>
-                <label style={labelStyle}>SKU / Item Code</label>
-                <input value={form.sku} onChange={(e) => set("sku", e.target.value)} style={inputStyle} placeholder="e.g. CNT-750" />
-              </div>
-              <div>
-                <label style={labelStyle}>Wholesale Price (USD) *</label>
-                <input type="number" step="0.01" min="0" value={form.price} onChange={(e) => set("price", e.target.value)} style={inputStyle} placeholder="12.99" />
-              </div>
-
-              {/* Unit + Origin */}
-              <div>
-                <label style={labelStyle}>Bottle / Can Size</label>
-                <select value={form.unit} onChange={(e) => set("unit", e.target.value)} style={{ ...inputStyle, appearance: "none" }}>
-                  {UNITS.map((u) => <option key={u}>{u}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>Country of Origin</label>
-                <input value={form.origin} onChange={(e) => set("origin", e.target.value)} style={inputStyle} placeholder="e.g. Spain" />
-              </div>
-
-              {/* Region */}
-              <div>
-                <label style={labelStyle}>Region</label>
-                <select value={form.region} onChange={(e) => set("region", e.target.value)} style={{ ...inputStyle, appearance: "none" }}>
-                  {REGIONS.map((r) => <option key={r}>{r}</option>)}
-                </select>
-              </div>
-
-              {/* Categories — multi-select checkboxes */}
-              <div>
-                <label style={labelStyle}>Categories * (select all that apply)</label>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "4px" }}>
-                  {ALL_CATEGORIES.map((cat) => {
-                    const selected = form.categories.includes(cat);
-                    return (
-                      <button
-                        key={cat}
-                        type="button"
-                        onClick={() => toggleCategory(cat)}
-                        style={{
-                          fontFamily: ff.b, fontSize: "11px", letterSpacing: "1px",
-                          textTransform: "uppercase", fontWeight: selected ? 600 : 400,
-                          color:      selected ? T.paper : T.muted,
-                          background: selected ? T.wine  : T.cream,
-                          border:     selected ? `1px solid ${T.wine}` : `1px solid ${T.taupe}`,
-                          padding: "7px 14px", borderRadius: "20px", cursor: "pointer",
-                          transition: "all 0.2s",
-                        }}
-                      >
-                        {selected ? "✓ " : ""}{cat}
-                      </button>
-                    );
-                  })}
-                </div>
-                {form.categories.length === 0 && (
-                  <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.orange, marginTop: "6px" }}>
-                    Please select at least one category.
-                  </p>
-                )}
-              </div>
-
-              {/* Image URL */}
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>Product Image URL</label>
-                <input
-                  value={form.imageUrl}
-                  onChange={(e) => set("imageUrl", e.target.value)}
-                  style={inputStyle}
-                  placeholder="https://... (optional — paste a direct image link)"
-                />
-                {form.imageUrl && (
-                  <div style={{ marginTop: "10px", display: "flex", alignItems: "center", gap: "12px" }}>
-                    <img
-                      src={form.imageUrl}
-                      alt="preview"
-                      style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "6px", border: `1px solid ${T.cream}` }}
-                      onError={(e) => { e.currentTarget.style.display = "none"; }}
-                    />
-                    <span style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>Image preview</span>
+      {showForm && (
+        <div style={{ background: T.paper, padding: "40px", borderRadius: "16px", border: `2px solid ${T.wine}20`, marginBottom: "40px" }}>
+           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+             <h2 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink }}>{editingId ? "Edit Catalog Item" : "New Portfolio Addition"}</h2>
+             <button onClick={() => setShowForm(false)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px" }}>✕</button>
+           </div>
+           
+           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "40px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Brand / Producer</label>
+                      <input value={form.brand} onChange={e => set("brand", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. Aljibes" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Product Name</label>
+                      <input value={form.name} onChange={e => set("name", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. Petit Verdot" />
+                    </div>
                   </div>
-                )}
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Vintage</label>
+                      <input value={form.vintage} onChange={e => set("vintage", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="2021" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Format</label>
+                      <input value={form.format} onChange={e => set("format", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="750ml x 12" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>SKU / QB ID</label>
+                      <input value={form.sku} onChange={e => set("sku", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="ALJ-PV" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Type / D.O.</label>
+                      <input value={form.type} onChange={e => set("type", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="Vino de la Tierra" />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Case Price ($)</label>
+                      <input value={form.price_case} onChange={e => set("price_case", e.target.value)} type="number" step="0.01" style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="0.00" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Bottle Price ($)</label>
+                      <input value={form.price_bottle} onChange={e => set("price_bottle", e.target.value)} type="number" step="0.01" style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="0.00" />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Origin Country</label>
+                      <input value={form.origin} onChange={e => set("origin", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="Spain" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Region</label>
+                      <select value={form.region} onChange={e => set("region", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }}>
+                        {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Portfolio Membership</label>
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                      {PORTFOLIOS.map(port => (
+                        <button 
+                          key={port.id} 
+                          onClick={() => togglePortfolio(port.id)}
+                          style={{
+                            padding: "8px 16px", borderRadius: "12px", fontSize: "11px", border: `1px solid ${form.portfolios.includes(port.id) ? T.gold : T.cream}`,
+                            background: form.portfolios.includes(port.id) ? T.gold : "none",
+                            color: form.portfolios.includes(port.id) ? T.ink : T.muted,
+                            cursor: "pointer", transition: "all 0.3s"
+                          }}
+                        >
+                          {form.portfolios.includes(port.id) && "✓ "} {port.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Categories</label>
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                      {ALL_CATEGORIES.map(cat => (
+                        <button 
+                          key={cat} 
+                          onClick={() => toggleCategory(cat)}
+                          style={{
+                            padding: "8px 16px", borderRadius: "20px", fontSize: "11px", border: `1px solid ${form.categories.includes(cat) ? T.wine : T.cream}`,
+                            background: form.categories.includes(cat) ? T.wine : "none",
+                            color: form.categories.includes(cat) ? T.paper : T.muted,
+                            cursor: "pointer", transition: "all 0.3s"
+                          }}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Description (EN)</label>
+                      <textarea value={form.description_en} onChange={e => set("description_en", e.target.value)} rows={4} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px", resize: "none" }} placeholder="English tasting notes..." />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Description (ES)</label>
+                      <textarea value={form.description_es} onChange={e => set("description_es", e.target.value)} rows={4} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px", resize: "none" }} placeholder="Notas de cata en español..." />
+                    </div>
+                  </div>
               </div>
 
-              {/* Description */}
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>Product Description</label>
-                <textarea
-                  value={form.description}
-                  onChange={(e) => set("description", e.target.value)}
-                  rows={4}
-                  style={{ ...inputStyle, resize: "vertical" }}
-                  placeholder="1–2 sentences describing the product — tasting notes, style, occasion..."
-                />
+              <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                 <div style={{ aspectRatio: "1", background: T.bg, borderRadius: "12px", border: `1px dashed ${T.cream}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                    {form.imageUrl ? <img src={form.imageUrl} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ color: T.muted, fontSize: "11px" }}>Product Image Preview</span>}
+                 </div>
+                 
+                 <div style={{ display: "flex", gap: "10px" }}>
+                   <input type="file" id="prod-img" style={{ display: "none" }} accept="image/*" onChange={handleProductImageUpload} />
+                   <label htmlFor="prod-img" style={{ flexGrow: 1, textAlign: "center", padding: "10px", background: T.taupe, borderRadius: "6px", cursor: "pointer", fontSize: "11px", fontWeight: 600 }}>{saving ? "..." : "Upload Label Image"}</label>
+                 </div>
+
+                 <div style={{ background: T.bg, padding: "20px", borderRadius: "12px", border: `1px solid ${T.cream}` }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 600 }}>In Stock</span>
+                      <input type="checkbox" checked={form.inStock} onChange={e => set("inStock", e.target.checked)} />
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 600 }}>Featured Selection</span>
+                      <input type="checkbox" checked={form.featured} onChange={e => set("featured", e.target.checked)} />
+                    </div>
+                 </div>
+
+                 {form.tier_pricing?.length > 0 && (
+                   <div style={{ padding: "16px", background: T.wineGlow, borderRadius: "12px", border: `1px solid ${T.wine}20` }}>
+                      <p style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700, color: T.wine, marginBottom: "10px" }}>Volume Tiers Active</p>
+                      {form.tier_pricing.map((t, idx) => (
+                        <div key={idx} style={{ fontSize: "11px", color: T.deep, marginBottom: "4px" }}>
+                          {t.min_cs}+ Cs: ${t.case_price} / cs
+                        </div>
+                      ))}
+                   </div>
+                 )}
+
+                 <button onClick={saveProduct} disabled={saving} style={{ marginTop: "auto", padding: "16px", background: T.wine, color: T.paper, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase" }}>
+                    {saving ? "Processing..." : "Sync to Portfolio"}
+                 </button>
               </div>
+           </div>
+        </div>
+      )}
 
-              {/* Toggles */}
-              <div style={{ gridColumn: "1 / -1", display: "flex", gap: "32px" }}>
-                <Toggle
-                  label="Available to Order"
-                  hint="Turn off if the product is out of stock"
-                  value={form.inStock}
-                  onChange={(v) => set("inStock", v)}
-                  onColor={T.green}
-                />
-                <Toggle
-                  label="Featured on Portfolio"
-                  hint="Shown in the 'Featured Selections' section"
-                  value={form.featured}
-                  onChange={(v) => set("featured", v)}
-                  onColor={T.gold}
-                />
-              </div>
-            </div>
-
-            {/* Save button */}
-            <div style={{ marginTop: "32px", display: "flex", gap: "12px", alignItems: "center" }}>
-              <button
-                onClick={save}
-                disabled={saving}
-                style={{
-                  fontFamily: ff.b, fontSize: "11px", letterSpacing: "2.5px",
-                  textTransform: "uppercase", fontWeight: 600,
-                  color: T.paper, background: saving ? T.muted : T.wine,
-                  border: "none", borderRadius: "6px",
-                  padding: "14px 36px", cursor: saving ? "not-allowed" : "pointer",
-                  transition: "background 0.2s",
-                }}
-              >
-                {saving ? "Saving…" : editingId ? "Save Changes" : "Add to Catalog"}
-              </button>
-              <button onClick={cancelForm} style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, background: "none", border: "none", cursor: "pointer" }}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ── Product List ── */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
-          <div>
-            <h2 style={{ fontFamily: ff.h, fontSize: "28px", color: T.ink }}>Product Catalog</h2>
-            <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, marginTop: "2px" }}>
-              {products.length} product{products.length !== 1 ? "s" : ""} · click a row to edit
-            </p>
-          </div>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, origin or SKU…"
-            style={{ padding: "10px 16px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "6px", fontFamily: ff.b, fontSize: "13px", color: T.ink, outline: "none", width: "280px" }}
+      {/* Product List View */}
+      <div style={{ background: T.paper, borderRadius: "12px", border: `1px solid ${T.cream}`, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+        <div style={{ padding: "20px", borderBottom: `1px solid ${T.cream}`, background: T.bg }}>
+          <input 
+            value={search} 
+            onChange={e => setSearch(e.target.value)} 
+            placeholder="Search by brand, product name, or SKU..." 
+            style={{ width: "100%", padding: "12px 16px", border: `1px solid ${T.cream}`, borderRadius: "8px", outline: "none", fontSize: "14px" }}
           />
         </div>
-
-        {/* Table */}
-        <div style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "10px", overflow: "hidden" }}>
-          {/* Header */}
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1.5fr 80px 80px 80px", padding: "12px 20px", background: T.cream, gap: "12px" }}>
-            {["Product", "Origin", "Price", "Categories", "Stock", "Featured", ""].map((h) => (
-              <span key={h} style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, fontWeight: 600 }}>{h}</span>
-            ))}
+        {products.filter(p => 
+          p.name.toLowerCase().includes(search.toLowerCase()) || 
+          (p.brand || "").toLowerCase().includes(search.toLowerCase()) || 
+          (p.sku || p.product_code || "").toLowerCase().includes(search.toLowerCase())
+        ).map((p, i) => (
+          <div key={p.id} style={{ display: "grid", gridTemplateColumns: "80px 3.5fr 1fr 1.5fr 100px", padding: "16px 20px", borderBottom: `1px solid ${T.cream}`, alignItems: "center", transition: "background 0.2s" }}>
+            <div style={{ width: "56px", height: "56px", background: T.bg, borderRadius: "6px", overflow: "hidden", border: `1px solid ${T.cream}` }}>
+              {p.image_url || p.imageUrl ? <img src={p.image_url || p.imageUrl} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : null}
+            </div>
+            <div>
+              <span style={{ fontSize: "10px", letterSpacing: "1px", textTransform: "uppercase", color: T.muted }}>{p.brand}</span>
+              <span style={{ fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink, display: "block" }}>{p.name} {p.vintage}</span>
+              <span style={{ fontSize: "11px", color: T.muted }}>{p.product_code || p.sku} · {p.format}</span>
+            </div>
+            <span style={{ fontSize: "12px", color: T.muted }}>{p.categories?.join(", ")}</span>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+               <span style={{ fontFamily: ff.h, color: T.wine, fontSize: "16px" }}>${(p.price_case || 0).toFixed(2)} <span style={{ fontSize: "10px", color: T.muted }}>/ cs</span></span>
+               <span style={{ fontSize: "11px", color: T.muted }}>${(p.price_bottle || 0).toFixed(2)} / btl</span>
+            </div>
+            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button onClick={() => openEdit(p)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px" }}>✏️</button>
+              <button onClick={() => deleteProduct(p.id)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px" }}>🗑️</button>
+            </div>
           </div>
-
-          {filtered.length === 0 && (
-            <div style={{ padding: "48px", textAlign: "center", fontFamily: ff.b, fontSize: "14px", color: T.muted }}>
-              {search ? `No products match "${search}"` : "No products yet — click Add Product to get started."}
-            </div>
-          )}
-
-          {filtered.map((p, i) => (
-            <div
-              key={p.id ?? p.slug ?? i}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "2fr 1fr 1fr 1.5fr 80px 80px 80px",
-                padding: "16px 20px",
-                gap: "12px",
-                borderBottom: i < filtered.length - 1 ? `1px solid ${T.cream}` : "none",
-                alignItems: "center",
-                cursor: "pointer",
-                transition: "background 0.15s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = T.bg)}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-              onClick={() => openEdit(p)}
-            >
-              {/* Name + SKU */}
-              <div>
-                <p style={{ fontFamily: ff.b, fontSize: "14px", fontWeight: 600, color: T.ink }}>{p.name}</p>
-                <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>{p.sku} · {p.unit}</p>
-              </div>
-
-              {/* Origin */}
-              <span style={{ fontFamily: ff.b, fontSize: "12px", color: T.deep }}>{p.origin}</span>
-
-              {/* Price */}
-              <span style={{ fontFamily: ff.h, fontSize: "16px", color: T.wine }}>${parseFloat(p.price).toFixed(2)}</span>
-
-              {/* Categories */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                {(p.categories ?? []).map((c) => (
-                  <span key={c} style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1px", textTransform: "uppercase", color: T.wine, background: T.wineGlow, padding: "3px 8px", borderRadius: "3px" }}>
-                    {c}
-                  </span>
-                ))}
-              </div>
-
-              {/* Stock */}
-              <span style={{ fontFamily: ff.b, fontSize: "11px", color: p.inStock ? T.green : T.red, fontWeight: 600 }}>
-                {p.inStock ? "✓ Yes" : "✕ No"}
-              </span>
-
-              {/* Featured */}
-              <span style={{ fontFamily: ff.b, fontSize: "11px", color: p.featured ? T.gold : T.taupe, fontWeight: 600 }}>
-                {p.featured ? "★ Yes" : "—"}
-              </span>
-
-              {/* Delete */}
-              <button
-                onClick={(e) => { e.stopPropagation(); deleteProduct(p); }}
-                disabled={deleting === (p.id ?? p.slug)}
-                style={{ fontFamily: ff.b, fontSize: "11px", color: T.red, background: "none", border: "none", cursor: "pointer", padding: "4px 8px", opacity: deleting === (p.id ?? p.slug) ? 0.4 : 1 }}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Help box */}
-        <div style={{ marginTop: "32px", padding: "24px 28px", background: T.cream, borderRadius: "10px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
-          {[
-            { icon: "＋", title: "Add a product",    text: 'Click "Add Product" at the top right, fill in the details, and save. It appears on the public Portfolio and the order catalog immediately.' },
-            { icon: "✎", title: "Edit a product",    text: 'Click anywhere on a product row to open the edit form. Change any field and click "Save Changes".' },
-            { icon: "◉", title: "Hide vs. delete",   text: 'Toggle "Available to Order" off to show the product as out of stock without removing it. Use Delete only to remove it permanently.' },
-          ].map((h) => (
-            <div key={h.title}>
-              <p style={{ fontFamily: ff.b, fontSize: "13px", fontWeight: 600, color: T.ink, marginBottom: "6px" }}>{h.icon} {h.title}</p>
-              <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.7 }}>{h.text}</p>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   );
-}
 
-// ── Toggle component ──────────────────────────────────────────────────────────
-function Toggle({ label, hint, value, onChange, onColor }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-      <button
-        type="button"
-        onClick={() => onChange(!value)}
-        style={{
-          width: "44px", height: "24px", borderRadius: "12px", border: "none",
-          background: value ? onColor : T.taupe, cursor: "pointer",
-          position: "relative", transition: "background 0.25s", flexShrink: 0,
-        }}
-      >
-        <span style={{
-          position: "absolute", top: "3px",
-          left: value ? "23px" : "3px",
-          width: "18px", height: "18px", borderRadius: "50%",
-          background: T.paper, transition: "left 0.25s",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-        }} />
-      </button>
-      <div>
-        <p style={{ fontFamily: ff.b, fontSize: "13px", fontWeight: 600, color: T.ink }}>{label}</p>
-        <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>{hint}</p>
+    <div style={{ display: "flex", minHeight: "100vh", background: T.bg }}>
+      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      
+      <main style={{ marginLeft: "280px", width: "calc(100% - 280px)", padding: "80px 60px" }}>
+        {activeTab === "products" && renderProducts()}
+        {activeTab === "media" && <AdminMediaManager />}
+        {activeTab === "catalogs" && <AdminCatalogManager />}
+        {activeTab === "analytics" && <AdminAnalytics />}
+      </main>
+
+      {/* ── Global Header Overlay ── */}
+      <div style={{ 
+        position: "fixed", top: 0, left: 0, right: 0, height: "80px", 
+        background: T.ink, zIndex: 100, display: "flex", 
+        justifyContent: "space-between", alignItems: "center", padding: "0 48px" 
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <span style={{ fontFamily: ff.h, color: T.paper, fontSize: "20px", letterSpacing: "4px" }}>Vinaio</span>
+          <span style={{ height: "20px", width: "1px", background: `${T.paper}30` }} />
+          <span style={{ fontFamily: ff.b, color: T.warm, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>Admin Console</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <span style={{ fontFamily: ff.b, color: T.warm, fontSize: "11px" }}>Welcome, Admin</span>
+          <a href="/api/admin/logout" style={{ fontFamily: ff.b, color: T.wineGlow, fontSize: "11px", textDecoration: "none", fontWeight: 600 }}>Logout →</a>
+        </div>
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ export default async function AdminPage() {
       products = data.map((p) => ({
         ...p,
         inStock: p.in_stock,
+        imageUrl: p.image_url,
         categories: p.categories ?? (p.category ? [p.category] : []),
       }));
     }

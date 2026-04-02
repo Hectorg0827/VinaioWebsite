@@ -4,22 +4,37 @@
 
 -- ─── Products ────────────────────────────────────────────────────────────────
 create table if not exists products (
-  id           uuid primary key default gen_random_uuid(),
-  slug         text unique not null,
-  name         text not null,
-  sku          text,
-  price        numeric(10,2),
-  unit         text,
-  categories   text[],
-  origin       text,
-  region       text,
-  in_stock     boolean default true,
-  featured     boolean default false,
-  description  text,
-  tags         text[],
-  image_url    text,
-  created_at   timestamptz default now()
+  id             uuid primary key default gen_random_uuid(),
+  slug           text unique not null,
+  product_code   text,
+  brand          text,
+  name           text not null,
+  vintage        text,
+  format         text,
+  type           text,
+  category       text,
+  categories     text[],
+  origin         text,
+  region         text,
+  description_en text,
+  description_es text,
+  price_case     numeric(10,2),
+  price_bottle   numeric(10,2),
+  tier_pricing   jsonb default '[]'::jsonb,
+  in_stock       boolean default true,
+  featured       boolean default false,
+  image_url      text,
+  tags           text[],
+  portfolios     text[] default '{}'::text[],
+  created_at     timestamptz default now()
 );
+
+-- Auto-tagging logic for curated portfolios
+update products set portfolios = array_append(portfolios, 'caribbean') 
+where origin ilike '%Dominican%' or origin ilike 'DR';
+
+update products set portfolios = array_append(portfolios, 'beer_low_alc') 
+where category = 'Beer' or type ilike '%Beer%';
 
 -- ─── Customer profiles (linked to auth.users) ────────────────────────────────
 create table if not exists customers (
@@ -90,6 +105,45 @@ create table if not exists contact_submissions (
   created_at     timestamptz default now()
 );
 
+-- ─── Site Management: Hero ──────────────────────────────────────────────────
+create table if not exists site_hero (
+  id uuid primary key default gen_random_uuid(),
+  url text not null,
+  type text default 'video',
+  title text,
+  subtitle text,
+  active boolean default true,
+  updated_at timestamptz default now()
+);
+
+-- ─── Site Management: Partners ───────────────────────────────────────────────
+create table if not exists site_partners (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  logo_url text not null,
+  active boolean default true,
+  "order" int default 0,
+  created_at timestamptz default now()
+);
+
+-- ─── Site Management: Catalogs ───────────────────────────────────────────────
+create table if not exists site_catalogs (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  file_url text not null,
+  category_filter text,
+  created_at timestamptz default now()
+);
+
+-- ─── Portal Logs ─────────────────────────────────────────────────────────────
+create table if not exists portal_logs (
+  id uuid primary key default gen_random_uuid(),
+  customer_id uuid references auth.users on delete set null,
+  action text not null,
+  details jsonb,
+  created_at timestamptz default now()
+);
+
 -- ─── Row Level Security ───────────────────────────────────────────────────────
 alter table products enable row level security;
 alter table customers enable row level security;
@@ -139,6 +193,21 @@ create policy "licenses_select_own"    on licenses for select using (auth.uid() 
 -- ── Contact Submissions ──────────────────────────────────────────────────────
 -- Anonymous users may insert (submit the contact form); no reads allowed
 create policy "contact_insert"         on contact_submissions for insert with check (true);
+
+-- ─── Site Management RLS ─────────────────────────────────────────────────────
+alter table site_hero enable row level security;
+alter table site_partners enable row level security;
+alter table site_catalogs enable row level security;
+alter table portal_logs enable row level security;
+
+-- Public can read active hero, partners, and catalogs
+create policy "site_hero_public_read"     on site_hero for select using (active = true);
+create policy "site_partners_public_read" on site_partners for select using (active = true);
+create policy "site_catalogs_public_read" on site_catalogs for select using (true);
+
+-- Authenticated (Portal Users) can log actions
+create policy "portal_logs_insert"        on portal_logs for insert with check (auth.uid() = customer_id);
+create policy "portal_logs_select_own"    on portal_logs for select using (auth.uid() = customer_id);
 
 -- ─── Seed: Products ───────────────────────────────────────────────────────────
 insert into products (slug, name, sku, price, unit, categories, origin, region, in_stock, featured, description, tags) values

@@ -13,9 +13,16 @@ export async function POST(req) {
   if (!(await isAdminAuthenticated(cookieStore))) return unauthorized();
 
   const body = await req.json();
-  const { name, sku, price, unit, categories, origin, region, inStock, featured, description, tags, imageUrl } = body;
+  const { 
+    name, sku, brand, vintage, format, type, category, categories, 
+    origin, region, description_en, description_es, 
+    price_case, price_bottle, tier_pricing, portfolios,
+    inStock, featured, imageUrl, tags 
+  } = body;
 
-  if (!name || !sku) {
+  const slug = body.slug || `${name}-${sku}`.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+  if (!name || (!sku && !body.product_code)) {
     return NextResponse.json({ error: "name and sku are required" }, { status: 400 });
   }
 
@@ -25,17 +32,26 @@ export async function POST(req) {
       .from("products")
       .insert({
         name,
-        sku,
-        price:       parseFloat(price) || 0,
-        unit:        unit || "750ml",
-        categories:  categories ?? [],
-        origin:      origin || "",
-        region:      region || "",
-        in_stock:    inStock ?? true,
-        featured:    featured ?? false,
-        description: description || "",
-        tags:        tags ?? [],
-        image_url:   imageUrl ?? null,
+        slug,
+        product_code:   body.product_code || sku,
+        brand:          brand          || null,
+        vintage:        vintage        || null,
+        format:         format         || null,
+        type:           type           || null,
+        category:       category       || categories?.[0] || null,
+        categories:     categories     ?? [],
+        origin:         origin         || "",
+        region:         region         || "",
+        description_en: description_en || null,
+        description_es: description_es || null,
+        price_case:     parseFloat(price_case)   || 0,
+        price_bottle:   parseFloat(price_bottle) || 0,
+        tier_pricing:   tier_pricing   ?? [],
+        portfolios:     portfolios     ?? [],
+        in_stock:       inStock        ?? true,
+        featured:       featured       ?? false,
+        image_url:      imageUrl       ?? null,
+        tags:           tags           ?? [],
       })
       .select()
       .single();
