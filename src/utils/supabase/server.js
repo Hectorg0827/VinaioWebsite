@@ -40,3 +40,23 @@ export const createClient = async () => {
     },
   );
 };
+
+export const createAdminClient = async () => {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    console.error("Missing Service Role key for Admin Client.");
+    return null;
+  }
+
+  return createServerClient(
+    supabaseUrl,
+    serviceRoleKey,
+    {
+      cookies: {
+        getAll() { return [] },
+        setAll() { },
+      },
+    },
+  );
+};

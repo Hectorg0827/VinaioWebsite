@@ -1,6 +1,6 @@
 import { NextResponse }        from "next/server";
 import { cookies }             from "next/headers";
-import { createClient }        from "@/lib/supabase/server";
+import { createAdminClient }    from "@/lib/supabase/server";
 import { isAdminAuthenticated } from "@/lib/admin/auth";
 
 async function unauthorized() {
@@ -27,7 +27,7 @@ export async function POST(req) {
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = await createAdminClient();
     const { data, error } = await supabase
       .from("products")
       .insert({

@@ -131,12 +131,19 @@ export default function AdminDashboard({ initialProducts }) {
     });
 
     if (res.ok) {
-       setMsg({ type: "success", text: "Product saved!" });
+       setMsg({ type: "success", text: "Product successfully synchronized with database!" });
        setShowForm(false);
-       window.location.reload(); 
+       // Refresh list after brief delay
+       setTimeout(() => window.location.reload(), 1000);
     } else {
-       const err = await res.json();
-       setMsg({ type: "error", text: err.error || "Failed to save." });
+       let errorMsg = "Failed to save.";
+       try {
+         const err = await res.json();
+         errorMsg = err.error || errorMsg;
+       } catch (e) {
+         console.error("Non-JSON error response", e);
+       }
+       setMsg({ type: "error", text: errorMsg });
     }
     setSaving(false);
   };

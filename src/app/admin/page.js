@@ -1,6 +1,6 @@
 import { cookies }             from "next/headers";
 import { redirect }            from "next/navigation";
-import { createClient }        from "@/lib/supabase/server";
+import { createAdminClient }    from "@/lib/supabase/server";
 import { isAdminAuthenticated } from "@/lib/admin/auth";
 import { PRODUCTS }            from "@/data/products";
 import AdminDashboard          from "./AdminDashboard";
@@ -16,7 +16,7 @@ export default async function AdminPage() {
   }));
 
   try {
-    const supabase = await createClient();
+    const supabase = await createAdminClient();
     const { data } = await supabase
       .from("products")
       .select("*")

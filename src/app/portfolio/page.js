@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/client";
 
 export default function PortfolioPage() {
   const [products, setProducts] = useState(PRODUCTS);
+  const [syncStatus, setSyncStatus] = useState("syncing"); // "syncing" | "live" | "static"
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [viewMode, setViewMode] = useState("selection"); // "selection" | "grid"
@@ -24,7 +25,12 @@ export default function PortfolioPage() {
       .from("products")
       .select("*")
       .order("featured", { ascending: false })
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Supabase fetch error:", error);
+          setSyncStatus("static");
+          return;
+        }
         if (data && data.length > 0) {
           setProducts(
             data.map((p) => ({
@@ -36,6 +42,9 @@ export default function PortfolioPage() {
               portfolios: p.portfolios ?? ["all"]
             }))
           );
+          setSyncStatus("live");
+        } else {
+          setSyncStatus("static");
         }
       });
   }, []);
@@ -112,8 +121,11 @@ export default function PortfolioPage() {
 
   return (
     <>
-      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 9999, background: "black", color: "white", padding: "10px", fontSize: "14px", pointerEvents: "none" }}>
-        Clicks: {clickCount} | {debugLog}
+      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 9999, background: "black", color: "white", padding: "10px", fontSize: "14px", pointerEvents: "none", opacity: 0.8 }}>
+        {syncStatus === "syncing" && <span style={{ color: T.gold }}>◈ Syncing Live Catalog...</span>}
+        {syncStatus === "live" && <span style={{ color: T.green }}>● Live Database Connected</span>}
+        {syncStatus === "static" && <span style={{ color: T.wineGlow }}>○ Using Static Fallback</span>}
+        <span style={{ marginLeft: "15px", opacity: 0.5 }}>Clicks: {clickCount} | {debugLog}</span>
       </div>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
