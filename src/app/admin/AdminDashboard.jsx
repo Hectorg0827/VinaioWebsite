@@ -100,24 +100,60 @@ export default function AdminDashboard({ initialProducts }) {
     const file = e.target.files?.[0];
     if (!file) return;
     setSaving(true);
-    const publicUrl = await uploadFile(file, "products");
-    if (publicUrl) {
-      set("imageUrl", publicUrl);
-      setMsg({ type: "success", text: "Bottle image uploaded!" });
+    setMsg({ type: "success", text: "Uploading bottle image..." });
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bucket", "products");
+
+    try {
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (res.ok && data.publicUrl) {
+        set("imageUrl", data.publicUrl);
+        setMsg({ type: "success", text: "Bottle image synced!" });
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: `Upload Error: ${err.message}` });
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleLogoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setSaving(true);
-    const publicUrl = await uploadFile(file, "logos");
-    if (publicUrl) {
-      set("logoUrl", publicUrl);
-      setMsg({ type: "success", text: "Brand logo uploaded!" });
+    setMsg({ type: "success", text: "Uploading brand logo..." });
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bucket", "logos");
+
+    try {
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (res.ok && data.publicUrl) {
+        set("logoUrl", data.publicUrl);
+        setMsg({ type: "success", text: "Brand logo synced!" });
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: `Upload Error: ${err.message}` });
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const saveProduct = async () => {
