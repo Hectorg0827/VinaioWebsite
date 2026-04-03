@@ -18,6 +18,10 @@ export default function HomePage() {
   const [loaded, setLoaded] = useState(false);
   const [partners, setPartners] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [hero, setHero] = useState({ 
+    images: [], 
+    subtitle: "From the sun-drenched vineyards of Rioja to the rolling hills of Tuscany, the volcanic slopes of Nepal to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines, spirits, and craft beverages to the American table. Based in New York and distributing across the United States, we partner directly with family estates and artisan producers in over 15 countries, curating a portfolio of more than 500 labels that tell a story in every bottle."
+  });
 
   // Default images in case DB is not yet synchronized
   const DEFAULT_SLIDES = [
