@@ -5,7 +5,13 @@ import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 
 export default function AdminMediaManager() {
-  const [hero, setHero] = useState({ url: "", title: "", subtitle: "", type: "video" });
+  const [hero, setHero] = useState({ 
+    url: "", // fallback/legacy
+    images: ["", "", ""], // Hero 2.0
+    title: "", 
+    subtitle: "From the sun-drenched vineyards of Rioja to the rolling hills of Tuscany, the volcanic slopes of Nepal to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines, spirits, and craft beverages to the American table. Based in New York and distributing across the United States, we partner directly with family estates and artisan producers in over 15 countries, curating a portfolio of more than 500 labels that tell a story in every bottle.", 
+    type: "image" 
+  });
   const [partners, setPartners] = useState([]);
   const [savingHero, setSavingHero] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
@@ -19,7 +25,18 @@ export default function AdminMediaManager() {
     try {
       const resHero = await fetch("/api/admin/hero");
       const dataHero = await resHero.json();
-      if (dataHero.hero) setHero(dataHero.hero);
+      if (dataHero.hero) {
+        let urls = [];
+        try {
+          urls = JSON.parse(dataHero.hero.url);
+        } catch (e) {
+          urls = dataHero.hero.url?.split("|").filter(Boolean) || [];
+        }
+        setHero({ 
+          ...dataHero.hero, 
+          images: urls.length >= 3 ? urls : [...urls, "", "", ""].slice(0, 3) 
+        });
+      }
 
       const resPart = await fetch("/api/admin/partners");
       const dataPart = await resPart.json();
@@ -31,29 +48,35 @@ export default function AdminMediaManager() {
 
   const saveHero = async () => {
     setSavingHero(true);
+    // Combine images back into one field for the legacy schema
+    const dataToSave = {
+      ...hero,
+      url: JSON.stringify(hero.images.filter(u => u.trim() !== "")),
+      active: true
+    };
+
     try {
       const res = await fetch("/api/admin/hero", {
         method: "POST",
-        body: JSON.stringify(hero),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSave),
       });
       if (res.ok) {
-        setMsg({ type: "success", text: "Hero updated!" });
+        setMsg({ type: "success", text: "Hero configuration synchronized!" });
       } else {
         throw new Error("Save failed");
       }
     } catch (err) {
-      setMsg({ type: "error", text: "Failed to save hero settings." });
+      setMsg({ type: "error", text: "Failed to sync hero settings." });
     }
     setSavingHero(false);
   };
 
-  const handleHeroFileUpload = async (e) => {
+  const handleHeroImageUpload = async (e, index) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setSavingHero(true);
-    const type = file.type.startsWith("video") ? "video" : "image";
-    
     const formData = new FormData();
     formData.append("file", file);
     formData.append("bucket", "hero");
@@ -62,8 +85,10 @@ export default function AdminMediaManager() {
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (res.ok && data.publicUrl) {
-        setHero({ ...hero, url: data.publicUrl, type });
-        setMsg({ type: "success", text: "File uploaded! Save to apply." });
+        const newImages = [...hero.images];
+        newImages[index] = data.publicUrl;
+        setHero({ ...hero, images: newImages });
+        setMsg({ type: "success", text: `Hero Image ${index + 1} uploaded!` });
       } else {
         throw new Error(data.error || "Upload failed");
       }
@@ -92,6 +117,7 @@ export default function AdminMediaManager() {
       if (resUpload.ok && dataUpload.publicUrl) {
         const resDb = await fetch("/api/admin/partners", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, logo_url: dataUpload.publicUrl, active: true, order: partners.length })
         });
         const dataDb = await resDb.json();
@@ -113,6 +139,7 @@ export default function AdminMediaManager() {
     try {
       const res = await fetch("/api/admin/partners", {
         method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, active: !currentStatus })
       });
       if (res.ok) {
@@ -137,11 +164,7 @@ export default function AdminMediaManager() {
 
   // ── Styles ──────────────────────────────────
   const cardStyle = {
-    background: T.paper,
-    padding: "32px",
-    borderRadius: "16px",
-    border: `1px solid ${T.cream}`,
-    marginBottom: "40px"
+    background: T.paper, padding: "32px", borderRadius: "16px", border: `1px solid ${T.cream}`, marginBottom: "40px"
   };
 
   const inputStyle = {
@@ -150,73 +173,64 @@ export default function AdminMediaManager() {
   };
 
   return (
-    <div style={{ maxWidth: "1000px" }}>
+    <div style={{ maxWidth: "1200px" }}>
       <Hr w="40px" c={T.wine} style={{ marginBottom: "20px" }} />
       <h1 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink, marginBottom: "40px" }}>Media & Branding</h1>
 
+      {msg && (
+        <div style={{ padding: "16px", background: msg.type === "success" ? T.wineGlow : "#fee2e2", color: msg.type === "success" ? T.wine : "#b91c1c", borderRadius: "8px", marginBottom: "24px", fontSize: "13px", fontWeight: 600 }}>
+          {msg.text}
+        </div>
+      )}
+
       {/* ── Hero Management ── */}
       <section style={cardStyle}>
-        <h2 style={{ fontFamily: ff.h, fontSize: "20px", color: T.wine, marginBottom: "24px" }}>Landing Hero (Vineyard Video)</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "32px" }}>
+           <div>
+             <h2 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "8px" }}>Dynamic Hero Console</h2>
+             <p style={{ fontSize: "13px", color: T.muted }}>Manage the "alive" 3-image carousel and mission statement text.</p>
+           </div>
+           <button onClick={saveHero} disabled={savingHero} style={{ padding: "12px 32px", background: T.wine, color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 600 }}>
+             {savingHero ? "Syncing..." : "Sync Hero to Site"}
+           </button>
+        </div>
         
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "40px" }}>
           <div>
-            <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Video / Header Image URL</label>
-            <input 
-              value={hero.url} 
-              onChange={(e) => setHero({ ...hero, url: e.target.value })} 
-              style={inputStyle} 
-              placeholder="https://... (CDN or Supabase Storage link)"
-            />
-            
-            <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Title Overlay</label>
-            <input 
-              value={hero.title} 
-              onChange={(e) => setHero({ ...hero, title: e.target.value })} 
-              style={inputStyle}
-            />
-
-            <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Subtitle</label>
-            <input 
+            <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, display: "block", marginBottom: "12px" }}>Global Hero Narrative</label>
+            <textarea 
               value={hero.subtitle} 
               onChange={(e) => setHero({ ...hero, subtitle: e.target.value })} 
-              style={inputStyle}
+              style={{ ...inputStyle, height: "180px", resize: "none" }}
+              placeholder="Vinaio Imports brings the world's most compelling wines..."
             />
 
-            <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
-              <input 
-                type="file" 
-                id="hero-upload" 
-                style={{ display: "none" }} 
-                accept="video/*,image/*" 
-                onChange={handleHeroFileUpload} 
-              />
-              <label 
-                htmlFor="hero-upload" 
-                style={{ flexGrow: 1, textAlign: "center", padding: "12px", background: T.bg, border: `1px dashed ${T.cream}`, borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "1px" }}
-              >
-                {savingHero ? "Uploading media..." : "↑ Upload New Video/Image"}
-              </label>
+            <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, display: "block", marginBottom: "16px" }}>Background Slide Sequence</label>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }}>
+              {[0, 1, 2].map(i => (
+                <div key={i}>
+                  <div style={{ width: "100%", height: "120px", background: T.bg, borderRadius: "8px", border: `1px dashed ${T.cream}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", overflow: "hidden" }}>
+                    {hero.images?.[i] ? <img src={hero.images[i]} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: "10px", color: T.muted }}>Slot {i+1}</span>}
+                  </div>
+                  <input type="file" id={`hero-${i}`} style={{ display: "none" }} accept="image/*" onChange={(e) => handleHeroImageUpload(e, i)} />
+                  <label htmlFor={`hero-${i}`} style={{ display: "block", textAlign: "center", padding: "8px", background: T.taupe, borderRadius: "6px", cursor: "pointer", fontSize: "10px", fontWeight: 600 }}>
+                    {savingHero ? "..." : "Upload Slide"}
+                  </label>
+                </div>
+              ))}
             </div>
-
-            <button 
-              onClick={saveHero} 
-              disabled={savingHero}
-              style={{ width: "100%", padding: "12px 24px", background: T.wine, color: T.paper, border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "12px", textTransform: "uppercase", letterSpacing: "2px" }}
-            >
-              {savingHero ? "Processing..." : "Save Hero Settings"}
-            </button>
           </div>
 
-          <div style={{ background: T.ink, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-             {hero.url ? (
-               hero.type === "video" ? (
-                 <video src={hero.url} autoPlay muted loop style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-               ) : (
-                 <img src={hero.url} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-               )
-             ) : (
-               <p style={{ color: T.paper, fontFamily: ff.b, fontSize: "12px" }}>Preview</p>
-             )}
+          <div style={{ background: T.ink, borderRadius: "16px", padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
+             <p style={{ color: T.gold, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Live Preview Simulation</p>
+             <div style={{ flexGrow: 1, position: "relative", background: "#000", borderRadius: "12px", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {hero.images?.[0] && <img src={hero.images[0]} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />}
+                <div style={{ position: "relative", zIndex: 2, padding: "20px", textAlign: "center" }}>
+                   <img src="/logo.png" style={{ height: "20px", marginBottom: "12px" }} />
+                   <div style={{ fontSize: "12px", color: "white", fontFamily: ff.h, lineHeight: 1.4 }}>{hero.subtitle?.substring(0, 80)}...</div>
+                </div>
+             </div>
+             <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontStyle: "italic" }}>The production site uses Ken Burns scale-animations for an "alive" feel.</p>
           </div>
         </div>
       </section>

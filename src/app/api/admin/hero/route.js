@@ -35,9 +35,24 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const supabase = await createAdminClient();
+
+    // 1. Find the current active row ID if it exists
+    const { data: existing } = await supabase
+      .from("site_hero")
+      .select("id")
+      .eq("active", true)
+      .limit(1)
+      .single();
+
+    // 2. Upsert using that ID or a new one
     const { data, error } = await supabase
       .from("site_hero")
-      .upsert({ ...body, active: true, updated_at: new Date() })
+      .upsert({ 
+        ...body, 
+        id: existing?.id, // If it exists, overwrite it
+        active: true, 
+        updated_at: new Date() 
+      })
       .select()
       .single();
 

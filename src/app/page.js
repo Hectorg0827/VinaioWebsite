@@ -16,22 +16,32 @@ const FALLBACK_LOGOS = [
 export default function HomePage() {
   const supabase = createClient();
   const [loaded, setLoaded] = useState(false);
-  const [hero, setHero] = useState({
-    url: "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-vineyard-at-sunset-1148-large.mp4",
-    type: "video",
-    title: "",
-    subtitle: "The bridge between terroir & the market"
-  });
   const [partners, setPartners] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Default images in case DB is not yet synchronized
+  const DEFAULT_SLIDES = [
+    "/images/hero/vineyard.png",
+    "/images/hero/macorix.png",
+    "/images/hero/barrels.png"
+  ];
 
   useEffect(() => {
     setTimeout(() => setLoaded(true), 80);
     fetchContent();
   }, []);
 
+  // Simple slide timer for the "alive" effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide(s => (s + 1) % DEFAULT_SLIDES.length);
+    }, 10000); 
+    return () => clearInterval(timer);
+  }, []);
+
   const fetchContent = async () => {
     try {
-      // 1. Fetch Hero (Most recent active)
+      // 1. Fetch Hero
       const { data: heroData } = await supabase
         .from("site_hero")
         .select("*")
@@ -40,7 +50,16 @@ export default function HomePage() {
         .limit(1)
         .single();
       
-      if (heroData) setHero(heroData);
+      if (heroData) {
+        // Handle potential array stored as delimiter or JSON
+        let urls = [];
+        try {
+          urls = JSON.parse(heroData.url);
+        } catch (e) {
+          urls = heroData.url?.split("|").filter(Boolean);
+        }
+        setHero({ ...heroData, images: urls.length > 0 ? urls : [heroData.url] });
+      }
 
       // 2. Fetch Partners
       const { data: partnersData } = await supabase
@@ -55,40 +74,61 @@ export default function HomePage() {
         setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
       }
     } catch (err) {
-      console.warn("Failed to fetch dynamic content, using defaults.");
+      console.warn("Using default hero configuration.");
       setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
     }
   };
 
+  const slides = (hero.images && hero.images.length > 0) ? hero.images : DEFAULT_SLIDES;
+
   return (
     <>
+      <style>{`
+        @keyframes kenburns {
+          0% { transform: scale(1.05) translate(0, 0); }
+          50% { transform: scale(1.2) translate(-2%, -2%); }
+          100% { transform: scale(1.05) translate(0, 0); }
+        }
+        .hero-slide {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transition: opacity 2s ease-in-out;
+          background-size: cover;
+          background-position: center;
+          animation: kenburns 30s infinite linear;
+        }
+        .hero-slide.active {
+          opacity: 1;
+        }
+      `}</style>
+
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         style={{
           height: "100vh",
           position: "relative",
           overflow: "hidden",
-          background: `url('https://images.unsplash.com/photo-1506377247377-2a5b3b0ca706?auto=format&fit=crop&q=80&w=2000') center/cover no-repeat`,
+          background: T.ink,
         }}
       >
-        {hero.type === "video" ? (
-          <video
-            src={hero.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
+        {slides.map((url, idx) => (
+          <div 
+            key={idx}
+            className={`hero-slide ${idx === currentSlide ? "active" : ""}`}
+            style={{ 
+              backgroundImage: `url(${url})`,
+              opacity: (idx === currentSlide && loaded) ? 0.6 : 0,
+              animationDelay: `${idx * -10}s`
+            }}
           />
-        ) : (
-          <div style={{ position: "absolute", inset: 0, background: `url(${hero.url}) center/cover no-repeat`, opacity: 0.6 }} />
-        )}
+        ))}
 
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `linear-gradient(to bottom, transparent 0%, ${T.ink} 100%)`,
+            background: `linear-gradient(to bottom, ${T.ink}99 0%, transparent 40%, ${T.ink} 100%)`,
           }}
         />
 
@@ -101,13 +141,14 @@ export default function HomePage() {
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
-            padding: "0 48px",
+            padding: "0 56px",
+            zIndex: 10
           }}
         >
           <div
             style={{
               opacity: loaded ? 1 : 0,
-              transition: "all 1.2s ease 0.4s",
+              transition: "all 1s ease 0.2s",
               marginBottom: "32px",
               display: "flex",
               alignItems: "center",
@@ -115,110 +156,73 @@ export default function HomePage() {
             }}
           >
             <Hr w="40px" c={T.gold} />
-            <span
-              style={{
-                fontFamily: ff.b,
-                fontSize: "10px",
-                fontWeight: 500,
-                letterSpacing: "6px",
-                textTransform: "uppercase",
-                color: T.gold,
-              }}
-            >
+            <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.gold }}>
               Importers &amp; Distributors
             </span>
             <Hr w="40px" c={T.gold} />
           </div>
 
-          <div
-            style={{
-              opacity: loaded ? 1 : 0,
-              transition: "all 1.4s ease 0.2s",
-              marginBottom: "40px",
-              background: "rgba(255,255,255,0.9)",
-              padding: "32px 64px",
-              borderRadius: "8px",
-              backdropFilter: "blur(12px)",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
-              border: "1px solid rgba(255,255,255,0.4)",
-            }}
-          >
-            <img 
-              src="/logo.png" 
-              alt="Vinaio" 
-              style={{ height: "clamp(60px, 8vw, 100px)", width: "auto" }} 
-            />
+          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "48px" }}>
+            <img src="/logo.png" alt="Vinaio" style={{ height: "clamp(50px, 6vw, 80px)", width: "auto", filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.5))" }} />
           </div>
 
-          <p
+          <h1
             style={{
               fontFamily: ff.h,
-              fontSize: "clamp(32px, 5vw, 64px)",
+              fontSize: "clamp(24px, 3.5vw, 42px)",
               color: T.paper,
               opacity: loaded ? 1 : 0,
-              transition: "all 1.2s ease 0.5s",
-              marginBottom: "16px",
-              textShadow: "0 2px 20px rgba(0,0,0,0.5)",
-              maxWidth: "800px",
-              lineHeight: 1.1
-            }}
-          >
-            {hero.title}
-          </p>
-
-          <p
-            style={{
-              fontFamily: ff.b,
-              fontSize: "clamp(17px, 2.2vw, 22px)",
-              fontStyle: "italic",
-              color: "rgba(255,255,255,0.8)",
-              opacity: loaded ? 1 : 0,
-              transition: "all 1.2s ease 0.7s",
-              marginBottom: "56px",
-              textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+              transition: "all 1s ease 0.4s",
+              marginBottom: "32px",
+              textShadow: "0 2px 20px rgba(0,0,0,0.8)",
+              maxWidth: "1000px",
+              lineHeight: 1.3,
+              fontWeight: 400
             }}
           >
             {hero.subtitle || "The bridge between terroir & the market"}
-          </p>
+          </h1>
 
           <div
             style={{
               display: "flex",
-              gap: "20px",
+              gap: "24px",
               flexWrap: "wrap",
               justifyContent: "center",
               opacity: loaded ? 1 : 0,
-              transition: "all 1.2s ease 0.9s",
+              transition: "all 1s ease 0.6s",
             }}
           >
             {[
-              { href: "/portfolio", label: "Explore Portfolio", primary: false },
-              { href: "/portal",    label: "Customer Portal",   primary: true  },
-              { href: "/services",  label: "Our Services",      primary: false },
+              { href: "/portfolio", label: "Explore Portfolio", primary: true },
+              { href: "/portal",    label: "Customer Portal",   primary: false },
+              { href: "/contact",   label: "Partner with Us",   primary: false },
             ].map(({ href, label, primary }) => (
               <Link
                 key={href}
                 href={href}
                 style={{
                   fontFamily: ff.b,
-                  fontSize: "10.5px",
-                  letterSpacing: "3px",
+                  fontSize: "10px",
+                  letterSpacing: "4px",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  color: primary ? T.paper : T.paper,
-                  background: primary ? T.wine : "transparent",
-                  border: `1px solid ${primary ? T.wine : "rgba(255,255,255,0.4)"}`,
-                  padding: "16px 36px",
+                  color: T.paper,
+                  background: primary ? T.wine : "rgba(255,255,255,0.05)",
+                  border: `1px solid ${primary ? T.wine : "rgba(255,255,255,0.3)"}`,
+                  padding: "18px 42px",
                   transition: "all 0.4s",
+                  backdropFilter: "blur(4px)"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = T.wine;
-                  e.currentTarget.style.borderColor = T.wine;
+                  e.currentTarget.style.borderColor = T.gold;
+                  e.currentTarget.style.color = T.paper;
                 }}
                 onMouseLeave={(e) => {
                   if (!primary) {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
                   }
                 }}
               >
@@ -232,21 +236,14 @@ export default function HomePage() {
         <div
           style={{
             position: "absolute",
-            bottom: "40px",
+            bottom: "48px",
             left: "50%",
             transform: "translateX(-50%)",
-            opacity: loaded ? 0.4 : 0,
-            transition: "opacity 1s ease 1.5s",
+            opacity: loaded ? 0.3 : 0,
+            transition: "opacity 1s ease 1s",
           }}
         >
-          <div
-            style={{
-              width: "1px",
-              height: "48px",
-              background: `linear-gradient(to bottom, transparent, ${T.paper})`,
-              margin: "0 auto",
-            }}
-          />
+          <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom, transparent, ${T.paper})`, margin: "0 auto" }} />
         </div>
       </section>
 
