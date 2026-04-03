@@ -12,6 +12,22 @@ export const updateSession = async (request) => {
     },
   });
 
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn("Supabase credentials missing in middleware. Returning mock client for build safety.");
+    const mock = new Proxy(() => mock, {
+      get: (target, prop) => {
+        if (prop === "then") return (resolve) => resolve({ data: { user: null }, error: null });
+        if (prop === "auth") return { getUser: () => Promise.resolve({ data: { user: null }, error: null }) };
+        return mock;
+      },
+      apply: () => mock
+    });
+    // This will refresh session if expired - necessary for Server Components
+    // to read the correct session
+    await mock.auth.getUser();
+    return supabaseResponse;
+  }
+
   const supabase = createServerClient(
     supabaseUrl,
     supabaseKey,

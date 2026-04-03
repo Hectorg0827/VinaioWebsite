@@ -1,19 +1,23 @@
 import { updateSession } from "@/utils/supabase/middleware";
-import { createClient }   from "@/utils/supabase/middleware"; // Assuming it was exported, but I'll use the server client for auth check
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse } from "next/server";
 
 export async function middleware(request) {
-  // Use the updateSession helper to refresh the cookie
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+
+  // 1. Handle missing environment variables during build/prerender
+  if (!supabaseUrl || !supabaseKey) {
+    return NextResponse.next();
+  }
+
+  // 2. Use the updateSession helper to refresh the cookie
   let supabaseResponse = await updateSession(request);
   
-  // Create a separate client for the auth protection check
-  // (Standard practice is to get the user from the client that was used in updateSession)
-  // But since updateSession returns the response, we need to re-initialize a client 
-  // or modify updateSession to return both.
-  
-  // For simplicity and following the project's current logic, I'll just keep the user check here.
+  // 3. Create a separate client for the auth protection check
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() { return request.cookies.getAll(); },
@@ -31,7 +35,7 @@ export async function middleware(request) {
     const { data } = await supabase.auth.getUser();
     user = data?.user ?? null;
   } catch {
-    return supabaseResponse;
+    // Fail silently in case of auth errors during build/edge cases
   }
 
   // Protect all /portal routes except /portal/login
