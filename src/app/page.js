@@ -15,9 +15,12 @@ const FALLBACK_LOGOS = [
 
 export default function HomePage() {
   const supabase = createClient();
+  const [loaded, setLoaded] = useState(false);
+  const [partners, setPartners] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [hero, setHero] = useState({ 
     images: [], 
-    subtitle: "From the sun-drenched vineyards of Rioja to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines and craft beverages to the American table. Partnering directly with artisan producers in over 15 countries, we curate a portfolio of labels that tell a story in every bottle."
+    subtitle: "From the sun-drenched vineyards of Rioja to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines and craft beverages to the American table. Partnering directly with artisan producers in over 15 countries, we curate a portfolio of world-class labels that tell a story in every bottle."
   });
 
   // Default elegant images from Unsplash to ensure background is NEVER black
