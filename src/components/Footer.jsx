@@ -104,7 +104,8 @@ export default function Footer() {
         }}
       >
         <p style={{ fontFamily: ff.b, fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>
-          © {new Date().getFullYear()} Vinaio Imports, Ltd. All rights reserved.
+          © {new Date().getFullYear()} Vinaio Imports, Ltd. All rights reserved.{" "}
+          <Link href="/admin" style={{ color: "rgba(255,255,255,0.1)", textDecoration: "none", cursor: "default" }}>·</Link>
         </p>
         <p style={{ fontFamily: ff.b, fontSize: "10px", color: "rgba(255,255,255,0.2)", letterSpacing: "1px", textTransform: "uppercase" }}>
           Please Drink Responsibly
