@@ -3,11 +3,8 @@
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
-import { createClient } from "@/lib/supabase/client";
-import { uploadFile } from "@/lib/supabase/storage";
 
 export default function AdminCatalogManager() {
-  const supabase = createClient();
   const [catalogs, setCatalogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: "", file_url: "", category_filter: "" });
@@ -19,21 +16,33 @@ export default function AdminCatalogManager() {
   }, []);
 
   const fetchCatalogs = async () => {
-    const { data } = await supabase.from("site_catalogs").select("*").order("created_at", { ascending: false });
-    if (data) setCatalogs(data);
+    try {
+      const res = await fetch("/api/admin/catalogs");
+      const data = await res.json();
+      if (data.catalogs) setCatalogs(data.catalogs);
+    } catch (err) {
+      console.error("Fetch catalogs error:", err);
+    }
     setLoading(false);
   };
 
   const saveCatalog = async () => {
     if (!form.name || !form.file_url) return setMsg({ type: "error", text: "Name and File are required." });
     setSaving(true);
-    const { error } = await supabase.from("site_catalogs").insert([form]);
-    if (!error) {
-       setMsg({ type: "success", text: "Catalog added!" });
-       setForm({ name: "", file_url: "", category_filter: "" });
-       fetchCatalogs();
-    } else {
-       setMsg({ type: "error", text: "Failed to save." });
+    try {
+      const res = await fetch("/api/admin/catalogs", {
+        method: "POST",
+        body: JSON.stringify(form)
+      });
+      if (res.ok) {
+        setMsg({ type: "success", text: "Catalog added!" });
+        setForm({ name: "", file_url: "", category_filter: "" });
+        fetchCatalogs();
+      } else {
+        throw new Error("Save failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: "Failed to save." });
     }
     setSaving(false);
   };
@@ -43,21 +52,33 @@ export default function AdminCatalogManager() {
     if (!file) return;
 
     setSaving(true);
-    const publicUrl = await uploadFile(file, "catalogs");
-    
-    if (publicUrl) {
-      setForm({ ...form, file_url: publicUrl });
-      setMsg({ type: "success", text: "PDF uploaded! Click 'Upload Catalog' to finalize." });
-    } else {
-      setMsg({ type: "error", text: "Upload failed." });
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bucket", "catalogs");
+
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (res.ok && data.publicUrl) {
+        setForm({ ...form, file_url: data.publicUrl });
+        setMsg({ type: "success", text: "PDF uploaded! Click 'Upload Catalog' to finalize." });
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: `Upload Error: ${err.message}` });
     }
     setSaving(false);
   };
 
   const deleteCatalog = async (id) => {
     if (!confirm("Permanently delete this catalog?")) return;
-    const { error } = await supabase.from("site_catalogs").delete().eq("id", id);
-    if (!error) fetchCatalogs();
+    try {
+      const res = await fetch(`/api/admin/catalogs?id=${id}`, { method: "DELETE" });
+      if (res.ok) fetchCatalogs();
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   const cardStyle = {

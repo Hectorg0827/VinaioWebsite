@@ -3,11 +3,8 @@
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
-import { createClient } from "@/lib/supabase/client";
-import { uploadFile } from "@/lib/supabase/storage";
 
 export default function AdminMediaManager() {
-  const supabase = createClient();
   const [hero, setHero] = useState({ url: "", title: "", subtitle: "", type: "video" });
   const [partners, setPartners] = useState([]);
   const [savingHero, setSavingHero] = useState(false);
@@ -19,20 +16,34 @@ export default function AdminMediaManager() {
   }, []);
 
   const fetchMedia = async () => {
-    const { data: heroData } = await supabase.from("site_hero").select("*").eq("active", true).single();
-    if (heroData) setHero(heroData);
+    try {
+      const resHero = await fetch("/api/admin/hero");
+      const dataHero = await resHero.json();
+      if (dataHero.hero) setHero(dataHero.hero);
 
-    const { data: partnersData } = await supabase.from("site_partners").select("*").order("order", { ascending: true });
-    if (partnersData) setPartners(partnersData);
+      const resPart = await fetch("/api/admin/partners");
+      const dataPart = await resPart.json();
+      if (dataPart.partners) setPartners(dataPart.partners);
+    } catch (err) {
+      console.error("Fetch media error:", err);
+    }
   };
 
   const saveHero = async () => {
     setSavingHero(true);
-    const { error } = await supabase
-      .from("site_hero")
-      .upsert({ ...hero, active: true, updated_at: new Date() });
-    
-    setMsg(error ? { type: "error", text: "Failed to save hero settings." } : { type: "success", text: "Hero updated!" });
+    try {
+      const res = await fetch("/api/admin/hero", {
+        method: "POST",
+        body: JSON.stringify(hero),
+      });
+      if (res.ok) {
+        setMsg({ type: "success", text: "Hero updated!" });
+      } else {
+        throw new Error("Save failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: "Failed to save hero settings." });
+    }
     setSavingHero(false);
   };
 
@@ -42,13 +53,22 @@ export default function AdminMediaManager() {
 
     setSavingHero(true);
     const type = file.type.startsWith("video") ? "video" : "image";
-    const publicUrl = await uploadFile(file, "hero");
     
-    if (publicUrl) {
-      setHero({ ...hero, url: publicUrl, type });
-      setMsg({ type: "success", text: "File uploaded! Save to apply." });
-    } else {
-      setMsg({ type: "error", text: "Upload failed." });
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bucket", "hero");
+
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (res.ok && data.publicUrl) {
+        setHero({ ...hero, url: data.publicUrl, type });
+        setMsg({ type: "success", text: "File uploaded! Save to apply." });
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: `Upload Error: ${err.message}` });
     }
     setSavingHero(false);
   };
@@ -61,39 +81,58 @@ export default function AdminMediaManager() {
     if (!name) return;
 
     setUploadingLogo(true);
-    const publicUrl = await uploadFile(file, "logos");
-    
-    if (publicUrl) {
-      const { data, error } = await supabase
-        .from("site_partners")
-        .insert([{ name, logo_url: publicUrl, active: true, order: partners.length }])
-        .select();
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bucket", "logos");
+
+    try {
+      const resUpload = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      const dataUpload = await resUpload.json();
       
-      if (!error && data) {
-        setPartners([...partners, data[0]]);
-        setMsg({ type: "success", text: "New brand added!" });
+      if (resUpload.ok && dataUpload.publicUrl) {
+        const resDb = await fetch("/api/admin/partners", {
+          method: "POST",
+          body: JSON.stringify({ name, logo_url: dataUpload.publicUrl, active: true, order: partners.length })
+        });
+        const dataDb = await resDb.json();
+        
+        if (resDb.ok && dataDb.partner) {
+          setPartners([...partners, dataDb.partner]);
+          setMsg({ type: "success", text: "New brand added!" });
+        }
+      } else {
+        throw new Error(dataUpload.error || "Logo upload failed");
       }
-    } else {
-      setMsg({ type: "error", text: "Logo upload failed." });
+    } catch (err) {
+      setMsg({ type: "error", text: err.message });
     }
     setUploadingLogo(false);
   };
 
   const togglePartner = async (id, currentStatus) => {
-    const { error } = await supabase
-      .from("site_partners")
-      .update({ active: !currentStatus })
-      .eq("id", id);
-    
-    if (!error) {
-      setPartners(partners.map(p => p.id === id ? { ...p, active: !currentStatus } : p));
+    try {
+      const res = await fetch("/api/admin/partners", {
+        method: "PATCH",
+        body: JSON.stringify({ id, active: !currentStatus })
+      });
+      if (res.ok) {
+        setPartners(partners.map(p => p.id === id ? { ...p, active: !currentStatus } : p));
+      }
+    } catch (err) {
+      console.error("Toggle error:", err);
     }
   };
 
   const deletePartner = async (id) => {
     if (!confirm("Remove this brand logo?")) return;
-    const { error } = await supabase.from("site_partners").delete().eq("id", id);
-    if (!error) setPartners(partners.filter(p => p.id !== id));
+    try {
+      const res = await fetch(`/api/admin/partners?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setPartners(partners.filter(p => p.id !== id));
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   // ── Styles ──────────────────────────────────

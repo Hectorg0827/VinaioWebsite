@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
-import { createClient } from "@/lib/supabase/client";
 
 export default function AdminAnalytics() {
-  const supabase = createClient();
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ logins: 0, downloads: 0 });
@@ -16,12 +14,17 @@ export default function AdminAnalytics() {
   }, []);
 
   const fetchLogs = async () => {
-    const { data } = await supabase.from("portal_logs").select("*").order("created_at", { ascending: false }).limit(100);
-    if (data) {
-       setLogs(data);
-       const logins = data.filter(l => l.action === "login").length;
-       const downloads = data.filter(l => l.action === "download").length;
-       setStats({ logins, downloads });
+    try {
+      const res = await fetch("/api/admin/analytics");
+      const data = await res.json();
+      if (data.logs) {
+         setLogs(data.logs);
+         const logins = data.logs.filter(l => l.action === "login").length;
+         const downloads = data.logs.filter(l => l.action === "download").length;
+         setStats({ logins, downloads });
+      }
+    } catch (err) {
+      console.error("Fetch analytics error:", err);
     }
     setLoading(false);
   };
