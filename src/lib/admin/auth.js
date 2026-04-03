@@ -16,14 +16,20 @@ async function deriveToken() {
   const secret   = process.env.ADMIN_SECRET || PEPPER;
   if (!password) return null;
 
-  const key = await crypto.subtle.importKey(
+  const _crypto = globalThis.crypto || (typeof require !== 'undefined' ? require('node:crypto').webcrypto : null);
+  if (!_crypto || !_crypto.subtle) {
+    console.error("WebCrypto not available in this environment.");
+    return null;
+  }
+
+  const key = await _crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(password),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"]
   );
-  const sig = await crypto.subtle.sign(
+  const sig = await _crypto.subtle.sign(
     "HMAC",
     key,
     new TextEncoder().encode(secret)
