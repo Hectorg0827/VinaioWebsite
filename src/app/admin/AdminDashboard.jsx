@@ -24,10 +24,9 @@ const PORTFOLIOS = [
 ];
 
 const EMPTY_FORM = {
-  name: "", sku: "", product_code: "", brand: "", vintage: "", format: "", type: "",
-  category: "", categories: [], origin: "", region: "Caribbean",
-  inStock: true, featured: false, description_en: "", description_es: "",
-  price_case: "", price_bottle: "", tier_pricing: [],
+  name: "", sku: "", product_code: "", brand: "", producer: "", vintage: "", format: "", 
+  case_qty: "", type: "", category: "", categories: [], origin: "", region: "Caribbean",
+  inStock: true, featured: false, summary: "", description_en: "", description_es: "",
   portfolios: ["all"],
   imageUrl: "",
   logoUrl: "",
@@ -38,8 +37,9 @@ export default function AdminDashboard({ initialProducts }) {
   const [products, setProducts]   = useState(initialProducts);
   const [form, setForm]           = useState(EMPTY_FORM);
   const [editingId, setEditingId] = useState(null);
-  const [showForm, setShowForm]   = useState(false);
   const [saving, setSaving]       = useState(false);
+  const [showBulk, setShowBulk]   = useState(false);
+  const [bulkData, setBulkData]   = useState("");
   const [msg, setMsg]             = useState(null);
   const [search, setSearch]       = useState("");
   const [deleting, setDeleting]   = useState(null);
@@ -69,11 +69,13 @@ export default function AdminDashboard({ initialProducts }) {
   const openEdit = (product) => {
     setForm({
       name:           product.name           ?? "",
-      sku:            product.sku            ?? "",
+      sku:            product.sku            ?? product.product_code ?? "",
       product_code:   product.product_code   ?? "",
       brand:          product.brand          ?? "",
+      producer:       product.producer       ?? "",
       vintage:        product.vintage        ?? "",
       format:         product.format         ?? "",
+      case_qty:       product.case_qty       ?? "",
       type:           product.type           ?? "",
       category:       product.category       ?? "",
       categories:     product.categories     ?? [],
@@ -81,11 +83,9 @@ export default function AdminDashboard({ initialProducts }) {
       region:         product.region         ?? "Caribbean",
       inStock:        product.in_stock       ?? product.inStock ?? true,
       featured:       product.featured       ?? false,
+      summary:        product.summary        ?? "",
       description_en: product.description_en ?? product.description ?? "",
       description_es: product.description_es ?? "",
-      price_case:     product.price_case     ?? "",
-      price_bottle:   product.price_bottle   ?? "",
-      tier_pricing:   product.tier_pricing   ?? [],
       portfolios:     product.portfolios     ?? ["all"],
       imageUrl:       product.image_url      ?? product.imageUrl ?? "",
       logoUrl:        product.logo_url       ?? product.logoUrl  ?? "",
@@ -169,7 +169,6 @@ export default function AdminDashboard({ initialProducts }) {
     if (res.ok) {
        setMsg({ type: "success", text: "Product successfully synchronized with database!" });
        setShowForm(false);
-       // Refresh list after brief delay
        setTimeout(() => window.location.reload(), 1000);
     } else {
        let errorMsg = "Failed to save.";
@@ -182,6 +181,33 @@ export default function AdminDashboard({ initialProducts }) {
        setMsg({ type: "error", text: errorMsg });
     }
     setSaving(false);
+  };
+
+  const runBulkImport = async () => {
+    if (!bulkData.trim()) return;
+    setSaving(true);
+    setMsg({ type: "success", text: "Running bulk migration..." });
+    
+    try {
+      const json = JSON.parse(bulkData);
+      const res = await fetch("/api/admin/products/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(json),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMsg({ type: "success", text: `Success! ${data.count} products imported.` });
+        setShowBulk(false);
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        setMsg({ type: "error", text: data.error || "Bulk import failed." });
+      }
+    } catch (e) {
+      setMsg({ type: "error", text: "Invalid JSON format." });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const deleteProduct = async (id) => {
@@ -199,9 +225,14 @@ export default function AdminDashboard({ initialProducts }) {
           <Hr w="40px" c={T.wine} style={{ marginBottom: "20px" }} />
           <h1 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink }}>Portfolio Management</h1>
         </div>
-        <button onClick={openAdd} style={{ padding: "12px 24px", background: T.wine, color: T.paper, border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}>
-          + Add Product
-        </button>
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button onClick={() => setShowBulk(true)} style={{ padding: "12px 24px", background: "transparent", color: T.wine, border: `1px solid ${T.wine}`, borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}>
+            Bulk Import JSON
+          </button>
+          <button onClick={openAdd} style={{ padding: "12px 24px", background: T.wine, color: T.paper, border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}>
+            + Add Product
+          </button>
+        </div>
       </div>
 
       {showForm && (
@@ -213,44 +244,48 @@ export default function AdminDashboard({ initialProducts }) {
            
            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "40px" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "16px" }}>
                     <div>
-                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Brand / Producer</label>
-                      <input value={form.brand} onChange={e => set("brand", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. Aljibes" />
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Producer</label>
+                      <input value={form.producer} onChange={e => set("producer", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. Bodegas Perica" />
                     </div>
                     <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Brand</label>
+                      <input value={form.brand} onChange={e => set("brand", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. Mi Villa" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>SKU / QB ID</label>
+                      <input value={form.sku} onChange={e => set("sku", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="203324" />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
                       <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Product Name</label>
-                      <input value={form.name} onChange={e => set("name", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. Petit Verdot" />
+                      <input value={form.name} onChange={e => set("name", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="e.g. White" />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Summary (Card Teaser)</label>
+                      <input value={form.summary} onChange={e => set("summary", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="A crisp, easy-drinking white blend..." />
                     </div>
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "16px" }}>
                     <div>
                       <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Vintage</label>
-                      <input value={form.vintage} onChange={e => set("vintage", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="2021" />
+                      <input value={form.vintage} onChange={e => set("vintage", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="2024" />
                     </div>
                     <div>
                       <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Format</label>
                       <input value={form.format} onChange={e => set("format", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="750ml x 12" />
                     </div>
                     <div>
-                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>SKU / QB ID</label>
-                      <input value={form.sku} onChange={e => set("sku", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="ALJ-PV" />
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Case Qty</label>
+                      <input value={form.case_qty} onChange={e => set("case_qty", e.target.value)} type="number" style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="12" />
                     </div>
                     <div>
-                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Type / D.O.</label>
-                      <input value={form.type} onChange={e => set("type", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="Vino de la Tierra" />
-                    </div>
-                  </div>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                    <div>
-                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Case Price ($)</label>
-                      <input value={form.price_case} onChange={e => set("price_case", e.target.value)} type="number" step="0.01" style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="0.00" />
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Bottle Price ($)</label>
-                      <input value={form.price_bottle} onChange={e => set("price_bottle", e.target.value)} type="number" step="0.01" style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="0.00" />
+                      <label style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Type / Varietal</label>
+                      <input value={form.type} onChange={e => set("type", e.target.value)} style={{ width: "100%", padding: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px" }} placeholder="White Wine" />
                     </div>
                   </div>
 
@@ -364,6 +399,27 @@ export default function AdminDashboard({ initialProducts }) {
                    </div>
                  )}
 
+      {showBulk && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
+          <div style={{ background: T.paper, width: "100%", maxWidth: "800px", borderRadius: "16px", padding: "40px" }}>
+            <h2 style={{ fontFamily: ff.h, fontSize: "24px", marginBottom: "20px" }}>Bulk Product Import</h2>
+            <p style={{ fontSize: "14px", color: T.muted, marginBottom: "20px" }}>Paste your JSON array below. Use the keys: producer, brand, name, sku, vintage, format, case_qty, origin, summary, description_en, image_url, logo_url, categories.</p>
+            <textarea 
+              value={bulkData} 
+              onChange={e => setBulkData(e.target.value)} 
+              style={{ width: "100%", height: "300px", padding: "20px", fontFamily: "monospace", fontSize: "12px", border: `1px solid ${T.cream}`, borderRadius: "8px", marginBottom: "20px" }}
+              placeholder='[ { "name": "...", "sku": "...", ... } ]'
+            />
+            <div style={{ display: "flex", gap: "16px", justifyContent: "flex-end" }}>
+              <button onClick={() => setShowBulk(false)} style={{ padding: "12px 24px", background: "none", border: "none", cursor: "pointer" }}>Cancel</button>
+              <button onClick={runBulkImport} disabled={saving} style={{ padding: "12px 24px", background: T.wine, color: "white", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+                {saving ? "Importing..." : "Start Import"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
                  <button onClick={saveProduct} disabled={saving} style={{ marginTop: "auto", padding: "16px", background: T.wine, color: T.paper, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase" }}>
                     {saving ? "Processing..." : "Sync to Portfolio"}
                  </button>
@@ -398,8 +454,10 @@ export default function AdminDashboard({ initialProducts }) {
             </div>
             <span style={{ fontSize: "12px", color: T.muted }}>{p.categories?.join(", ")}</span>
             <div style={{ display: "flex", flexDirection: "column" }}>
-               <span style={{ fontFamily: ff.h, color: T.wine, fontSize: "16px" }}>${(p.price_case || 0).toFixed(2)} <span style={{ fontSize: "10px", color: T.muted }}>/ cs</span></span>
-               <span style={{ fontSize: "11px", color: T.muted }}>${(p.price_bottle || 0).toFixed(2)} / btl</span>
+               <span style={{ fontSize: "11px", fontWeight: 600, color: T.gold, background: T.ink, padding: "4px 8px", borderRadius: "4px", textAlign: "center" }}>
+                 {p.case_qty ? `${p.case_qty} / pk` : "Catalog"}
+               </span>
+               <span style={{ fontSize: "10px", color: T.muted, textAlign: "center", marginTop: "4px" }}>No Pricing Displayed</span>
             </div>
             <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
               <button onClick={() => openEdit(p)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px" }}>✏️</button>

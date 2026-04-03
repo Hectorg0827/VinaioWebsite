@@ -120,9 +120,14 @@ export default function ProductDetailPage({ params }) {
             <h1 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 64px)", color: T.paper, lineHeight: 1.1, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "2px" }}>
               {product.brand}
             </h1>
-            <p style={{ fontFamily: ff.b, fontSize: "20px", color: T.wine, fontStyle: "italic", fontWeight: 500 }}>
+            <p style={{ fontFamily: ff.b, fontSize: "20px", color: T.wine, fontStyle: "italic", fontWeight: 500, marginBottom: "16px" }}>
               {product.name} {product.type ? `· ${product.type}` : ""}
             </p>
+            {product.summary && (
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.6)", maxWidth: "800px", margin: "0 auto", lineHeight: 1.6 }}>
+                {product.summary}
+              </p>
+            )}
           </Reveal>
         </div>
       </section>
@@ -164,6 +169,10 @@ export default function ProductDetailPage({ params }) {
                   <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Origin</h4>
                   <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.origin}</p>
                   <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted }}>{product.region}</p>
+                </div>
+                <div>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Producer</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.producer || product.brand}</p>
                 </div>
                 <div>
                   <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Category</h4>

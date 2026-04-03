@@ -14,10 +14,9 @@ export async function POST(req) {
 
   const body = await req.json();
   const { 
-    name, sku, brand, vintage, format, type, category, categories, 
-    origin, region, description_en, description_es, 
-    price_case, price_bottle, tier_pricing, portfolios,
-    inStock, featured, imageUrl, logoUrl, tags 
+    name, sku, brand, producer, vintage, format, case_qty, type, category, categories, 
+    origin, region, description_en, description_es, summary,
+    portfolios, inStock, featured, imageUrl, logoUrl, tags 
   } = body;
 
   const slug = body.slug || `${name}-${sku}`.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -35,18 +34,18 @@ export async function POST(req) {
         slug,
         product_code:   body.product_code || sku,
         brand:          brand          || null,
+        producer:       producer       || null,
         vintage:        vintage        || null,
         format:         format         || null,
+        case_qty:       parseInt(case_qty) || null,
         type:           type           || null,
         category:       category       || categories?.[0] || null,
         categories:     categories     ?? [],
         origin:         origin         || "",
         region:         region         || "",
+        summary:        summary        || null,
         description_en: description_en || null,
         description_es: description_es || null,
-        price_case:     parseFloat(price_case)   || 0,
-        price_bottle:   parseFloat(price_bottle) || 0,
-        tier_pricing:   tier_pricing   ?? [],
         portfolios:     portfolios     ?? [],
         in_stock:       inStock        ?? true,
         featured:       featured       ?? false,

@@ -426,8 +426,8 @@ function ProductCard({ product }) {
   const bottle = product.imageUrl || product.image_url;
   const description = product.description_en || product.description || "";
   
-  // Truncate description to ~120 chars
-  const summary = description.length > 120 ? description.substring(0, 117) + "..." : description;
+  // Use the new summary field, fallback to truncated description
+  const teaser = product.summary || (description.length > 120 ? description.substring(0, 117) + "..." : description);
 
   return (
     <div
@@ -486,7 +486,7 @@ function ProductCard({ product }) {
 
         {/* 4. DESCRIPTION SUMMARY */}
         <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>
-          {summary}
+          {teaser}
         </p>
 
         {/* 5. FOOTER / BUTTON */}
