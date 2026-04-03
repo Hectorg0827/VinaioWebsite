@@ -54,10 +54,17 @@ export async function POST(req) {
   const body = await req.json().catch(() => ({}));
   const { password } = body;
 
+  console.log("[ADMIN AUTH] Attempt from IP:", ip);
+  console.log("[ADMIN AUTH] Password set in ENV:", adminPassword ? "YES (length " + adminPassword.length + ")" : "NO");
+  console.log("[ADMIN AUTH] Received password:", password ? "YES (length " + password.length + ")" : "NO");
+
   if (typeof password !== "string" || password !== adminPassword) {
+    console.error("[ADMIN AUTH] Authentication failed.");
     recordFailure(ip);
     return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
   }
+
+  console.log("[ADMIN AUTH] Authentication successful.");
 
   // Correct password — clear rate limit and set HMAC token cookie
   clearAttempts(ip);
@@ -69,7 +76,7 @@ export async function POST(req) {
     secure:   process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge:   60 * 60 * 8, // 8 hours
-    path:     "/admin",    // scoped to /admin only
+    path:     "/",         // accessible to all routes (API and UI)
   });
 
   return NextResponse.json({ ok: true });
