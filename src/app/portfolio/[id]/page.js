@@ -256,11 +256,3 @@ function SuggestionCard({ product }) {
     </Link>
   );
 }
-", margin: "40px auto", padding: "0 48px" }}>
-        <Link href="/portfolio" style={{ display: "flex", alignItems: "center", gap: "12px", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, textDecoration: "none" }}>
-          ← Back to Portfolio
-        </Link>
-      </section>
-    </main>
-  );
-}
