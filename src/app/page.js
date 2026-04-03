@@ -15,19 +15,16 @@ const FALLBACK_LOGOS = [
 
 export default function HomePage() {
   const supabase = createClient();
-  const [loaded, setLoaded] = useState(false);
-  const [partners, setPartners] = useState([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [hero, setHero] = useState({ 
     images: [], 
-    subtitle: "From the sun-drenched vineyards of Rioja to the rolling hills of Tuscany, the volcanic slopes of Nepal to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines, spirits, and craft beverages to the American table. Based in New York and distributing across the United States, we partner directly with family estates and artisan producers in over 15 countries, curating a portfolio of more than 500 labels that tell a story in every bottle."
+    subtitle: "From the sun-drenched vineyards of Rioja to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines and craft beverages to the American table. Partnering directly with artisan producers in over 15 countries, we curate a portfolio of labels that tell a story in every bottle."
   });
 
-  // Default images in case DB is not yet synchronized
+  // Default elegant images from Unsplash to ensure background is NEVER black
   const DEFAULT_SLIDES = [
-    "/images/hero/vineyard.png",
-    "/images/hero/macorix.png",
-    "/images/hero/barrels.png"
+    "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=2000", // Vineyard/Wine
+    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2000", // Barrels
+    "https://images.unsplash.com/photo-1543412849-fd47250680ca?auto=format&fit=crop&q=80&w=2000"  // Bottles/Beach vibe
   ];
 
   useEffect(() => {
@@ -39,13 +36,12 @@ export default function HomePage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide(s => (s + 1) % DEFAULT_SLIDES.length);
-    }, 10000); 
+    }, 8000); 
     return () => clearInterval(timer);
   }, []);
 
   const fetchContent = async () => {
     try {
-      // 1. Fetch Hero
       const { data: heroData } = await supabase
         .from("site_hero")
         .select("*")
@@ -55,17 +51,15 @@ export default function HomePage() {
         .single();
       
       if (heroData) {
-        // Handle potential array stored as delimiter or JSON
         let urls = [];
         try {
           urls = JSON.parse(heroData.url);
         } catch (e) {
           urls = heroData.url?.split("|").filter(Boolean);
         }
-        setHero({ ...heroData, images: urls.length > 0 ? urls : [heroData.url] });
+        setHero({ ...heroData, images: (urls && urls.length > 0) ? urls : [heroData.url] });
       }
 
-      // 2. Fetch Partners
       const { data: partnersData } = await supabase
         .from("site_partners")
         .select("*")
@@ -89,21 +83,22 @@ export default function HomePage() {
     <>
       <style>{`
         @keyframes kenburns {
-          0% { transform: scale(1.05) translate(0, 0); }
-          50% { transform: scale(1.2) translate(-2%, -2%); }
-          100% { transform: scale(1.05) translate(0, 0); }
+          0% { transform: scale(1.05); }
+          100% { transform: scale(1.15); }
         }
         .hero-slide {
           position: absolute;
           inset: 0;
           opacity: 0;
-          transition: opacity 2s ease-in-out;
+          transition: opacity 1.5s ease-in-out;
           background-size: cover;
           background-position: center;
-          animation: kenburns 30s infinite linear;
         }
         .hero-slide.active {
           opacity: 1;
+        }
+        .hero-slide.active img {
+          animation: kenburns 15s forwards ease-out;
         }
       `}</style>
 
@@ -113,26 +108,29 @@ export default function HomePage() {
           height: "100vh",
           position: "relative",
           overflow: "hidden",
-          background: T.ink,
+          background: "#000",
         }}
       >
         {slides.map((url, idx) => (
           <div 
             key={idx}
             className={`hero-slide ${idx === currentSlide ? "active" : ""}`}
-            style={{ 
-              backgroundImage: `url(${url})`,
-              opacity: (idx === currentSlide && loaded) ? 0.6 : 0,
-              animationDelay: `${idx * -10}s`
-            }}
-          />
+            style={{ zIndex: 1 }}
+          >
+            <img 
+              src={url} 
+              alt="Hero Slide" 
+              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.55 }} 
+            />
+          </div>
         ))}
 
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `linear-gradient(to bottom, ${T.ink}99 0%, transparent 40%, ${T.ink} 100%)`,
+            background: `linear-gradient(to bottom, #000 0%, transparent 30%, transparent 70%, #000 100%)`,
+            zIndex: 2
           }}
         />
 
@@ -145,7 +143,7 @@ export default function HomePage() {
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
-            padding: "0 56px",
+            padding: "0 10vw",
             zIndex: 10
           }}
         >
@@ -166,31 +164,32 @@ export default function HomePage() {
             <Hr w="40px" c={T.gold} />
           </div>
 
-          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "48px" }}>
-            <img src="/logo.png" alt="Vinaio" style={{ height: "clamp(50px, 6vw, 80px)", width: "auto", filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.5))" }} />
+          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "40px" }}>
+            <img src="/logo.png" alt="Vinaio" style={{ height: "45px", width: "auto" }} />
           </div>
 
-          <h1
+          <p
             style={{
               fontFamily: ff.h,
-              fontSize: "clamp(24px, 3.5vw, 42px)",
+              fontSize: "clamp(18px, 1.6vw, 24px)",
               color: T.paper,
               opacity: loaded ? 1 : 0,
               transition: "all 1s ease 0.4s",
-              marginBottom: "32px",
-              textShadow: "0 2px 20px rgba(0,0,0,0.8)",
-              maxWidth: "1000px",
-              lineHeight: 1.3,
-              fontWeight: 400
+              marginBottom: "56px",
+              textShadow: "0 2px 20px rgba(0,0,0,1)",
+              maxWidth: "900px",
+              lineHeight: 1.8,
+              fontWeight: 400,
+              letterSpacing: "0.5px"
             }}
           >
-            {hero.subtitle || "The bridge between terroir & the market"}
-          </h1>
+            {hero.subtitle}
+          </p>
 
           <div
             style={{
               display: "flex",
-              gap: "24px",
+              gap: "32px",
               flexWrap: "wrap",
               justifyContent: "center",
               opacity: loaded ? 1 : 0,
@@ -198,36 +197,35 @@ export default function HomePage() {
             }}
           >
             {[
-              { href: "/portfolio", label: "Explore Portfolio", primary: true },
-              { href: "/portal",    label: "Customer Portal",   primary: false },
-              { href: "/contact",   label: "Partner with Us",   primary: false },
-            ].map(({ href, label, primary }) => (
+              { href: "/portfolio", label: "Explore Portfolio" },
+              { href: "/portal",    label: "Customer Portal"   },
+              { href: "/contact",   label: "Partner with Us"   },
+            ].map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 style={{
                   fontFamily: ff.b,
-                  fontSize: "10px",
-                  letterSpacing: "4px",
+                  fontSize: "9px",
+                  letterSpacing: "5px",
                   textTransform: "uppercase",
                   fontWeight: 600,
                   color: T.paper,
-                  background: primary ? T.wine : "rgba(255,255,255,0.05)",
-                  border: `1px solid ${primary ? T.wine : "rgba(255,255,255,0.3)"}`,
-                  padding: "18px 42px",
-                  transition: "all 0.4s",
+                  background: "transparent",
+                  border: `1px solid rgba(255,255,255,0.25)`,
+                  padding: "18px 48px",
+                  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                   backdropFilter: "blur(4px)"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = T.wine;
-                  e.currentTarget.style.borderColor = T.gold;
-                  e.currentTarget.style.color = T.paper;
+                  e.currentTarget.style.borderColor = T.wine;
+                  e.currentTarget.style.boxShadow = `0 10px 40px ${T.wine}40`;
                 }}
                 onMouseLeave={(e) => {
-                  if (!primary) {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
-                  }
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
+                  e.currentTarget.style.boxShadow = "none";
                 }}
               >
                 {label}
