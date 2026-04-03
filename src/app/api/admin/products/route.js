@@ -17,7 +17,7 @@ export async function POST(req) {
     name, sku, brand, vintage, format, type, category, categories, 
     origin, region, description_en, description_es, 
     price_case, price_bottle, tier_pricing, portfolios,
-    inStock, featured, imageUrl, tags 
+    inStock, featured, imageUrl, logoUrl, tags 
   } = body;
 
   const slug = body.slug || `${name}-${sku}`.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -51,6 +51,7 @@ export async function POST(req) {
         in_stock:       inStock        ?? true,
         featured:       featured       ?? false,
         image_url:      imageUrl       ?? null,
+        logo_url:       logoUrl        ?? null,
         tags:           tags           ?? [],
       })
       .select()

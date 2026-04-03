@@ -18,7 +18,7 @@ export async function PUT(req, { params }) {
     name, sku, brand, vintage, format, type, category, categories, 
     origin, region, description_en, description_es, 
     price_case, price_bottle, tier_pricing, portfolios,
-    inStock, featured, imageUrl, tags 
+    inStock, featured, imageUrl, logoUrl, tags 
   } = body;
 
   try {
@@ -45,6 +45,7 @@ export async function PUT(req, { params }) {
         in_stock:       inStock,
         featured,
         image_url:      imageUrl       ?? null,
+        logo_url:       logoUrl        ?? null,
         tags:           tags           ?? [],
       })
       .eq("id", id)

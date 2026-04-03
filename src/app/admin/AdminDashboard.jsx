@@ -30,6 +30,7 @@ const EMPTY_FORM = {
   price_case: "", price_bottle: "", tier_pricing: [],
   portfolios: ["all"],
   imageUrl: "",
+  logoUrl: "",
 };
 
 export default function AdminDashboard({ initialProducts }) {
@@ -87,6 +88,7 @@ export default function AdminDashboard({ initialProducts }) {
       tier_pricing:   product.tier_pricing   ?? [],
       portfolios:     product.portfolios     ?? ["all"],
       imageUrl:       product.image_url      ?? product.imageUrl ?? "",
+      logoUrl:        product.logo_url       ?? product.logoUrl  ?? "",
     });
     setEditingId(product.id ?? product.slug);
     setShowForm(true);
@@ -101,7 +103,19 @@ export default function AdminDashboard({ initialProducts }) {
     const publicUrl = await uploadFile(file, "products");
     if (publicUrl) {
       set("imageUrl", publicUrl);
-      setMsg({ type: "success", text: "Image uploaded!" });
+      setMsg({ type: "success", text: "Bottle image uploaded!" });
+    }
+    setSaving(false);
+  };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSaving(true);
+    const publicUrl = await uploadFile(file, "logos");
+    if (publicUrl) {
+      set("logoUrl", publicUrl);
+      setMsg({ type: "success", text: "Brand logo uploaded!" });
     }
     setSaving(false);
   };
@@ -263,14 +277,27 @@ export default function AdminDashboard({ initialProducts }) {
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                 <div style={{ aspectRatio: "1", background: T.bg, borderRadius: "12px", border: `1px dashed ${T.cream}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                    {form.imageUrl ? <img src={form.imageUrl} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ color: T.muted, fontSize: "11px" }}>Product Image Preview</span>}
-                 </div>
-                 
-                 <div style={{ display: "flex", gap: "10px" }}>
-                   <input type="file" id="prod-img" style={{ display: "none" }} accept="image/*" onChange={handleProductImageUpload} />
-                   <label htmlFor="prod-img" style={{ flexGrow: 1, textAlign: "center", padding: "10px", background: T.taupe, borderRadius: "6px", cursor: "pointer", fontSize: "11px", fontWeight: 600 }}>{saving ? "..." : "Upload Label Image"}</label>
-                 </div>
+                  <div style={{ padding: "20px", background: T.bg, borderRadius: "12px", border: `1px solid ${T.cream}` }}>
+                    <p style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, color: T.muted, marginBottom: "12px" }}>Product Assets</p>
+                    
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ fontSize: "10px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Brand Logo</label>
+                      <div style={{ height: "80px", background: "white", borderRadius: "8px", border: `1px dashed ${T.cream}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", marginBottom: "8px" }}>
+                        {form.logoUrl ? <img src={form.logoUrl} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} /> : <span style={{ fontSize: "10px", color: T.muted }}>No Logo</span>}
+                      </div>
+                      <input type="file" id="logo-img" style={{ display: "none" }} accept="image/*" onChange={handleLogoUpload} />
+                      <label htmlFor="logo-img" style={{ display: "block", textAlign: "center", padding: "8px", background: T.taupe, borderRadius: "6px", cursor: "pointer", fontSize: "10px", fontWeight: 600 }}>{saving ? "..." : "Upload Logo"}</label>
+                    </div>
+
+                    <div>
+                      <label style={{ fontSize: "10px", fontWeight: 600, display: "block", marginBottom: "8px" }}>Bottle Image (Full)</label>
+                      <div style={{ height: "180px", background: "white", borderRadius: "8px", border: `1px dashed ${T.cream}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", marginBottom: "8px" }}>
+                        {form.imageUrl ? <img src={form.imageUrl} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} /> : <span style={{ fontSize: "10px", color: T.muted }}>No Bottle Image</span>}
+                      </div>
+                      <input type="file" id="prod-img" style={{ display: "none" }} accept="image/*" onChange={handleProductImageUpload} />
+                      <label htmlFor="prod-img" style={{ display: "block", textAlign: "center", padding: "8px", background: T.taupe, borderRadius: "6px", cursor: "pointer", fontSize: "10px", fontWeight: 600 }}>{saving ? "..." : "Upload Bottle"}</label>
+                    </div>
+                  </div>
 
                  <div style={{ background: T.bg, padding: "20px", borderRadius: "12px", border: `1px solid ${T.cream}` }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>

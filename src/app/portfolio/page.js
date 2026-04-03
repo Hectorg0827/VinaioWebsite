@@ -15,6 +15,7 @@ export default function PortfolioPage() {
   const [category, setCategory] = useState("All");
   const [viewMode, setViewMode] = useState("selection"); // "selection" | "grid"
   const [currentPortfolio, setCurrentPortfolio] = useState("all");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // Try to load live products from Supabase; fall back to static data
   useEffect(() => {
@@ -285,7 +286,7 @@ export default function PortfolioPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
               {filtered.map((p, i) => (
                 <Reveal key={p.id || p.slug} delay={i * 0.05}>
-                  <ProductCard product={p} />
+                  <ProductCard product={{ ...p, onImageClick: setSelectedImage }} />
                 </Reveal>
               ))}
             </div>
@@ -343,26 +344,61 @@ export default function PortfolioPage() {
           </div>
         </Reveal>
       </section>
+      {/* ── Lightbox Modal ── */}
+      {selectedImage && (
+        <div 
+          onClick={() => setSelectedImage(null)}
+          style={{ 
+            position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 10000, 
+            display: "flex", alignItems: "center", justifyContent: "center", padding: "40px", cursor: "zoom-out" 
+          }}
+        >
+          <img src={selectedImage} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} alt="Enlarged product" />
+          <button style={{ position: "absolute", top: "40px", right: "40px", background: "none", border: "none", color: "white", fontSize: "32px", cursor: "pointer" }}>✕</button>
+        </div>
+      )}
     </>
   );
 }
 
 // ─── Featured card ────────────────────────────────────────────────────────────
 function FeaturedCard({ product }) {
-  const imageUrl = product.imageUrl || product.image_url;
+  const logo = product.logoUrl || product.logo_url;
+  const bottle = product.imageUrl || product.image_url;
+  const description = product.description_en || product.description || "";
+  const categories = (product.categories ?? [product.category]).join(" · ");
+  
+  // Truncate description
+  const summary = description.length > 80 ? description.substring(0, 77) + "..." : description;
+
   return (
-    <div style={{ padding: "32px 28px", background: T.ink, borderRadius: "10px", position: "relative", overflow: "hidden", minHeight: "260px", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-      {imageUrl && (
-        <img src={imageUrl} alt={product.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.25 }} />
+    <div style={{ padding: "32px 28px", background: T.ink, borderRadius: "10px", position: "relative", overflow: "hidden", minHeight: "360px", display: "flex", flexDirection: "column" }}>
+      {bottle && (
+        <img src={bottle} alt={product.name} style={{ position: "absolute", right: "-10%", top: "20%", height: "80%", objectFit: "contain", opacity: 0.2, pointerEvents: "none" }} />
       )}
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 80% 20%, ${T.wineDeep}60 0%, transparent 60%)` }} />
-      <div style={{ position: "relative" }}>
-        <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>{(product.categories ?? [product.category]).join(" · ")} · {product.origin}</span>
-        <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "8px", lineHeight: 1.2 }}>{product.name}</h3>
-        <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7, marginBottom: "20px" }}>{product.description_en || product.description}</p>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1px", textTransform: "uppercase", color: T.gold, opacity: 0.8 }}>Wholesale Pricing in Portal</span>
-          <Link href="/portal" style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, border: `1px solid rgba(255,255,255,0.2)`, padding: "8px 16px" }}>
+      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 20% 20%, ${T.wineDeep}40 0%, transparent 70%)` }} />
+      
+      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: "100%", gap: "20px" }}>
+        {/* LOGO */}
+        <div style={{ height: "60px", display: "flex", alignItems: "center" }}>
+          {logo ? (
+            <img src={logo} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "150px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+          ) : (
+            <span style={{ fontFamily: ff.h, color: T.gold, fontSize: "20px", letterSpacing: "2px", textTransform: "uppercase" }}>{product.brand}</span>
+          )}
+        </div>
+
+        <div>
+          <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>
+            {categories} · {product.origin}
+          </span>
+          <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "4px", lineHeight: 1.1 }}>{product.brand}</h3>
+          <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.warm, fontStyle: "italic", marginBottom: "12px" }}>{product.name}</p>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginBottom: "24px", maxWidth: "80%" }}>{summary}</p>
+        </div>
+
+        <div style={{ marginTop: "auto" }}>
+          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, border: `1px solid rgba(255,255,255,0.3)`, padding: "10px 24px", textDecoration: "none", display: "inline-block" }}>
             View Details
           </Link>
         </div>
@@ -373,40 +409,84 @@ function FeaturedCard({ product }) {
 
 // ─── Catalog card ─────────────────────────────────────────────────────────────
 function ProductCard({ product }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const logo = product.logoUrl || product.logo_url;
+  const bottle = product.imageUrl || product.image_url;
+  const description = product.description_en || product.description || "";
+  
+  // Truncate description to ~120 chars
+  const summary = description.length > 120 ? description.substring(0, 117) + "..." : description;
+
   return (
     <div
-      style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "8px", display: "flex", flexDirection: "column", overflow: "hidden", height: "100%" }}
-      onMouseEnter={(e) => (e.currentTarget.style.borderColor = T.taupe)}
-      onMouseLeave={(e) => (e.currentTarget.style.borderColor = T.cream)}
+      style={{ 
+        background: T.paper, 
+        border: `1px solid ${T.cream}`, 
+        borderRadius: "12px", 
+        display: "flex", 
+        flexDirection: "column", 
+        overflow: "hidden", 
+        height: "100%",
+        transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
+        transform: isHovered ? "translateY(-4px)" : "none",
+        boxShadow: isHovered ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 12px rgba(0,0,0,0.02)"
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {(product.imageUrl || product.image_url) && (
-        <Link href={`/portfolio/${product.id}`} style={{ height: "180px", overflow: "hidden", display: "block" }}>
-          <img
-            src={product.imageUrl || product.image_url}
-            alt={product.name}
-            style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.6s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          />
-        </Link>
-      )}
-      <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "12px", flexGrow: 1 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.wine, background: T.wineGlow, padding: "4px 10px", borderRadius: "4px" }}>
-            {(product.categories ?? [product.category]).join(" · ")}
-          </span>
-          {!product.inStock && <Badge status="outofstock" />}
+      {/* 1. BRAND LOGO SLOT (Top) */}
+      <div style={{ height: "100px", padding: "20px", display: "flex", alignItems: "center", justifyContent: "center", background: "white", borderBottom: `1px solid ${T.bg}` }}>
+        {logo ? (
+          <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", letterSpacing: "2px", textTransform: "uppercase" }}>{product.brand}</span>
+        )}
+      </div>
+
+      <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
+        {/* 2. BRAND NAME & TYPE */}
+        <div style={{ textAlign: "center" }}>
+          <h3 style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 700, color: T.ink, marginBottom: "4px", textTransform: "uppercase", letterSpacing: "1px" }}>
+            {product.brand}
+          </h3>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>
+            {product.name} {product.type ? `· ${product.type}` : ""}
+          </p>
         </div>
-        <div>
-          <Link href={`/portfolio/${product.id}`} style={{ textDecoration: "none" }}>
-            <h3 style={{ fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink, marginBottom: "4px" }}>{product.name}</h3>
-          </Link>
-          <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>{product.sku} · {product.unit} · {product.origin}</p>
+
+        {/* 3. FULL BOTTLE IMAGE (Contained) */}
+        <div 
+          style={{ height: "240px", position: "relative", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }}
+          onClick={() => product.onImageClick?.(bottle)}
+        >
+          {bottle ? (
+            <img
+              src={bottle}
+              alt={product.name}
+              style={{ height: "100%", maxWidth: "100%", objectFit: "contain", filter: isHovered ? "drop-shadow(0 10px 20px rgba(0,0,0,0.15))" : "none", transition: "all 0.5s" }}
+            />
+          ) : (
+            <div style={{ width: "100%", height: "100%", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "8px" }}>
+              <span style={{ fontSize: "10px", color: T.muted }}>No Image Available</span>
+            </div>
+          )}
         </div>
-        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.deep, lineHeight: 1.7, flexGrow: 1 }}>{product.description_en || product.description}</p>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "12px", borderTop: `1px solid ${T.cream}`, marginTop: "auto" }}>
-          <span style={{ fontFamily: ff.b, fontSize: "10px", fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: "1px" }}>Wholesale pricing in portal</span>
-          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.paper, background: T.wine, padding: "8px 16px", borderRadius: "4px" }}>
+
+        {/* 4. DESCRIPTION SUMMARY */}
+        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>
+          {summary}
+        </p>
+
+        {/* 5. FOOTER / BUTTON */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Link 
+            href={`/portfolio/${product.id || product.slug}`} 
+            style={{ 
+              fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", 
+              color: T.paper, background: T.wine, padding: "10px 32px", borderRadius: "4px",
+              textDecoration: "none", fontWeight: 600
+            }}
+          >
             Details
           </Link>
         </div>
