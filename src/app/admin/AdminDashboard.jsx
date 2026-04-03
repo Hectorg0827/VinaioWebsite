@@ -38,6 +38,7 @@ export default function AdminDashboard({ initialProducts }) {
   const [form, setForm]           = useState(EMPTY_FORM);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving]       = useState(false);
+  const [showForm, setShowForm]   = useState(false);
   const [showBulk, setShowBulk]   = useState(false);
   const [bulkData, setBulkData]   = useState("");
   const [msg, setMsg]             = useState(null);
