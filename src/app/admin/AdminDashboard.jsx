@@ -4,6 +4,7 @@ import { useState } from "react";
 import { T, ff } from "@/lib/theme";
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminMediaManager from "@/components/AdminMediaManager";
+import AdminTeamManager from "@/components/AdminTeamManager";
 import AdminCatalogManager from "@/components/AdminCatalogManager";
 import AdminAnalytics from "@/components/AdminAnalytics";
 import Hr from "@/components/Hr";
@@ -477,6 +478,7 @@ export default function AdminDashboard({ initialProducts }) {
       <main style={{ marginLeft: "280px", width: "calc(100% - 280px)", padding: "80px 60px" }}>
         {activeTab === "products" && renderProducts()}
         {activeTab === "media" && <AdminMediaManager />}
+        {activeTab === "team" && <AdminTeamManager />}
         {activeTab === "catalogs" && <AdminCatalogManager />}
         {activeTab === "analytics" && <AdminAnalytics />}
       </main>

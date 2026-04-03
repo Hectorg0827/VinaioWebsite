@@ -3,10 +3,11 @@
 import { T, ff } from "@/lib/theme";
 
 const NAV_ITEMS = [
-  { id: "products", label: "Product Catalog", icon: "🍷" },
-  { id: "media", label: "Media & Branding", icon: "🖼️" },
-  { id: "catalogs", label: "Customer Catalogs", icon: "📁" },
-  { id: "analytics", label: "Portal Analytics", icon: "📊" },
+  { id: "products",  label: "Product Catalog",   icon: "🍷" },
+  { id: "media",     label: "Media & Branding",  icon: "🖼️" },
+  { id: "team",      label: "Team Members",      icon: "👥" },
+  { id: "catalogs",  label: "Customer Catalogs", icon: "📁" },
+  { id: "analytics", label: "Portal Analytics",  icon: "📊" },
 ];
 
 export default function AdminSidebar({ activeTab, onTabChange }) {
