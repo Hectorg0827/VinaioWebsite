@@ -61,9 +61,10 @@ export default function Footer() {
             <h4 style={{ fontFamily: ff.h, fontSize: "14px", color: T.paper, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "20px" }}>Explore</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
+                ["/",          "Home"],
                 ["/portfolio", "Portfolio"],
-                ["/spain",     "Spain & Europe"],
-                ["/services",  "Our Services"],
+                ["/about",     "About Us"],
+                ["/services",  "Services"],
                 ["/contact",   "Contact"],
               ].map(([href, label]) => (
                 <Link key={href} href={href} style={{ fontFamily: ff.b, fontSize: "12px", color: T.warm, textDecoration: "none" }}>

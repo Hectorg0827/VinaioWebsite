@@ -8,7 +8,7 @@ import { T, ff } from "@/lib/theme";
 const LINKS = [
   { href: "/",          label: "Home" },
   { href: "/portfolio", label: "Portfolio" },
-  { href: "/spain",     label: "Spain & Europe" },
+  { href: "/about",     label: "About Us" },
   { href: "/services",  label: "Services" },
   { href: "/contact",   label: "Contact" },
 ];
@@ -147,7 +147,6 @@ export default function Nav() {
               border: "none",
               cursor: "pointer",
               padding: "4px",
-              display: "flex",
               flexDirection: "column",
               gap: "5px",
             }}
