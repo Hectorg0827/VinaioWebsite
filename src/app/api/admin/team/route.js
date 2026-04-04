@@ -27,6 +27,8 @@ export async function POST(req) {
 
   const supabase = await createAdminClient();
   const body = await req.json();
+  const { data, error } = await supabase
+    .from("site_team")
     .insert([{
       name: body.name,
       role: body.role,
