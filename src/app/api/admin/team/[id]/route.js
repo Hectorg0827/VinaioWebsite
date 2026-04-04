@@ -1,7 +1,14 @@
-import { createAdminClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { createAdminClient }    from "@/lib/supabase/server";
+import { isAdminAuthenticated } from "@/lib/admin/auth";
+import { cookies }             from "next/headers";
+import { NextResponse }        from "next/server";
 
 export async function PUT(req, { params }) {
+  const cookieStore = await cookies();
+  if (!(await isAdminAuthenticated(cookieStore))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
   const supabase = await createAdminClient();
   const body = await req.json();
@@ -25,6 +32,11 @@ export async function PUT(req, { params }) {
 }
 
 export async function DELETE(req, { params }) {
+  const cookieStore = await cookies();
+  if (!(await isAdminAuthenticated(cookieStore))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
   const supabase = await createAdminClient();
 
