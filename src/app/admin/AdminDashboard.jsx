@@ -471,11 +471,29 @@ export default function AdminDashboard({ initialProducts }) {
     </div>
   );
 
+  const [configError, setConfigError] = useState(!initialProducts || initialProducts.length <= 3 && initialProducts[0]?.id === "bermudez");
+
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: T.bg }}>
       <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
       
       <main style={{ marginLeft: "280px", width: "calc(100% - 280px)", padding: "80px 60px" }}>
+        {configError && (
+          <div style={{ 
+            background: `${T.red}10`, border: `1px solid ${T.red}30`, borderRadius: "10px", 
+            padding: "24px", marginBottom: "40px", display: "flex", alignItems: "center", gap: "20px" 
+          }}>
+            <span style={{ fontSize: "24px" }}>⚠️</span>
+            <div>
+              <h3 style={{ color: T.red, fontFamily: ff.h, fontSize: "16px", margin: "0 0 4px" }}>Database Disconnected (Missing Credentials)</h3>
+              <p style={{ fontSize: "12px", color: T.muted, margin: 0 }}>
+                The Admin Panel is showing <strong>mock backup data</strong> because your Supabase environment variables are missing on Vercel. 
+                Please set <code style={{ color: T.red, fontWeight: 700 }}>SUPABASE_SERVICE_ROLE_KEY</code> in your Vercel Project Settings.
+              </p>
+            </div>
+          </div>
+        )}
+
         {activeTab === "products" && renderProducts()}
         {activeTab === "media" && <AdminMediaManager />}
         {activeTab === "team" && <AdminTeamManager />}
