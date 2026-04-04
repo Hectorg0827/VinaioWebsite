@@ -17,6 +17,12 @@ export default function PortfolioPage() {
   const [viewMode, setViewMode] = useState("selection"); // "selection" | "grid"
   const [currentPortfolio, setCurrentPortfolio] = useState("all");
   const [selectedImage, setSelectedImage] = useState(null);
+  
+  // Advanced Filter States
+  const [selectedRegion, setSelectedRegion] = useState("All Regions");
+  const [selectedOrigin, setSelectedOrigin] = useState("All Origins");
+  const [selectedSize, setSelectedSize] = useState("All Sizes");
+  const [selectedType, setSelectedType] = useState("All Types");
 
   // Try to load live products from Supabase; fall back to static data
   useEffect(() => {
@@ -100,18 +106,26 @@ export default function PortfolioPage() {
     },
   ];
 
-  const filtered = products.filter(
-    (p) =>
-      (currentPortfolio === "all" || (p.portfolios ?? []).includes(currentPortfolio)) &&
-      (category === "All" || (p.categories ?? []).includes(category)) &&
-      (p.name.toLowerCase().includes(search.toLowerCase()) ||
-        (p.brand || "").toLowerCase().includes(search.toLowerCase()) ||
-        p.origin.toLowerCase().includes(search.toLowerCase()) ||
-        (p.description_en || p.description || "").toLowerCase().includes(search.toLowerCase()))
-  );
+  const filtered = products.filter((p) => {
+    const s = search.toLowerCase();
+    const matchesSearch = 
+      (p.name?.toLowerCase() || "").includes(s) ||
+      (p.brand?.toLowerCase() || "").includes(s) ||
+      (p.origin?.toLowerCase() || "").includes(s) ||
+      (p.type?.toLowerCase() || "").includes(s) ||
+      (p.description_en?.toLowerCase() || p.description?.toLowerCase() || "").includes(s);
+
+    const matchesPortfolio = currentPortfolio === "all" || (p.portfolios ?? []).includes(currentPortfolio);
+    const matchesCategory = category === "All" || (p.categories ?? []).includes(category);
+    const matchesRegion = selectedRegion === "All Regions" || p.region === selectedRegion;
+    const matchesOrigin = selectedOrigin === "All Origins" || p.origin === selectedOrigin;
+    const matchesSize = selectedSize === "All Sizes" || (p.unit || p.format) === selectedSize;
+    const matchesType = selectedType === "All Types" || p.type === selectedType;
+
+    return matchesSearch && matchesPortfolio && matchesCategory && matchesRegion && matchesOrigin && matchesSize && matchesType;
+  });
 
   const selectPortfolio = (id) => {
-    console.log("Selecting portfolio:", id);
     setCurrentPortfolio(id);
     setViewMode("grid");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -119,14 +133,14 @@ export default function PortfolioPage() {
 
   const featured = products.filter((p) => p.featured);
 
+  // Derive unique options for advanced filters
+  const uniqueOrigins = ["All Origins", ...Array.from(new Set(products.map(p => p.origin).filter(Boolean))).sort()];
+  const uniqueRegions = ["All Regions", ...Array.from(new Set(products.map(p => p.region).filter(Boolean))).sort()];
+  const uniqueSizes = ["All Sizes", ...Array.from(new Set(products.map(p => p.unit || p.format).filter(Boolean))).sort()];
+  const uniqueTypes = ["All Types", ...Array.from(new Set(products.map(p => p.type).filter(Boolean))).sort()];
+
   return (
     <>
-      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 9999, background: "black", color: "white", padding: "10px", fontSize: "14px", pointerEvents: "none", opacity: 0.8 }}>
-        {syncStatus === "syncing" && <span style={{ color: T.gold }}>◈ Syncing Live Catalog...</span>}
-        {syncStatus === "live" && <span style={{ color: T.green }}>● Live Database Connected</span>}
-        {syncStatus === "static" && <span style={{ color: T.wineGlow }}>○ Using Static Fallback</span>}
-        <span style={{ marginLeft: "15px", opacity: 0.5 }}>Clicks: {clickCount} | {debugLog}</span>
-      </div>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -202,25 +216,10 @@ export default function PortfolioPage() {
                 <Reveal key={card.id} delay={i * 0.1}>
                   <div 
                     style={{ 
-                      width: "100%",
-                      height: "320px", 
-                      position: "relative", 
-                      borderRadius: "16px", 
-                      overflow: "hidden", 
-                      border: `1px solid ${T.cream}`,
-                      background: T.paper,
-                      display: "block",
-                      zIndex: 20,
-                      transition: "transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s",
+                      width: "100%", height: "320px", position: "relative", borderRadius: "16px", 
+                      overflow: "hidden", border: `1px solid ${T.cream}`, background: T.paper,
+                      display: "block", zIndex: 20, transition: "all 0.4s",
                       boxShadow: "0 10px 30px rgba(0,0,0,0.05)"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-8px)";
-                      e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
                     }}
                   >
                     <img src={card.img} alt={card.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
@@ -229,22 +228,12 @@ export default function PortfolioPage() {
                       <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
                       <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.7)", lineHeight: 1.6 }}>{card.desc}</p>
                     </div>
-                    {/* Transparent overlay dedicated strictly to catching clicks */}
                     <button
                       onClick={() => selectPortfolio(card.id)}
                       style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        background: "transparent",
-                        border: "none",
-                        cursor: "pointer",
-                        zIndex: 10,
-                        padding: 0,
-                        outline: "none"
+                        position: "absolute", inset: 0, width: "100%", height: "100%",
+                        background: "transparent", border: "none", cursor: "pointer", zIndex: 10, outline: "none"
                       }}
-                      aria-label={`Select ${card.title}`}
                     />
                   </div>
                 </Reveal>
@@ -272,26 +261,57 @@ export default function PortfolioPage() {
                   </h2>
                 </div>
                 
-                {/* Search + filter */}
-                <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search this collection..."
-                    style={{
-                      padding: "14px 20px",
-                      background: T.paper,
-                      border: `1px solid ${T.cream}`,
-                      borderRadius: "10px",
-                      fontFamily: ff.b,
-                      fontSize: "14px",
-                      color: T.ink,
-                      outline: "none",
-                      width: "280px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.03)"
-                    }}
-                  />
-                </div>
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Quick search brands or products..."
+                  style={{
+                    padding: "14px 20px", background: T.paper, border: `1px solid ${T.cream}`,
+                    borderRadius: "10px", fontFamily: ff.b, fontSize: "14px", color: T.ink,
+                    outline: "none", width: "320px", boxShadow: "0 4px 12px rgba(0,0,0,0.03)"
+                  }}
+                />
+              </div>
+
+              {/* Advanced Professional Filter Bar */}
+              <div style={{ 
+                display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "40px", 
+                paddingBottom: "24px", borderBottom: `1px solid ${T.cream}` 
+              }}>
+                 {[
+                   { label: "Category", val: category, set: setCategory, options: ACTIVE_CATEGORIES },
+                   { label: "Region", val: selectedRegion, set: setSelectedRegion, options: uniqueRegions },
+                   { label: "Country", val: selectedOrigin, set: setSelectedOrigin, options: uniqueOrigins },
+                   { label: "Format", val: selectedSize, set: setSelectedSize, options: uniqueSizes },
+                   { label: "Type", val: selectedType, set: setSelectedType, options: uniqueTypes },
+                 ].map(f => (
+                   <div key={f.label} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      <span style={{ fontSize: "9px", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 700, color: T.muted }}>{f.label}</span>
+                      <select 
+                        value={f.val} 
+                        onChange={(e) => f.set(e.target.value)}
+                        style={{
+                          padding: "10px 16px", background: T.paper, color: T.ink, border: `1px solid ${T.cream}`, 
+                          borderRadius: "8px", fontSize: "13px", fontFamily: ff.b, outline: "none", minWidth: "150px"
+                        }}
+                      >
+                        {f.options.map(o => <option key={o} value={o}>{o === "All" ? `All ${f.label}s` : o}</option>)}
+                      </select>
+                   </div>
+                 ))}
+                 <button 
+                  onClick={() => {
+                    setCategory("All");
+                    setSelectedRegion("All Regions");
+                    setSelectedOrigin("All Origins");
+                    setSelectedSize("All Sizes");
+                    setSelectedType("All Types");
+                    setSearch("");
+                  }}
+                  style={{ alignSelf: "flex-end", fontSize: "11px", color: T.wine, background: "none", border: "none", cursor: "pointer", height: "40px", padding: "0 10px" }}
+                 >
+                   Reset Filters
+                 </button>
               </div>
             </Reveal>
 
@@ -304,7 +324,7 @@ export default function PortfolioPage() {
             </div>
             {filtered.length === 0 && (
               <div style={{ textAlign: "center", padding: "120px 0", fontFamily: ff.b, fontSize: "15px", color: T.muted }}>
-                No products found in this collection.
+                No products found matching your active filters.
               </div>
             )}
           </div>
@@ -356,6 +376,7 @@ export default function PortfolioPage() {
           </div>
         </Reveal>
       </section>
+
       {/* ── Lightbox Modal ── */}
       {selectedImage && (
         <div 
@@ -373,134 +394,69 @@ export default function PortfolioPage() {
   );
 }
 
-// ─── Featured card ────────────────────────────────────────────────────────────
+// ─── Featured card (Consistent styling) ───
 function FeaturedCard({ product }) {
   const logo = product.logoUrl || product.logo_url;
   const bottle = product.imageUrl || product.image_url;
   const description = product.description_en || product.description || "";
   const categories = (product.categories ?? [product.category]).join(" · ");
-  
-  // Truncate description
   const summary = description.length > 80 ? description.substring(0, 77) + "..." : description;
 
   return (
     <div style={{ padding: "32px 28px", background: T.ink, borderRadius: "10px", position: "relative", overflow: "hidden", minHeight: "360px", display: "flex", flexDirection: "column" }}>
-      {bottle && (
-        <img src={bottle} alt={product.name} style={{ position: "absolute", right: "-10%", top: "20%", height: "80%", objectFit: "contain", opacity: 0.2, pointerEvents: "none" }} />
-      )}
+      {bottle && <img src={bottle} alt={product.name} style={{ position: "absolute", right: "-10%", top: "20%", height: "80%", objectFit: "contain", opacity: 0.2, pointerEvents: "none" }} />}
       <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 20% 20%, ${T.wineDeep}40 0%, transparent 70%)` }} />
-      
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: "100%", gap: "20px" }}>
-        {/* LOGO */}
         <div style={{ height: "60px", display: "flex", alignItems: "center" }}>
-          {logo ? (
-            <img src={logo} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "150px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
-          ) : (
-            <span style={{ fontFamily: ff.h, color: T.gold, fontSize: "20px", letterSpacing: "2px", textTransform: "uppercase" }}>{product.brand}</span>
-          )}
+          {logo ? <img src={logo} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "150px", objectFit: "contain", filter: "brightness(0) invert(1)" }} /> : <span style={{ fontFamily: ff.h, color: T.gold, fontSize: "20px", textTransform: "uppercase" }}>{product.brand}</span>}
         </div>
-
         <div>
-          <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>
-            {categories} · {product.origin}
-          </span>
+          <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>{categories} · {product.origin}</span>
           <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "4px", lineHeight: 1.1 }}>{product.brand}</h3>
           <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.warm, fontStyle: "italic", marginBottom: "12px" }}>{product.name}</p>
           <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginBottom: "24px", maxWidth: "80%" }}>{summary}</p>
         </div>
-
         <div style={{ marginTop: "auto" }}>
-          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, border: `1px solid rgba(255,255,255,0.3)`, padding: "10px 24px", textDecoration: "none", display: "inline-block" }}>
-            View Details
-          </Link>
+          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, border: `1px solid rgba(255,255,255,0.3)`, padding: "10px 24px", textDecoration: "none", display: "inline-block" }}>View Details</Link>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Catalog card ─────────────────────────────────────────────────────────────
+// ─── Product card (Consistent styling) ───
 function ProductCard({ product }) {
   const [isHovered, setIsHovered] = useState(false);
   const logo = product.logoUrl || product.logo_url;
   const bottle = product.imageUrl || product.image_url;
   const description = product.description_en || product.description || "";
-  
-  // Use the new summary field, fallback to truncated description
   const teaser = product.summary || (description.length > 120 ? description.substring(0, 117) + "..." : description);
 
   return (
     <div
       style={{ 
-        background: T.paper, 
-        border: `1px solid ${T.cream}`, 
-        borderRadius: "12px", 
-        display: "flex", 
-        flexDirection: "column", 
-        overflow: "hidden", 
-        height: "100%",
-        transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
-        transform: isHovered ? "translateY(-4px)" : "none",
+        background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "12px", 
+        display: "flex", flexDirection: "column", overflow: "hidden", height: "100%",
+        transition: "all 0.4s", transform: isHovered ? "translateY(-4px)" : "none",
         boxShadow: isHovered ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 12px rgba(0,0,0,0.02)"
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 1. BRAND LOGO SLOT (Top) */}
       <div style={{ height: "100px", padding: "20px", display: "flex", alignItems: "center", justifyContent: "center", background: "white", borderBottom: `1px solid ${T.bg}` }}>
-        {logo ? (
-          <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} />
-        ) : (
-          <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", letterSpacing: "2px", textTransform: "uppercase" }}>{product.brand}</span>
-        )}
+        {logo ? <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} /> : <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", textTransform: "uppercase" }}>{product.brand}</span>}
       </div>
-
       <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
-        {/* 2. BRAND NAME & TYPE */}
         <div style={{ textAlign: "center" }}>
-          <h3 style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 700, color: T.ink, marginBottom: "4px", textTransform: "uppercase", letterSpacing: "1px" }}>
-            {product.brand}
-          </h3>
-          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>
-            {product.name} {product.type ? `· ${product.type}` : ""}
-          </p>
+          <h3 style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 700, color: T.ink, marginBottom: "4px", textTransform: "uppercase" }}>{product.brand}</h3>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
         </div>
-
-        {/* 3. FULL BOTTLE IMAGE (Contained) */}
-        <div 
-          style={{ height: "240px", position: "relative", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }}
-          onClick={() => product.onImageClick?.(bottle)}
-        >
-          {bottle ? (
-            <img
-              src={bottle}
-              alt={product.name}
-              style={{ height: "100%", maxWidth: "100%", objectFit: "contain", filter: isHovered ? "drop-shadow(0 10px 20px rgba(0,0,0,0.15))" : "none", transition: "all 0.5s" }}
-            />
-          ) : (
-            <div style={{ width: "100%", height: "100%", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "8px" }}>
-              <span style={{ fontSize: "10px", color: T.muted }}>No Image Available</span>
-            </div>
-          )}
+        <div style={{ height: "240px", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }} onClick={() => product.onImageClick?.(bottle)}>
+          {bottle ? <img src={bottle} alt={product.name} style={{ height: "100%", maxWidth: "100%", objectFit: "contain", transition: "all 0.5s" }} /> : <div style={{ width: "100%", height: "100%", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>No Image</div>}
         </div>
-
-        {/* 4. DESCRIPTION SUMMARY */}
-        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>
-          {teaser}
-        </p>
-
-        {/* 5. FOOTER / BUTTON */}
+        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>{teaser}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Link 
-            href={`/portfolio/${product.id || product.slug}`} 
-            style={{ 
-              fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", 
-              color: T.paper, background: T.wine, padding: "10px 32px", borderRadius: "4px",
-              textDecoration: "none", fontWeight: 600
-            }}
-          >
-            Details
-          </Link>
+          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, background: T.wine, padding: "10px 32px", borderRadius: "4px", textDecoration: "none", fontWeight: 600 }}>Details</Link>
         </div>
       </div>
     </div>
