@@ -1,12 +1,11 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Reveal from "@/components/Reveal";
 import Hr from "@/components/Hr";
 import Link from "next/link";
-
-export const metadata = {
-  title: "About Us | Vinaio Imports — 26 Years of Transatlantic Excellence",
-  description: "Founded in 1998, Vinaio Imports is a premier beverage alcohol importer and distributor bridging world-class producers with the American palate through our dual-continent operations.",
-};
+import { createClient } from "@/lib/supabase/client";
 
 const STATS = [
   { number: "26+", label: "Years of Experience" },
@@ -15,58 +14,65 @@ const STATS = [
   { number: "580+", label: "SKUs in Portfolio" },
 ];
 
-const LEADERSHIP = [
-  {
-    initials: "FL",
-    name: "Franlyn Liriano",
-    title: "Chief Financial Officer",
-    desc: "Oversees all financial operations, reporting, and fiscal strategy — ensuring Vinaio's growth is built on a solid financial foundation across all markets."
-  },
-  {
-    initials: "CJ",
-    name: "Carlos Jiménez",
-    title: "VP of Compliance",
-    desc: "Manages federal and state regulatory compliance across all 50 states — from TTB approvals and COLA registrations to state licensing and excise tax requirements."
-  },
-  {
-    initials: "SE",
-    name: "Sandro Estrella",
-    title: "Portfolio Director — Wines & Spirits",
-    desc: "Leads portfolio strategy and supplier relationships for Vinaio's wine and spirits brands, curating a world-class selection and driving sales across the US distribution network."
-  },
-  {
-    initials: "HG",
-    name: "Hector Garcia",
-    title: "Portfolio Director — Beer & Sales Director, Vinaio Spain",
-    desc: "Manages the beer portfolio and Caribbean brand division while leading sales strategy for Vinaio Spain, bridging operations between the US, Caribbean, and European markets."
-  },
-  {
-    initials: "LC",
-    name: "Leandro Caseres",
-    title: "Logistics Officer",
-    desc: "Coordinates the full logistics pipeline — from international freight and customs clearance to warehouse operations and last-mile delivery across Vinaio's US distribution footprint."
-  },
-  {
-    initials: "SM",
-    name: "Scarlet Matos",
-    title: "Head of Order Department",
-    desc: "Leads order management and fulfillment operations — ensuring accuracy, speed, and seamless coordination between sales, warehouse, and delivery across all Vinaio markets."
-  }
+const FALLBACK_LEADERSHIP = [
+  { initials: "FL", name: "Franlyn Liriano", title: "Chief Financial Officer", desc: "Oversees all financial operations, reporting, and fiscal strategy." },
+  { initials: "CJ", name: "Carlos Jiménez", title: "VP of Compliance", desc: "Manages federal and state regulatory compliance across all 50 states." },
+  { initials: "SE", name: "Sandro Estrella", title: "Portfolio Director — Wines & Spirits", desc: "Leads portfolio strategy and supplier relationships." },
+  { initials: "HG", name: "Hector Garcia", title: "Portfolio Director — Beer & Sales Director, Vinaio Spain", desc: "Manages the beer portfolio and Caribbean brand division." },
+  { initials: "LC", name: "Leandro Caseres", title: "Logistics Officer", desc: "Coordinates the full logistics pipeline from international freight to warehouse." },
+  { initials: "SM", name: "Scarlet Matos", title: "Head of Order Department", desc: "Leads order management and fulfillment operations." }
 ];
 
-const SALES_TEAM = [
+const FALLBACK_SALES = [
   "Johnny Paulino", "Kelvin Felix", "Jazmin Collado", "Carlos Hidalgo",
   "Sandro Estrella", "Ramón Delmonte", "Jesús Gutiérrez", "Dan Kessler",
   "Dulce Baldera", "Marco Vivona", "Eduardo Salanova", "Miguel Henríquez"
 ];
 
-const ADVISORS = [
+const FALLBACK_ADVISORS = [
   { name: "César Baeza", role: "Wine Master" },
   { name: "Marco Vivona", role: "Portfolio Manager — France, Italy & South America" },
   { name: "Jesús Gutiérrez", role: "Nariz de Oro" }
 ];
 
 export default function AboutPage() {
+  const [team, setTeam] = useState({ executive: [], leadership: [], sales: [], advisor: [] });
+  const [useFallback, setUseFallback] = useState(false);
+  const supabase = createClient();
+
+  useEffect(() => {
+    fetchTeam();
+  }, []);
+
+  const fetchTeam = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("site_team")
+        .select("*")
+        .eq("active", true)
+        .order("order", { ascending: true });
+
+      if (error || !data || data.length === 0) {
+        setUseFallback(true);
+        return;
+      }
+
+      const grouped = data.reduce((acc, m) => {
+        const lv = m.level || "sales";
+        if (!acc[lv]) acc[lv] = [];
+        acc[lv].push(m);
+        return acc;
+      }, { executive: [], leadership: [], sales: [], advisor: [] });
+
+      setTeam(grouped);
+      setUseFallback(false);
+    } catch (err) {
+      setUseFallback(true);
+    }
+  };
+
+  const getInitials = (name) => name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+
   return (
     <div style={{ background: T.paper }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -189,45 +195,18 @@ export default function AboutPage() {
           </Reveal>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "40px" }}>
-            <Reveal>
+             <Reveal>
               <div style={{ background: "rgba(255,255,255,0.03)", padding: "48px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.06)", height: "100%" }}>
                 <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>United States</p>
                 <h3 style={{ fontFamily: ff.h, fontSize: "32px", marginBottom: "24px" }}>Full-Service Distribution</h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                  <div>
-                    <strong style={{ color: T.gold, display: "block", marginBottom: "4px" }}>Direct Markets</strong>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>We self-distribute across New York, New Jersey, and Florida with our own dedicated sales force and logistics.</p>
-                  </div>
-                  <div>
-                    <strong style={{ color: T.gold, display: "block", marginBottom: "4px" }}>National Network</strong>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Through 26+ vetted distribution partners, we place brands across all major US metropolitan areas.</p>
-                  </div>
-                  <div>
-                    <strong style={{ color: T.gold, display: "block", marginBottom: "4px" }}>Full Compliance</strong>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Federal and state licensing, TTB label approvals, and tax management across all 50 states.</p>
-                  </div>
-                </div>
+                <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Direct markets in NY, NJ, and FL with a national network spanning all major US metropolitan areas.</p>
               </div>
             </Reveal>
-
             <Reveal delay={0.2}>
               <div style={{ background: "rgba(122, 24, 54, 0.1)", padding: "48px", borderRadius: "8px", border: `1px solid ${T.wine}30`, height: "100%" }}>
                 <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wineGlow, marginBottom: "16px", textTransform: "uppercase" }}>Spain & Europe</p>
                 <h3 style={{ fontFamily: ff.h, fontSize: "32px", marginBottom: "24px" }}>Origin-Side Operations</h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                  <div>
-                    <strong style={{ color: T.wineGlow, display: "block", marginBottom: "4px" }}>Vinaio Spain SL</strong>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Our European entity manages sourcing, producer relationships, and export logistics directly from Spain.</p>
-                  </div>
-                  <div>
-                    <strong style={{ color: T.wineGlow, display: "block", marginBottom: "4px" }}>European Distribution</strong>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>We maintain an active distribution network across Spain and key European markets for select brands.</p>
-                  </div>
-                  <div>
-                    <strong style={{ color: T.wineGlow, display: "block", marginBottom: "4px" }}>Strategic Control</strong>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Operating on both continents means direct quality control and streamlined logistics from producer to port.</p>
-                  </div>
-                </div>
+                <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Vinaio Spain SL manages sourcing and export logistics directly from Europe, ensuring unmatched quality control.</p>
               </div>
             </Reveal>
           </div>
@@ -244,72 +223,51 @@ export default function AboutPage() {
             </div>
           </Reveal>
 
-          {/* CEO */}
-          <Reveal>
-            <div style={{
-              background: T.ink,
-              borderRadius: "12px",
-              padding: "60px",
-              marginBottom: "40px",
-              display: "flex",
-              alignItems: "center",
-              gap: "60px",
-              flexWrap: "wrap"
-            }}>
-              <div style={{
-                width: "160px",
-                height: "160px",
-                borderRadius: "50%",
-                background: `linear-gradient(135deg, ${T.wine} 0%, ${T.gold} 100%)`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: ff.h,
-                fontSize: "56px",
-                color: T.paper,
-                flexShrink: 0
-              }}>JA</div>
-              <div style={{ flex: 1, minWidth: "300px" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.gold, marginBottom: "8px", textTransform: "uppercase" }}>Chief Executive Officer & Owner</p>
-                <h3 style={{ fontFamily: ff.h, fontSize: "40px", color: T.paper, marginBottom: "20px" }}>Joan Altés</h3>
-                <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>
-                  Founder and visionary behind Vinaio Imports, Joan has built the company from the ground up into a transatlantic import and distribution operation spanning the United States and Europe. His deep relationships with producers and commitment to quality define the soul of the company.
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Team Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" }}>
-            {LEADERSHIP.map((m, i) => (
-              <Reveal key={m.name} delay={i * 0.05}>
-                <div style={{
-                  background: T.paper,
-                  border: `1px solid ${T.cream}`,
-                  padding: "40px",
-                  borderRadius: "8px",
-                  display: "flex",
-                  gap: "24px",
-                  alignItems: "flex-start",
-                  height: "100%"
+          {/* Executive (CEO) */}
+          {(useFallback || team.executive.length > 0) && (
+            <Reveal>
+              { (useFallback ? [{ name: "Joan Altés", role: "Chief Executive Officer & Owner", desc: "Founder and visionary behind Vinaio Imports, Joan has built the company from the ground up into a transatlantic import and distribution operation.", photo_url: "" }] : team.executive).map(m => (
+                <div key={m.name} style={{
+                  background: T.ink, borderRadius: "12px", padding: "60px", marginBottom: "40px",
+                  display: "flex", alignItems: "center", gap: "60px", flexWrap: "wrap"
                 }}>
                   <div style={{
-                    width: "60px",
-                    height: "60px",
-                    borderRadius: "50%",
-                    background: `${T.wine}10`,
-                    border: `1px solid ${T.wine}20`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: ff.h,
-                    fontSize: "20px",
-                    color: T.wine,
-                    flexShrink: 0
-                  }}>{m.initials}</div>
+                    width: "160px", height: "160px", borderRadius: "50%",
+                    background: m.photo_url ? `url(${m.photo_url}) center/cover` : `linear-gradient(135deg, ${T.wine} 0%, ${T.gold} 100%)`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: ff.h, fontSize: "56px", color: T.paper, flexShrink: 0, overflow: "hidden"
+                  }}>
+                    {!m.photo_url && getInitials(m.name)}
+                  </div>
+                  <div style={{ flex: 1, minWidth: "300px" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.gold, marginBottom: "8px", textTransform: "uppercase" }}>Executive Leadership</p>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "40px", color: T.paper, marginBottom: "20px" }}>{m.name}</h3>
+                    <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>{m.desc || m.role}</p>
+                  </div>
+                </div>
+              ))}
+            </Reveal>
+          )}
+
+          {/* Leadership Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" }}>
+            {(useFallback ? FALLBACK_LEADERSHIP : team.leadership).map((m, i) => (
+              <Reveal key={m.name} delay={i * 0.05}>
+                <div style={{
+                  background: T.paper, border: `1px solid ${T.cream}`, padding: "40px", borderRadius: "8px",
+                  display: "flex", gap: "24px", alignItems: "flex-start", height: "100%"
+                }}>
+                  <div style={{
+                    width: "60px", height: "60px", borderRadius: "50%",
+                    background: m.photo_url ? `url(${m.photo_url}) center/cover` : `${T.wine}10`,
+                    border: `1px solid ${T.wine}20`, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: ff.h, fontSize: "20px", color: T.wine, flexShrink: 0, overflow: "hidden"
+                  }}>
+                    {!m.photo_url && (m.initials || getInitials(m.name))}
+                  </div>
                   <div>
                     <h4 style={{ fontFamily: ff.h, fontSize: "22px", color: T.ink, marginBottom: "4px" }}>{m.name}</h4>
-                    <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "1.5px", color: T.wine, fontWeight: 600, textTransform: "uppercase", marginBottom: "12px" }}>{m.title}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "1.5px", color: T.wine, fontWeight: 600, textTransform: "uppercase", marginBottom: "12px" }}>{m.role || m.title}</p>
                     <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.6 }}>{m.desc}</p>
                   </div>
                 </div>
@@ -323,31 +281,33 @@ export default function AboutPage() {
       <section style={{ background: T.bg, padding: "100px 48px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
-            <div style={{
-              background: T.ink,
-              borderRadius: "12px",
-              padding: "80px 48px",
-              textAlign: "center"
-            }}>
+            <div style={{ background: T.ink, borderRadius: "12px", padding: "80px 48px", textAlign: "center" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
               <h2 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "12px" }}>Our Sales Team</h2>
               <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.4)", maxWidth: "520px", margin: "0 auto 48px", lineHeight: 1.7 }}>
-                The backbone of Vinaio — in the streets, at the tastings, and in every account. Our reps bring deep market knowledge and personal relationships to every territory.
+                The backbone of Vinaio — our reps bring deep market knowledge and personal relationships to every territory.
               </p>
+              
+              {/* If we have dynamic sales members with photos, show them differently? */}
+              {/* For now, maintain the badge-style list if they have no photos, or grid if they do */}
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "12px" }}>
-                {SALES_TEAM.map((name) => (
-                  <div key={name} style={{
-                    padding: "10px 20px",
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "4px",
-                    fontFamily: ff.h,
-                    fontSize: "15px",
-                    color: T.paper
-                  }}>
-                    {name}
-                  </div>
-                ))}
+                {(useFallback ? FALLBACK_SALES : team.sales).map((m) => {
+                  const name = typeof m === "string" ? m : m.name;
+                  const photo = typeof m === "string" ? null : m.photo_url;
+                  
+                  return (
+                    <div key={name} style={{
+                      padding: photo ? "8px" : "10px 20px",
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: photo ? "40px" : "4px",
+                      display: "flex", alignItems: "center", gap: "12px"
+                    }}>
+                      {photo && <img src={photo} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />}
+                      <span style={{ fontFamily: ff.h, fontSize: photo ? "13px" : "15px", color: T.paper }}>{name}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </Reveal>
@@ -357,24 +317,18 @@ export default function AboutPage() {
       {/* ── Advisors ────────────────────────────────────────────────────── */}
       <section style={{ padding: "80px 48px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "40px" }}>
-          <Reveal>
-            <div style={{ background: T.paper, padding: "48px", borderTop: `4px solid ${T.wine}`, height: "100%" }}>
-              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wine, marginBottom: "16px", textTransform: "uppercase" }}>Administration</p>
-              <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.ink, marginBottom: "20px" }}>Built for a Complex World</h3>
-              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, lineHeight: 1.8 }}>
-                From a diversity of backgrounds and countries of origin, our staff meets the needs of a fast-changing world. We operate across languages, cultures, and regulatory environments with fluency.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.2}>
+           <Reveal delay={0.2}>
             <div style={{ background: T.paper, padding: "48px", borderTop: `4px solid ${T.gold}`, height: "100%" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>Advisors</p>
               <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.ink, marginBottom: "24px" }}>Expert Counsel</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                {ADVISORS.map((a) => (
+                {(useFallback ? FALLBACK_ADVISORS : team.advisor).map((a) => (
                   <div key={a.name} style={{ display: "flex", gap: "20px" }}>
-                    <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: T.bg, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "14px" }}>
-                      {a.name.split(" ").map(n => n[0]).join("")}
+                    <div style={{ 
+                      width: "48px", height: "48px", borderRadius: "50%", background: a.photo_url ? `url(${a.photo_url}) center/cover` : T.bg, 
+                      flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "14px", overflow: "hidden" 
+                    }}>
+                      {!a.photo_url && getInitials(a.name)}
                     </div>
                     <div>
                       <p style={{ fontFamily: ff.h, fontSize: "18px", color: T.ink, marginBottom: "2px" }}>{a.name}</p>
@@ -383,6 +337,15 @@ export default function AboutPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </Reveal>
+           <Reveal>
+            <div style={{ background: T.paper, padding: "48px", borderTop: `4px solid ${T.wine}`, height: "100%" }}>
+              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wine, marginBottom: "16px", textTransform: "uppercase" }}>Administration</p>
+              <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.ink, marginBottom: "20px" }}>Built for a Complex World</h3>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, lineHeight: 1.8 }}>
+                Our staff operates across languages, cultures, and regulatory environments with fluency, ensuring seamless operations from producer to glass.
+              </p>
             </div>
           </Reveal>
         </div>
@@ -402,15 +365,8 @@ export default function AboutPage() {
             Whether you&apos;re a producer seeking US market entry or a buyer looking for exceptional products, we&apos;d love to hear from you.
           </p>
           <Link href="/contact" style={{
-            fontFamily: ff.b,
-            fontSize: "11px",
-            letterSpacing: "4px",
-            color: T.paper,
-            background: T.wine,
-            padding: "18px 44px",
-            display: "inline-block",
-            textTransform: "uppercase",
-            fontWeight: 600
+            fontFamily: ff.b, fontSize: "11px", letterSpacing: "4px", color: T.paper, background: T.wine,
+            padding: "18px 44px", display: "inline-block", textTransform: "uppercase", fontWeight: 600
           }}>
             Get in Touch
           </Link>
