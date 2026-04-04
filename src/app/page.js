@@ -494,33 +494,49 @@ export default function HomePage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "2px",
-              background: T.taupe,
-              borderRadius: "8px",
-              overflow: "hidden",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "24px",
+              marginTop: "40px",
             }}
           >
             {[
-              { label: "26 States", sub: "Distribution Network" },
-              { label: "NY · NJ · FL", sub: "Self-Distribution" },
-              { label: "On & Off Premise", sub: "Channel Coverage" },
-              { label: "10+ Brands", sub: "Portfolio & Growing" },
-            ].map((s) => (
-              <Reveal key={s.label}>
+              { label: "NY · NJ · FL", sub: "Full-Service Direct Distribution" },
+              { label: "26+ States", sub: "National Distribution Network" },
+              { label: "Spain & Europe", sub: "Import & Continental Operations" },
+              { label: "Award-Winning", sub: "International Wine, Beer & Spirits" },
+            ].map((s, i) => (
+              <Reveal key={s.label} delay={i * 0.1}>
                 <div
+                  className="territory-box"
                   style={{
-                    padding: "40px 28px",
+                    padding: "48px 32px",
                     background: T.paper,
                     textAlign: "center",
+                    border: `1px solid ${T.cream}`,
+                    borderRadius: "12px",
+                    transition: "all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)",
+                    cursor: "default",
+                    position: "relative",
+                    overflow: "hidden"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-10px)";
+                    e.currentTarget.style.borderColor = T.wine;
+                    e.currentTarget.style.boxShadow = `0 20px 40px ${T.wine}10`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = T.cream;
+                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
                   <p
                     style={{
                       fontFamily: ff.h,
-                      fontSize: "clamp(28px, 3vw, 40px)",
+                      fontSize: "clamp(24px, 2.5vw, 36px)",
                       color: T.wine,
-                      marginBottom: "8px",
+                      marginBottom: "12px",
+                      lineHeight: 1
                     }}
                   >
                     {s.label}
@@ -528,10 +544,11 @@ export default function HomePage() {
                   <p
                     style={{
                       fontFamily: ff.b,
-                      fontSize: "10px",
-                      letterSpacing: "2px",
+                      fontSize: "11px",
+                      letterSpacing: "3px",
                       textTransform: "uppercase",
                       color: T.muted,
+                      fontWeight: 600
                     }}
                   >
                     {s.sub}
