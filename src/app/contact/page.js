@@ -193,8 +193,8 @@ export default function ContactPage() {
                   </div>
                 </div>
                 {[
-                  { label: "Phone",     value: "(212) 555-0142", href: "tel:+12125550142" },
-                  { label: "Email",     value: "hector@vinaioimports.com", href: "mailto:hector@vinaioimports.com" },
+                  { label: "Phone", value: "(718) 842-7201", href: "tel:+17188427201" },
+                  { label: "Email", value: "c.s@vinaioimports.com", href: "mailto:c.s@vinaioimports.com" },
                 ].map((c) => (
                   <div key={c.label} style={{ marginBottom: "12px" }}>
                     <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "2px" }}>{c.label}</p>
