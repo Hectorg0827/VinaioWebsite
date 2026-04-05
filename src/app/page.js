@@ -15,33 +15,38 @@ const FALLBACK_LOGOS = [
 
 export default function HomePage() {
   const supabase = createClient();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(true);
   const [partners, setPartners] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hero, setHero] = useState({ 
     images: [], 
-    subtitle: "From the sun-drenched vineyards of Rioja to the Caribbean shores of the Dominican Republic — Vinaio Imports brings the world's most compelling wines and craft beverages to the American table. Partnering directly with artisan producers in over 15 countries, we curate a portfolio of world-class labels that tell a story in every bottle."
+    title: "Curating Excellence",
+    subtitle: "Transatlantic Spirits & Wine Purveyors"
   });
 
   // Default elegant images from Unsplash to ensure background is NEVER black
   const DEFAULT_SLIDES = [
-    "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=2000", // Vineyard/Wine
-    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2000", // Barrels
-    "https://images.unsplash.com/photo-1543412849-fd47250680ca?auto=format&fit=crop&q=80&w=2000"  // Bottles/Beach vibe
+    "/images/hero/hero-rum.png",
+    "/images/hero/hero-vineyard.png",
+    "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=2048", // Vineyard/Wine
+    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2048", // Barrels
+    "https://images.unsplash.com/photo-1543412849-fd47250680ca?auto=format&fit=crop&q=80&w=2048"  // Bottles/Beach vibe
   ];
 
   useEffect(() => {
-    setTimeout(() => setLoaded(true), 80);
+    // Ensuring visibility is triggered early
+    setTimeout(() => setLoaded(true), 150);
     fetchContent();
   }, []);
 
   // Simple slide timer for the "alive" effect
   useEffect(() => {
+    const slideCount = (hero.images && hero.images.length > 0) ? hero.images.length : DEFAULT_SLIDES.length;
     const timer = setInterval(() => {
-      setCurrentSlide(s => (s + 1) % DEFAULT_SLIDES.length);
+      setCurrentSlide(s => (s + 1) % slideCount);
     }, 8000); 
     return () => clearInterval(timer);
-  }, []);
+  }, [hero.images, DEFAULT_SLIDES.length]);
 
   const fetchContent = async () => {
     try {
@@ -60,7 +65,12 @@ export default function HomePage() {
         } catch (e) {
           urls = heroData.url?.split("|").filter(Boolean);
         }
-        setHero({ ...heroData, images: (urls && urls.length > 0) ? urls : [heroData.url] });
+        setHero({ 
+          ...heroData, 
+          title: heroData.title || "Curating Excellence",
+          subtitle: heroData.subtitle || "Transatlantic Spirits & Wine Purveyors",
+          images: (urls && urls.length > 0) ? urls : [heroData.url] 
+        });
       }
 
       const { data: partnersData } = await supabase
@@ -167,23 +177,50 @@ export default function HomePage() {
             <Hr w="40px" c={T.gold} />
           </div>
 
-          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "40px" }}>
-            <img src="/logo.png" alt="Vinaio" style={{ height: "45px", width: "auto" }} />
+          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "20px" }}>
+            <img 
+              src="/logo.png" 
+              alt="Vinaio" 
+              style={{ 
+                height: "80px", 
+                width: "auto", 
+                filter: "brightness(0) invert(1)",
+                marginBottom: "20px"
+              }} 
+            />
           </div>
+
+          <h1
+            style={{
+              fontFamily: ff.h,
+              fontSize: "clamp(42px, 8vw, 110px)",
+              color: T.paper,
+              lineHeight: 0.9,
+              marginBottom: "32px",
+              opacity: loaded ? 1 : 0,
+              transition: "all 1s ease 0.4s",
+              textShadow: "0 4px 30px rgba(0,0,0,0.5)",
+              maxWidth: "1100px",
+              fontWeight: 400
+            }}
+          >
+            {hero.title}
+          </h1>
 
           <p
             style={{
-              fontFamily: ff.h,
-              fontSize: "clamp(18px, 1.6vw, 24px)",
+              fontFamily: ff.b,
+              fontSize: "clamp(14px, 1.4vw, 18px)",
               color: T.paper,
-              opacity: loaded ? 1 : 0,
-              transition: "all 1s ease 0.4s",
+              opacity: loaded ? 0.9 : 0,
+              transition: "all 1s ease 0.5s",
               marginBottom: "56px",
-              textShadow: "0 2px 20px rgba(0,0,0,1)",
-              maxWidth: "900px",
-              lineHeight: 1.8,
-              fontWeight: 400,
-              letterSpacing: "0.5px"
+              textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+              maxWidth: "800px",
+              lineHeight: 1.6,
+              fontWeight: 500,
+              letterSpacing: "4px",
+              textTransform: "uppercase"
             }}
           >
             {hero.subtitle}
@@ -334,54 +371,70 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "24px",
+              gap: "20px",
             }}
           >
             {[
-              { icon: "◈", title: "Import & Compliance",    desc: "TTB licensing, COLA registration, label approval, federal & state permits." },
-              { icon: "◉", title: "Logistics & Warehousing", desc: "Bonded warehouse, temperature-controlled storage, freight coordination." },
-              { icon: "◎", title: "26-State Distribution",   desc: "Self-distribution in NY, NJ & FL. Distributor network across 26 states." },
-              { icon: "◆", title: "White Label",             desc: "Private-label wines, spirits, and beer — fully sourced and market-ready." },
+              { title: "Import & Compliance",    desc: "TTB licensing, COLA registration, label approval, federal & state permits." },
+              { title: "Logistics & Warehousing", desc: "Bonded warehouse, temperature-controlled storage, freight coordination." },
+              { title: "26-State Distribution",   desc: "Self-distribution in NY, NJ & FL. Distributor network across 26 states." },
+              { title: "White Label",             desc: "Private-label wines, spirits, and beer — fully sourced and market-ready." },
             ].map((s, i) => (
               <Reveal key={s.title} delay={i * 0.1}>
                 <div
                   style={{
-                    padding: "32px 28px",
                     background: T.bg,
                     border: `1px solid ${T.cream}`,
-                    borderRadius: "8px",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    minHeight: "240px",
+                    transition: "all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)",
+                    cursor: "default"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-10px)";
+                    e.currentTarget.style.borderColor = T.wine;
+                    e.currentTarget.style.boxShadow = `0 20px 40px ${T.wine}10`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = T.cream;
+                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <div
-                    style={{
-                      fontSize: "24px",
-                      color: T.wine,
-                      marginBottom: "16px",
-                    }}
-                  >
-                    {s.icon}
+                  <div style={{ flex: 1, padding: "32px 28px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+                    <p
+                      style={{
+                        fontFamily: ff.b,
+                        fontSize: "14px",
+                        color: T.muted,
+                        lineHeight: 1.6,
+                        margin: 0
+                      }}
+                    >
+                      {s.desc}
+                    </p>
                   </div>
-                  <h3
-                    style={{
-                      fontFamily: ff.b,
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      color: T.ink,
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {s.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: ff.b,
-                      fontSize: "13px",
-                      color: T.muted,
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    {s.desc}
-                  </p>
+                  
+                  {/* Burgundy Bottom Strip for Title */}
+                  <div style={{ background: T.wine, padding: "18px 20px", textAlign: "center" }}>
+                    <h3
+                      style={{
+                        fontFamily: ff.b,
+                        fontSize: "10px",
+                        letterSpacing: "2.5px",
+                        textTransform: "uppercase",
+                        fontWeight: 600,
+                        color: T.paper,
+                        margin: 0
+                      }}
+                    >
+                      {s.title}
+                    </h3>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -494,30 +547,32 @@ export default function HomePage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "24px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "20px",
               marginTop: "40px",
             }}
           >
             {[
-              { label: "NY · NJ · FL", sub: "Full-Service Direct Distribution" },
-              { label: "26+ States", sub: "National Distribution Network" },
-              { label: "Spain & Europe", sub: "Import & Continental Operations" },
-              { label: "Award-Winning", sub: "International Wine, Beer & Spirits" },
+              { label: "Full Service Distributor", sub: "New York, New Jersey and Florida" },
+              { label: "Importer & Wholesaler",   sub: "Sourcing direct from global producers" },
+              { label: "Advanced Logistics",        sub: "Bonded warehouse & refrigerated storage" },
+              { label: "Regulatory Support",       sub: "COLA and TTB compliance expertise" },
             ].map((s, i) => (
               <Reveal key={s.label} delay={i * 0.1}>
                 <div
                   className="territory-box"
                   style={{
-                    padding: "48px 32px",
                     background: T.paper,
-                    textAlign: "center",
                     border: `1px solid ${T.cream}`,
                     borderRadius: "12px",
                     transition: "all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)",
                     cursor: "default",
                     position: "relative",
-                    overflow: "hidden"
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    minHeight: "220px"
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-10px)";
@@ -530,29 +585,44 @@ export default function HomePage() {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <p
-                    style={{
-                      fontFamily: ff.h,
-                      fontSize: "clamp(24px, 2.5vw, 36px)",
-                      color: T.wine,
-                      marginBottom: "12px",
-                      lineHeight: 1
-                    }}
-                  >
-                    {s.label}
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: ff.b,
-                      fontSize: "11px",
-                      letterSpacing: "3px",
-                      textTransform: "uppercase",
-                      color: T.muted,
-                      fontWeight: 600
-                    }}
-                  >
-                    {s.sub}
-                  </p>
+                  {/* Content Area (Centered) */}
+                  <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
+                    <p
+                      style={{
+                        fontFamily: ff.b,
+                        fontSize: "14px",
+                        color: T.muted,
+                        lineHeight: 1.6,
+                        margin: 0
+                      }}
+                    >
+                      {s.sub}
+                    </p>
+                  </div>
+                  
+                  {/* Burgundy Bottom Strip for Title */}
+                  <div style={{
+                    background: T.wine,
+                    padding: "20px 24px",
+                    width: "100%",
+                    marginTop: "auto",
+                    textAlign: "center"
+                  }}>
+                    <h3
+                      style={{
+                        fontFamily: ff.b,
+                        fontSize: "10px",
+                        letterSpacing: "2.5px",
+                        textTransform: "uppercase",
+                        color: T.paper,
+                        fontWeight: 600,
+                        margin: 0,
+                        lineHeight: 1.4
+                      }}
+                    >
+                      {s.label}
+                    </h3>
+                  </div>
                 </div>
               </Reveal>
             ))}

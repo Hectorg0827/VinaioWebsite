@@ -20,7 +20,9 @@ export default function Nav() {
 
   const isPortal = pathname.startsWith("/portal");
   const isAdmin  = pathname.startsWith("/admin");
-  const isHome   = pathname === "/";
+  const isHome      = pathname === "/";
+  const isPortfolio = pathname === "/portfolio";
+  const isAbout     = pathname === "/about";
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 80);
@@ -33,8 +35,8 @@ export default function Nav() {
 
   if (isAdmin) return null; // Admin has its own top bar
 
-  const hero = isHome && !scrolled;
-  const dark = hero || isPortal;
+  const isDarkHero = (isHome || isPortfolio || isAbout) && !scrolled;
+  const dark = isDarkHero || isPortal;
 
   const bgColor = isPortal
     ? T.ink
@@ -94,8 +96,8 @@ export default function Nav() {
               style={{ 
                 height: scrolled ? "32px" : "40px",
                 width: "auto",
-                filter: isPortal && !menuOpen ? "brightness(0) invert(1)" : "none",
-                transition: "height 0.4s, filter 0.4s",
+                filter: "none",
+                transition: "height 0.4s",
               }} 
             />
           </Link>

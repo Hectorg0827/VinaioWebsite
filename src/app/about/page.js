@@ -224,9 +224,12 @@ export default function AboutPage() {
           </Reveal>
 
           {/* Executive (CEO) */}
-          {(useFallback || team.executive.length > 0) && (
+          {(useFallback || (team.executive && team.executive.length > 0)) && (
             <Reveal>
-              { (useFallback ? [{ name: "Joan Altés", role: "Chief Executive Officer & Owner", desc: "Founder and visionary behind Vinaio Imports, Joan has built the company from the ground up into a transatlantic import and distribution operation.", photo_url: "" }] : team.executive).map(m => (
+              {(useFallback || !team.executive || team.executive.length === 0
+                ? [{ name: "Joan Altés", role: "Chief Executive Officer & Owner", desc: "Founder and visionary behind Vinaio Imports, Joan has built the company from the ground up into a transatlantic import and distribution operation.", photo_url: "" }] 
+                : team.executive
+              ).map(m => (
                 <div key={m.name} style={{
                   background: T.ink, borderRadius: "12px", padding: "60px", marginBottom: "40px",
                   display: "flex", alignItems: "center", gap: "60px", flexWrap: "wrap"
@@ -251,7 +254,10 @@ export default function AboutPage() {
 
           {/* Leadership Grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" }}>
-            {(useFallback ? FALLBACK_LEADERSHIP : team.leadership).map((m, i) => (
+            {(useFallback || !team.leadership || team.leadership.length === 0 
+               ? FALLBACK_LEADERSHIP 
+               : team.leadership
+            ).map((m, i) => (
               <Reveal key={m.name} delay={i * 0.05}>
                 <div style={{
                   background: T.paper, border: `1px solid ${T.cream}`, padding: "40px", borderRadius: "8px",

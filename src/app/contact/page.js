@@ -188,8 +188,8 @@ export default function ContactPage() {
                     H
                   </div>
                   <div>
-                    <p style={{ fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink }}>Hector Garcia</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted }}>Sales Director</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink }}>Katja Kohl</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted }}>Customer Service</p>
                   </div>
                 </div>
                 {[
@@ -209,7 +209,7 @@ export default function ContactPage() {
               <div style={{ padding: "28px 32px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "10px" }}>
                 <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, marginBottom: "16px" }}>Office</p>
                 {[
-                  ["Location", "New York Metropolitan Area"],
+                  ["Location", "608 Tiffany Street, Bronx NY 10474"],
                   ["Hours", "Mon – Fri · 9:00am – 6:00pm ET"],
                   ["Response Time", "Within 1 business day"],
                 ].map(([k, v]) => (

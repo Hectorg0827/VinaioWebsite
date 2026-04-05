@@ -44,8 +44,9 @@ export default function PortfolioPage() {
               inStock: p.in_stock ?? p.inStock,
               imageUrl: p.image_url ?? p.imageUrl,
               featured: p.featured,
-              categories: p.categories ?? [p.category],
-              portfolios: p.portfolios ?? ["all"]
+              // Handle JSONB or legacy strings safely
+              categories: Array.isArray(p.categories) ? p.categories : (p.categories ? [p.categories] : [p.category].filter(Boolean)),
+              portfolios: Array.isArray(p.portfolios) ? p.portfolios : ["all"]
             }))
           );
           setSyncStatus("live");
