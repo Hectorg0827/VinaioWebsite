@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import PortalShell from "./PortalShell";
+import { redirect }     from "next/navigation";
 
 export const metadata = {
   title:  "Customer Portal — Vinaio Imports",
@@ -7,19 +7,19 @@ export const metadata = {
 };
 
 export default async function PortalLayout({ children }) {
-  // Gracefully handle missing Supabase config (e.g. during local dev without .env.local)
-  let user = null;
+  // Defence-in-depth auth check (middleware is the primary guard)
   try {
     const supabase = await createClient();
     const { data } = await supabase.auth.getUser();
-    user = data?.user ?? null;
+    const isLoginPage = false; // layout doesn't know the exact path; middleware handles redirect
+    if (!data?.user) {
+      // Only redirect if Supabase is actually configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      if (supabaseUrl) redirect("/portal/login");
+    }
   } catch {
-    // Supabase not configured — portal pages will show demo/mock data
+    // Supabase not configured — allow render with mock data
   }
 
-  return (
-    <PortalShell user={user}>
-      {children}
-    </PortalShell>
-  );
+  return <>{children}</>;
 }

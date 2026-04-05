@@ -1,39 +1,95 @@
 import { getUser } from "@/lib/supabase/safe";
-import DashboardClient from "./DashboardClient";
+import PortalApp   from "./PortalApp";
 
-export default async function PortalDashboardPage() {
+export default async function PortalPage() {
   const { user, supabase } = await getUser();
 
-  let customer = null, invoices = [], orders = [], licenses = [], catalogs = [];
+  let customer = null, orders = [], products = [], licenses = [], catalogs = [];
 
   if (supabase && user) {
-    const [c, inv, ord, lic, cat] = await Promise.all([
+    const [c, ord, prod, lic, cat] = await Promise.all([
       supabase.from("customers").select("*").eq("id", user.id).single(),
-      supabase.from("invoices").select("*").eq("customer_id", user.id).order("created_at", { ascending: false }).limit(10),
-      supabase.from("orders").select("*, order_items(count)").eq("customer_id", user.id).order("created_at", { ascending: false }).limit(5),
+      supabase
+        .from("orders")
+        .select("*, order_items(qty, unit_price, product_id, products(name, sku))")
+        .eq("customer_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabase
+        .from("products")
+        .select("*")
+        .eq("in_stock", true)
+        .order("featured", { ascending: false }),
       supabase.from("licenses").select("*").eq("customer_id", user.id),
-      supabase.from("site_catalogs").select("*").eq("active", true).order("created_at", { ascending: false }),
+      supabase.from("site_catalogs").select("*").order("created_at", { ascending: false }),
     ]);
 
-    customer = c.data;
-    invoices = inv.data ?? [];
-    orders   = ord.data ?? [];
+    // Normalize customer to PortalApp shape
+    if (c.data) {
+      customer = {
+        name:          c.data.company        ?? "Your Account",
+        contact:       user.email?.split("@")[0] ?? "User",
+        email:         user.email             ?? "",
+        accountNumber: c.data.account_number  ?? "—",
+        rep:           c.data.rep_name        ?? "Vinaio Team",
+        repEmail:      c.data.rep_email       ?? "orders@vinaioimports.com",
+        creditLimit:   c.data.credit_limit    ?? 0,
+        currentAR:     c.data.balance         ?? 0,
+        overdueAR:     0,  // computed from live invoices on demand
+        daysOverdue:   0,
+        ytdPurchases:  0,
+        address:       "",
+      };
+    }
+
+    // Normalize orders
+    if (ord.data?.length) {
+      orders = ord.data.map((o) => ({
+        id:     o.id,
+        date:   new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        items:  (o.order_items ?? []).map((li) => ({
+          name: li.products?.name ?? "Product",
+          qty:  li.qty,
+        })),
+        total:  o.total  ?? 0,
+        status: o.status ?? "Processing",
+      }));
+    }
+
+    // Normalize product catalogue for order page
+    if (prod.data?.length) {
+      products = prod.data.map((p) => ({
+        id:          p.id,
+        sku:         p.product_code  ?? p.sku ?? "",
+        name:        p.name,
+        brand:       p.brand         ?? p.origin ?? "",
+        category:    (p.categories ?? [])[0] ?? p.category ?? "Other",
+        price:       p.price_bottle  ?? p.price ?? 0,
+        btlPerCase:  p.case_qty      ?? 12,
+        trend:       "Steady",
+        tags:        p.tags          ?? [],
+        description: p.description_en ?? p.description ?? "",
+        imageUrl:    p.image_url     ?? null,
+        portfolios:  p.portfolios    ?? [],
+      }));
+    }
+
     licenses = lic.data ?? [];
     catalogs = cat.data ?? [];
 
-    // Log Activity for Analytics
-    await supabase.from("portal_logs").insert([{
+    // Log portal visit for analytics (fire-and-forget)
+    supabase.from("portal_logs").insert([{
       customer_id: user.id,
-      action: "login",
-      details: { page: "dashboard", user_email: user.email }
-    }]);
+      action:      "portal_visit",
+      details:     { page: "dashboard", user_email: user.email },
+    }]).then(() => {});
   }
 
   return (
-    <DashboardClient
+    <PortalApp
       customer={customer}
-      invoices={invoices}
       orders={orders}
+      products={products}
       licenses={licenses}
       catalogs={catalogs}
       user={user}
