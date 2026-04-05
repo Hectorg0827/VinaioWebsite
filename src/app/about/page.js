@@ -232,11 +232,13 @@ export default function AboutPage() {
               ).map(m => (
                 <div key={m.name} style={{
                   background: T.ink, borderRadius: "12px", padding: "60px", marginBottom: "40px",
-                  display: "flex", alignItems: "center", gap: "60px", flexWrap: "wrap"
+                  display: "flex", alignItems: "center", gap: "60px", flexWrap: "wrap",
+                  border: `1px solid ${T.wine}20`
                 }}>
                   <div style={{
                     width: "160px", height: "160px", borderRadius: "50%",
-                    background: m.photo_url ? `url(${m.photo_url}) center/cover` : `linear-gradient(135deg, ${T.wine} 0%, ${T.gold} 100%)`,
+                    background: m.photo_url ? `url(${m.photo_url}) center/cover` : T.wine,
+                    border: `2px solid ${T.gold}40`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontFamily: ff.h, fontSize: "56px", color: T.paper, flexShrink: 0, overflow: "hidden"
                   }}>
@@ -296,21 +298,30 @@ export default function AboutPage() {
               
               {/* If we have dynamic sales members with photos, show them differently? */}
               {/* For now, maintain the badge-style list if they have no photos, or grid if they do */}
-              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "12px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
                 {(useFallback ? FALLBACK_SALES : team.sales).map((m) => {
                   const name = typeof m === "string" ? m : m.name;
                   const photo = typeof m === "string" ? null : m.photo_url;
                   
                   return (
                     <div key={name} style={{
-                      padding: photo ? "8px" : "10px 20px",
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: photo ? "40px" : "4px",
-                      display: "flex", alignItems: "center", gap: "12px"
+                      padding: "8px 24px 8px 8px",
+                      background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderRadius: "40px",
+                      display: "flex", alignItems: "center", gap: "12px",
+                      transition: "all 0.3s"
                     }}>
-                      {photo && <img src={photo} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />}
-                      <span style={{ fontFamily: ff.h, fontSize: photo ? "13px" : "15px", color: T.paper }}>{name}</span>
+                      <div style={{ 
+                        width: "36px", height: "36px", borderRadius: "50%", 
+                        background: photo ? `url(${photo}) center/cover` : T.wine,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: ff.h, fontSize: "11px", color: "white", flexShrink: 0, overflow: "hidden",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+                      }}>
+                        {!photo && getInitials(name)}
+                      </div>
+                      <span style={{ fontFamily: ff.h, fontSize: "13px", color: T.paper, letterSpacing: "0.5px" }}>{name}</span>
                     </div>
                   );
                 })}
@@ -331,8 +342,9 @@ export default function AboutPage() {
                 {(useFallback ? FALLBACK_ADVISORS : team.advisor).map((a) => (
                   <div key={a.name} style={{ display: "flex", gap: "20px" }}>
                     <div style={{ 
-                      width: "48px", height: "48px", borderRadius: "50%", background: a.photo_url ? `url(${a.photo_url}) center/cover` : T.bg, 
-                      flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "14px", overflow: "hidden" 
+                      width: "48px", height: "48px", borderRadius: "50%", background: a.photo_url ? `url(${a.photo_url}) center/cover` : T.wine, 
+                      flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "14px", overflow: "hidden",
+                      color: "white"
                     }}>
                       {!a.photo_url && getInitials(a.name)}
                     </div>

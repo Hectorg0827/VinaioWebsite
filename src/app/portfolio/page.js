@@ -134,7 +134,8 @@ export default function PortfolioPage() {
 
   const featured = products.filter((p) => p.featured);
 
-  // Derive unique options for advanced filters
+  // Derive unique options for advanced filters dynamically from Supabase data
+  const dynamicCategories = ["All", ...Array.from(new Set(products.flatMap(p => p.categories || []))).sort()];
   const uniqueOrigins = ["All Origins", ...Array.from(new Set(products.map(p => p.origin).filter(Boolean))).sort()];
   const uniqueRegions = ["All Regions", ...Array.from(new Set(products.map(p => p.region).filter(Boolean))).sort()];
   const uniqueSizes = ["All Sizes", ...Array.from(new Set(products.map(p => p.unit || p.format).filter(Boolean))).sort()];
@@ -280,7 +281,7 @@ export default function PortfolioPage() {
                 paddingBottom: "24px", borderBottom: `1px solid ${T.cream}` 
               }}>
                  {[
-                   { label: "Category", val: category, set: setCategory, options: ACTIVE_CATEGORIES },
+                   { label: "Category", val: category, set: setCategory, options: dynamicCategories },
                    { label: "Region", val: selectedRegion, set: setSelectedRegion, options: uniqueRegions },
                    { label: "Country", val: selectedOrigin, set: setSelectedOrigin, options: uniqueOrigins },
                    { label: "Format", val: selectedSize, set: setSelectedSize, options: uniqueSizes },

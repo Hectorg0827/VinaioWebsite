@@ -15,6 +15,11 @@ import { uploadFile } from "@/lib/supabase/storage";
 const REGIONS = ["Caribbean", "South America", "Europe", "North America", "Asia", "Other"];
 const UNITS   = ["750ml", "1L", "1.75L", "375ml", "355ml", "330ml", "500ml", "Other"];
 
+const isUUID = (str) => {
+  if (typeof str !== "string") return false;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+};
+
 const PORTFOLIOS = [
   { id: "all",               label: "All Products" },
   { id: "elite",             label: "Vinaio Elite" },
