@@ -182,13 +182,19 @@ export default function HomePage() {
 
            {/* The dramatic Logo */}
            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             <img 
-               src={logoUrl} 
-               alt="Vinaio Logo" 
+             <div
                style={{ 
                  height: "140px", 
-                 width: "auto", 
-                 filter: "brightness(0) invert(1)",
+                 width: "500px", 
+                 backgroundColor: T.wine,
+                 WebkitMaskImage: `url('${logoUrl}')`,
+                 WebkitMaskSize: "contain",
+                 WebkitMaskRepeat: "no-repeat",
+                 WebkitMaskPosition: "center",
+                 maskImage: `url('${logoUrl}')`,
+                 maskSize: "contain",
+                 maskRepeat: "no-repeat",
+                 maskPosition: "center",
                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.8s both cubic-bezier(0.2, 0.8, 0.2, 1)",
                  animationDelay: introFading ? "0s" : "4.0s"
                }} 
