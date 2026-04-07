@@ -9,8 +9,14 @@ import { createClient } from "@/lib/supabase/client";
 
 // Fallback branding logos if DB is empty
 const FALLBACK_LOGOS = [
-  "brand-1.png", "brand-10.png", "brand-11.png", "brand-12.svg", "brand-13.png", 
-  "brand-14.png", "brand-15.png", "brand-16.png", "brand-17.png", "brand-18.png"
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Logistics%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Caribbean%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Elite%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Florida%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20NY%20%26%20NJ%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Wholesale%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Beverages%20logo.svg"
 ];
 
 export default function HomePage() {
@@ -92,7 +98,7 @@ export default function HomePage() {
       if (partnersData && partnersData.length > 0) {
         setPartners(partnersData.map(p => p.logo_url));
       } else {
-        setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+        setPartners(FALLBACK_LOGOS);
       }
 
       const { data: configData } = await supabase
@@ -106,7 +112,7 @@ export default function HomePage() {
       }
     } catch (err) {
       console.warn("Using default hero configuration.");
-      setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+      setPartners(FALLBACK_LOGOS);
     }
   };
 
