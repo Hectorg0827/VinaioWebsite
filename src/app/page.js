@@ -15,7 +15,9 @@ const FALLBACK_LOGOS = [
 
 export default function HomePage() {
   const supabase = createClient();
-  const [loaded, setLoaded] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const [introFading, setIntroFading] = useState(false);
+  const [introFinished, setIntroFinished] = useState(false);
   const [partners, setPartners] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hero, setHero] = useState({ 
@@ -35,8 +37,15 @@ export default function HomePage() {
   ];
 
   useEffect(() => {
-    // Ensuring visibility is triggered early
-    setTimeout(() => setLoaded(true), 150);
+    // Cinematic Intro Timing
+    setTimeout(() => {
+      setIntroFading(true);
+      setTimeout(() => {
+        setIntroFinished(true);
+        setLoaded(true); // Fade in the main site content after intro
+      }, 1500); // Wait for the fade out to finish
+    }, 2000); // Wait 2 seconds before fading out
+
     fetchContent();
   }, []);
 
@@ -105,6 +114,35 @@ export default function HomePage() {
 
   return (
     <>
+      {!introFinished && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: T.ink,
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: introFading ? 0 : 1,
+            transition: 'opacity 1.5s ease-in-out',
+            pointerEvents: 'none'
+          }}
+        >
+          <img 
+            src={logoUrl} 
+            alt="Vinaio Logo" 
+            style={{ 
+              height: "80px", 
+              width: "auto", 
+              filter: "brightness(0) invert(1)",
+              transform: introFading ? "scale(1.1) translateY(-10px)" : "scale(1) translateY(0px)",
+              transition: "transform 2.5s cubic-bezier(0.4, 0, 0.2, 1)"
+            }} 
+          />
+        </div>
+      )}
+
       <style>{`
         @keyframes kenburns {
           0% { transform: scale(1.05); }
@@ -132,7 +170,7 @@ export default function HomePage() {
           height: "100vh",
           position: "relative",
           overflow: "hidden",
-          background: "#000",
+          background: T.ink,
         }}
       >
         {slides.map((url, idx) => (
@@ -153,7 +191,7 @@ export default function HomePage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: `linear-gradient(to bottom, #000 0%, transparent 30%, transparent 70%, #000 100%)`,
+            background: `linear-gradient(to bottom, ${T.ink} 0%, transparent 30%, transparent 70%, ${T.ink} 100%)`,
             zIndex: 2
           }}
         />

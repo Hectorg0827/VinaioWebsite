@@ -301,7 +301,7 @@ export default function AdminMediaManager() {
 
           <div style={{ background: T.ink, borderRadius: "16px", padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
              <p style={{ color: T.gold, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Live Preview Simulation</p>
-             <div style={{ flexGrow: 1, position: "relative", background: "#000", borderRadius: "12px", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+             <div style={{ flexGrow: 1, position: "relative", background: T.ink, borderRadius: "12px", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {hero.images?.[0] && <img src={hero.images[0]} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />}
                 <div style={{ position: "relative", zIndex: 2, padding: "20px", textAlign: "center" }}>
                    <img src={branding.logo_url} style={{ height: "20px", marginBottom: "12px" }} />
