@@ -388,7 +388,7 @@ export default function HomePage() {
             {[
               { title: "Import & Compliance",    desc: "TTB licensing, COLA registration, label approval, federal & state permits." },
               { title: "Logistics & Warehousing", desc: "Bonded warehouse, temperature-controlled storage, freight coordination." },
-              { title: "26-State Distribution",   desc: "Self-distribution in NY, NJ & FL. Distributor network across 26 states." },
+              { title: "Importer & Wholesaler",   desc: "Sourcing direct from global producers" },
               { title: "White Label",             desc: "Private-label wines, spirits, and beer — fully sourced and market-ready." },
             ].map((s, i) => (
               <Reveal key={s.title} delay={i * 0.1}>
@@ -565,9 +565,9 @@ export default function HomePage() {
           >
             {[
               { label: "Full Service Distributor", sub: "New York, New Jersey and Florida" },
-              { label: "Importer & Wholesaler",   sub: "Sourcing direct from global producers" },
-              { label: "Advanced Logistics",        sub: "Bonded warehouse & refrigerated storage" },
-              { label: "Regulatory Support",       sub: "COLA and TTB compliance expertise" },
+              { label: "26-State Distribution",   sub: "Self-distribution in NY, NJ & FL. Distributor network across 26 states." },
+              { label: "Curated Portfolio",       sub: "Over 100+ award winning world wide brands" },
+              { label: "White Glove Delivery",    sub: "70 Refrigerated delivery trucks" },
             ].map((s, i) => (
               <Reveal key={s.label} delay={i * 0.1}>
                 <div
