@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { T, ff } from "@/lib/theme";
@@ -7,6 +8,22 @@ import { T, ff } from "@/lib/theme";
 export default function Footer() {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
+  const [logoUrl, setLogoUrl] = useState("/logo.png");
+
+  useEffect(() => {
+    const fetchBranding = async () => {
+      try {
+        const res = await fetch("/api/admin/config?key=branding");
+        const data = await res.json();
+        if (data.config?.value?.logo_url) {
+          setLogoUrl(data.config.value.logo_url);
+        }
+      } catch (err) {
+        console.error("Footer branding fetch error:", err);
+      }
+    };
+    fetchBranding();
+  }, []);
 
   if (isAdmin) return null;
 
@@ -32,7 +49,7 @@ export default function Footer() {
         {/* Brand */}
         <div style={{ minWidth: "200px" }}>
           <img
-            src="/logo.png"
+            src={logoUrl}
             alt="Vinaio Imports"
             style={{
               height: "40px",

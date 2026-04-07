@@ -2,13 +2,12 @@ import { NextResponse }        from "next/server";
 import { cookies }             from "next/headers";
 import { createAdminClient }    from "@/lib/supabase/server";
 import { isAdminAuthenticated } from "@/lib/admin/auth";
+import { uploadToBunny }       from "@/lib/bunny/storage";
 
 /**
  * POST /api/admin/upload
- * Expects FormData with:
- * - file: The actual binary file
- * - bucket: 'products' | 'logos'
- * - folder: optional sub-folder path
+ * 
+ * Uploads a file to Bunny.net (CDN) as primary, with Supabase Storage as fallback.
  */
 export async function POST(req) {
   const cookieStore = await cookies();
@@ -26,22 +25,38 @@ export async function POST(req) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    // Format consistent filename: Timestamp_OriginalSafeName
+    const timestamp = Date.now();
+    const safeName = file.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9._-]/g, "");
+    const fileName = `${timestamp}_${safeName}`;
+    
+    // Path for storage (Supabase uses bucket separately, Bunny uses full path)
+    const storagePath = `${folder}${fileName}`;
+
+    // ─── 1. Attempt Bunny.net Upload (Primary) ──────────────────────────────
+    // We treat the "bucket" name as the root folder in Bunny Storage
+    const bunnyUrl = await uploadToBunny(file, fileName, `${bucket}/${folder}`);
+    
+    if (bunnyUrl) {
+      return NextResponse.json({ 
+        publicUrl: bunnyUrl, 
+        path: `${bucket}/${storagePath}`,
+        provider: "bunny" 
+      });
+    }
+
+    // ─── 2. Fallback to Supabase Storage ─────────────────────────────────────
+    console.warn("Bunny upload skipped/failed, falling back to Supabase.");
+    
     const supabase = await createAdminClient();
     if (!supabase) {
       throw new Error("Failed to initialize Supabase Admin client.");
     }
 
-    // Format filename for storage: Timestamp_OriginalSafeName
-    const timestamp = Date.now();
-    const safeName = file.name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9._-]/g, "");
-    const filePath = `${folder}${timestamp}_${safeName}`;
-
-    // ArrayBuffer conversion for storage upload
     const buffer = await file.arrayBuffer();
-
     const { data, error } = await supabase.storage
       .from(bucket)
-      .upload(filePath, buffer, {
+      .upload(storagePath, buffer, {
         contentType: file.type,
         cacheControl: "3600",
         upsert: false,
@@ -49,12 +64,15 @@ export async function POST(req) {
 
     if (error) throw error;
 
-    // Get the public URL for the newly uploaded file
     const { data: { publicUrl } } = supabase.storage
       .from(bucket)
       .getPublicUrl(data.path);
 
-    return NextResponse.json({ publicUrl, path: data.path });
+    return NextResponse.json({ 
+      publicUrl, 
+      path: data.path, 
+      provider: "supabase" 
+    });
 
   } catch (err) {
     console.error("Admin Upload API Error:", err.message);

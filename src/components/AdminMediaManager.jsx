@@ -15,6 +15,8 @@ export default function AdminMediaManager() {
   const [partners, setPartners] = useState([]);
   const [savingHero, setSavingHero] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [branding, setBranding] = useState({ logo_url: "/logo.png" });
+  const [savingBranding, setSavingBranding] = useState(false);
   const [msg, setMsg] = useState(null);
 
   useEffect(() => {
@@ -41,6 +43,10 @@ export default function AdminMediaManager() {
       const resPart = await fetch("/api/admin/partners");
       const dataPart = await resPart.json();
       if (dataPart.partners) setPartners(dataPart.partners);
+
+      const resConfig = await fetch("/api/admin/config?key=branding");
+      const dataConfig = await resConfig.json();
+      if (dataConfig.config?.value) setBranding(dataConfig.config.value);
     } catch (err) {
       console.error("Fetch media error:", err);
     }
@@ -70,6 +76,49 @@ export default function AdminMediaManager() {
       setMsg({ type: "error", text: "Failed to sync hero settings." });
     }
     setSavingHero(false);
+  };
+
+  const saveBranding = async () => {
+    setSavingBranding(true);
+    try {
+      const res = await fetch("/api/admin/config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: "branding", value: branding }),
+      });
+      if (res.ok) {
+        setMsg({ type: "success", text: "Master branding updated!" });
+      } else {
+        throw new Error("Save failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: "Failed to save branding." });
+    }
+    setSavingBranding(false);
+  };
+
+  const handleMasterLogoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSavingBranding(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bucket", "branding");
+
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (res.ok && data.publicUrl) {
+        setBranding({ ...branding, logo_url: data.publicUrl });
+        setMsg({ type: "success", text: "Master Logo uploaded!" });
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: `Upload Error: ${err.message}` });
+    }
+    setSavingBranding(false);
   };
 
   const handleHeroImageUpload = async (e, index) => {
@@ -183,6 +232,35 @@ export default function AdminMediaManager() {
         </div>
       )}
 
+      {/* ── Core Branding ── */}
+      <section style={cardStyle}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+           <div>
+             <h2 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "8px" }}>Global Identity</h2>
+             <p style={{ fontSize: "13px", color: T.muted }}>Manage the Vinaio master logo used in navigation and footer.</p>
+           </div>
+           <button onClick={saveBranding} disabled={savingBranding} style={{ padding: "12px 32px", background: T.wine, color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 600 }}>
+             {savingBranding ? "Saving..." : "Save Branding"}
+           </button>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "40px", alignItems: "center" }}>
+          <div style={{ padding: "20px", background: T.bg, borderRadius: "12px", border: `1px solid ${T.cream}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "140px" }}>
+             <img src={branding.logo_url} style={{ height: "50px", objectFit: "contain", marginBottom: "16px" }} />
+             <input type="file" id="master-logo" style={{ display: "none" }} accept="image/*" onChange={handleMasterLogoUpload} />
+             <label htmlFor="master-logo" style={{ padding: "8px 16px", background: T.taupe, borderRadius: "6px", cursor: "pointer", fontSize: "10px", fontWeight: 600 }}>
+               Upload New Logo
+             </label>
+          </div>
+          <div>
+            <p style={{ fontSize: "13px", lineHeight: 1.6, color: T.muted }}>
+              The Master Logo is the primary visual anchor for Vinaio. Uploading a high-resolution transparent PNG is recommended. 
+              Changes to the logo will reflect across the header, footer, and admin simulations.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Hero Management ── */}
       <section style={cardStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "32px" }}>
@@ -226,7 +304,7 @@ export default function AdminMediaManager() {
              <div style={{ flexGrow: 1, position: "relative", background: "#000", borderRadius: "12px", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {hero.images?.[0] && <img src={hero.images[0]} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />}
                 <div style={{ position: "relative", zIndex: 2, padding: "20px", textAlign: "center" }}>
-                   <img src="/logo.png" style={{ height: "20px", marginBottom: "12px" }} />
+                   <img src={branding.logo_url} style={{ height: "20px", marginBottom: "12px" }} />
                    <div style={{ fontSize: "12px", color: "white", fontFamily: ff.h, lineHeight: 1.4 }}>{hero.subtitle?.substring(0, 80)}...</div>
                 </div>
              </div>

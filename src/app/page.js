@@ -23,6 +23,7 @@ export default function HomePage() {
     title: "Curating Excellence",
     subtitle: "Transatlantic Spirits & Wine Purveyors"
   });
+  const [logoUrl, setLogoUrl] = useState("/logo.png");
 
   // Default elegant images from Unsplash to ensure background is NEVER black
   const DEFAULT_SLIDES = [
@@ -83,6 +84,16 @@ export default function HomePage() {
         setPartners(partnersData.map(p => p.logo_url));
       } else {
         setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+      }
+
+      const { data: configData } = await supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "branding")
+        .single();
+      
+      if (configData?.value?.logo_url) {
+        setLogoUrl(configData.value.logo_url);
       }
     } catch (err) {
       console.warn("Using default hero configuration.");
@@ -179,7 +190,7 @@ export default function HomePage() {
 
           <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "20px" }}>
             <img 
-              src="/logo.png" 
+              src={logoUrl} 
               alt="Vinaio" 
               style={{ 
                 height: "80px", 

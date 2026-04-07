@@ -1,5 +1,5 @@
 import { getUser } from "@/lib/supabase/safe";
-import PortalApp   from "./PortalApp";
+import DashboardClient from "./DashboardClient";
 
 export default async function PortalPage() {
   const { user, supabase } = await getUser();
@@ -24,7 +24,7 @@ export default async function PortalPage() {
       supabase.from("site_catalogs").select("*").order("created_at", { ascending: false }),
     ]);
 
-    // Normalize customer to PortalApp shape
+    // Normalize customer to DashboardClient shape
     if (c.data) {
       customer = {
         name:          c.data.company        ?? "Your Account",
@@ -86,13 +86,14 @@ export default async function PortalPage() {
   }
 
   return (
-    <PortalApp
+    <DashboardClient
       customer={customer}
       orders={orders}
       products={products}
       licenses={licenses}
       catalogs={catalogs}
       user={user}
+      invoices={[]}
     />
   );
 }

@@ -17,6 +17,7 @@ export default function Nav() {
   const pathname    = usePathname();
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
+  const [logoUrl, setLogoUrl]     = useState("/logo.png");
 
   const isPortal = pathname.startsWith("/portal");
   const isAdmin  = pathname.startsWith("/admin");
@@ -25,6 +26,19 @@ export default function Nav() {
   const isAbout     = pathname === "/about";
 
   useEffect(() => {
+    const fetchBranding = async () => {
+      try {
+        const res = await fetch("/api/admin/config?key=branding");
+        const data = await res.json();
+        if (data.config?.value?.logo_url) {
+          setLogoUrl(data.config.value.logo_url);
+        }
+      } catch (err) {
+        console.error("Nav branding fetch error:", err);
+      }
+    };
+    fetchBranding();
+
     const handler = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
@@ -91,7 +105,7 @@ export default function Nav() {
           {/* Wordmark */}
           <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img 
-              src="/logo.png" 
+              src={logoUrl} 
               alt="Vinaio Imports" 
               style={{ 
                 height: scrolled ? "32px" : "40px",
