@@ -43,8 +43,8 @@ export default function HomePage() {
       setTimeout(() => {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
-      }, 1500); // Wait for the fade out to finish
-    }, 2000); // Wait 2 seconds before fading out
+      }, 1200); // Wait for the shatter blast to finish
+    }, 2500); // Leave logo on screen longer before shatter
 
     fetchContent();
   }, []);
@@ -115,35 +115,57 @@ export default function HomePage() {
   return (
     <>
       {!introFinished && (
-        <div 
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: T.ink,
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: introFading ? 0 : 1,
-            transition: 'opacity 1.5s ease-in-out',
-            pointerEvents: 'none'
-          }}
-        >
-          <img 
-            src={logoUrl} 
-            alt="Vinaio Logo" 
-            style={{ 
-              height: "80px", 
-              width: "auto", 
-              filter: "brightness(0) invert(1)",
-              transform: introFading ? "scale(1.1) translateY(-10px)" : "scale(1) translateY(0px)",
-              transition: "transform 2.5s cubic-bezier(0.4, 0, 0.2, 1)"
-            }} 
-          />
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none' }}>
+           {/* The Shards that make up the solid background initially */}
+           {[
+             { clip: "polygon(0% 0%, 50% 0%, 50% 50%)", trans: "translate(-50vw, -50vh) rotate(-15deg)" },
+             { clip: "polygon(50% 0%, 100% 0%, 50% 50%)", trans: "translate(50vw, -40vh) rotate(20deg)" },
+             { clip: "polygon(100% 0%, 100% 100%, 50% 50%)", trans: "translate(60vw, 10vh) rotate(10deg)" },
+             { clip: "polygon(100% 100%, 50% 100%, 50% 50%)", trans: "translate(40vw, 50vh) rotate(-20deg)" },
+             { clip: "polygon(50% 100%, 0% 100%, 50% 50%)", trans: "translate(-60vw, 40vh) rotate(25deg)" },
+             { clip: "polygon(0% 100%, 0% 0%, 50% 50%)", trans: "translate(-50vw, -10vh) rotate(-10deg)" },
+           ].map((shard, i) => (
+             <div 
+               key={i}
+               style={{
+                 position: 'absolute',
+                 inset: 0,
+                 background: T.ink,
+                 clipPath: shard.clip,
+                 transform: introFading ? shard.trans : "translate(0,0) rotate(0)",
+                 opacity: introFading ? 0 : 1,
+                 transition: "transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.8s ease-in 0.2s"
+               }}
+             />
+           ))}
+
+           {/* The dramatic Logo */}
+           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+             <img 
+               src={logoUrl} 
+               alt="Vinaio Logo" 
+               style={{ 
+                 height: "100px", 
+                 width: "auto", 
+                 filter: "brightness(0) invert(1)",
+                 animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 2.5s forwards cubic-bezier(0.2, 0.8, 0.2, 1)",
+               }} 
+             />
+           </div>
         </div>
       )}
 
       <style>{`
+        @keyframes logoEntrance {
+          0% { transform: scale(0.3); opacity: 0; filter: brightness(0) invert(1) blur(20px); }
+          30% { transform: scale(1.1); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
+          100% { transform: scale(1); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
+        }
+        @keyframes shatterBlast {
+          0% { transform: scale(1); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
+          20% { transform: scale(1.4); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
+          100% { transform: scale(5); opacity: 0; filter: brightness(0) invert(1) blur(20px); }
+        }
         @keyframes kenburns {
           0% { transform: scale(1.05); }
           100% { transform: scale(1.15); }
