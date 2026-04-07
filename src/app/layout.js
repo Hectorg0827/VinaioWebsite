@@ -8,8 +8,8 @@ export const metadata = {
     "New York's premier beverage alcohol importer and distributor. Specializing in authentic Dominican rums, craft spirits, and exclusive international wine portfolios.",
   keywords: [
     "wine importer", "spirits distributor", "beverage alcohol", "white label wine",
-    "Dominican Republic rum", "Spanish wine importer", "TTB licensed", "Park Street alternative",
-    "MHW alternative", "New York wine distributor", "New Jersey spirits",
+    "Dominican Republic rum", "Spanish wine importer", "TTB licensed", "compliance solutions",
+    "logistics partner", "New York wine distributor", "New Jersey spirits",
   ],
   openGraph: {
     title: "Vinaio Imports",

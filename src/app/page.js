@@ -372,7 +372,7 @@ export default function HomePage() {
                   lineHeight: 1.8,
                 }}
               >
-                The same suite of services as Park Street and MHW — with boutique
+                A comprehensive suite of import, compliance, and distribution solutions — delivered with boutique
                 attention and deep Caribbean &amp; Latin American expertise.
               </p>
             </div>
