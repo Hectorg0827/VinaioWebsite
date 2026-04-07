@@ -9,14 +9,16 @@ import { createClient } from "@/lib/supabase/client";
 
 // Fallback branding logos if DB is empty
 const FALLBACK_LOGOS = [
+  "brand-1.png", "brand-10.png", "brand-11.png", "brand-12.svg", "brand-13.png", 
+  "brand-14.png", "brand-15.png", "brand-16.png", "brand-17.png", "brand-18.png"
+];
+
+// Sub-logos exclusively for the cinematic intro sequence
+const INTRO_LOGOS = [
   "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Logistics%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Caribbean%20logo.svg",
   "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Elite%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Florida%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20NY%20%26%20NJ%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Wholesale%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Beverages%20logo.svg"
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Caribbean%20logo.svg",
+  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Logistics%20logo.svg"
 ];
 
 export default function HomePage() {
@@ -50,7 +52,7 @@ export default function HomePage() {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
       }, 1200); // Wait for the shatter blast to finish
-    }, 4000); // Wait for sequence to play out
+    }, 6000); // Wait for 4 sequence explosions + main logo to play out
 
     fetchContent();
   }, []);
@@ -98,7 +100,7 @@ export default function HomePage() {
       if (partnersData && partnersData.length > 0) {
         setPartners(partnersData.map(p => p.logo_url));
       } else {
-        setPartners(FALLBACK_LOGOS);
+        setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
       }
 
       const { data: configData } = await supabase
@@ -112,7 +114,7 @@ export default function HomePage() {
       }
     } catch (err) {
       console.warn("Using default hero configuration.");
-      setPartners(FALLBACK_LOGOS);
+      setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
     }
   };
 
@@ -145,28 +147,37 @@ export default function HomePage() {
              />
            ))}
 
-           {/* Rapid Fire Sub Logos Carousel */}
-           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-             <div style={{ 
-               display: 'flex', 
-               gap: '15vw',
-               alignItems: 'center',
-               animation: introFading ? "none" : "carouselWhip 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards"
-             }}>
-               {FALLBACK_LOGOS.map((url, i) => (
-                 <img 
-                   key={"sub-" + i}
-                   src={url} 
-                   alt="Vinaio Sub Logo" 
-                   style={{ 
-                     height: "100px", 
-                     width: "auto", 
-                     flexShrink: 0,
-                     filter: "brightness(0) invert(1) drop-shadow(0 0 20px rgba(255,255,255,0.2))",
-                   }} 
+           {/* Cinematic Exploding Sub Logos */}
+           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+             {INTRO_LOGOS.map((url, i) => (
+               <div 
+                 key={"sub-" + i}
+                 style={{ 
+                   position: "absolute",
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "center",
+                   animation: introFading ? "none" : `explodeLogo 1s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
+                   animationDelay: `${i * 1.0}s`
+                 }}
+               >
+                 <div
+                   style={{
+                     width: "280px",
+                     height: "150px",
+                     backgroundColor: T.burgundy,
+                     WebkitMaskImage: `url(${url})`,
+                     WebkitMaskSize: "contain",
+                     WebkitMaskRepeat: "no-repeat",
+                     WebkitMaskPosition: "center",
+                     maskImage: `url(${url})`,
+                     maskSize: "contain",
+                     maskRepeat: "no-repeat",
+                     maskPosition: "center",
+                   }}
                  />
-               ))}
-             </div>
+               </div>
+             ))}
            </div>
 
            {/* The dramatic Logo */}
@@ -179,7 +190,7 @@ export default function HomePage() {
                  width: "auto", 
                  filter: "brightness(0) invert(1)",
                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.8s both cubic-bezier(0.2, 0.8, 0.2, 1)",
-                 animationDelay: introFading ? "0s" : "2.0s"
+                 animationDelay: introFading ? "0s" : "4.0s"
                }} 
              />
            </div>
@@ -187,11 +198,12 @@ export default function HomePage() {
       )}
 
       <style>{`
-        @keyframes carouselWhip {
-          0% { transform: translateX(100vw); opacity: 0; filter: blur(10px); }
-          15% { opacity: 1; filter: blur(0px); }
-          85% { opacity: 1; filter: blur(0px); }
-          100% { transform: translateX(calc(-100% - 20vw)); opacity: 0; filter: blur(10px); }
+        @keyframes explodeLogo {
+          0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); }
+          20% { opacity: 1; transform: scale(1.1) translateY(0px); filter: blur(0px); }
+          50% { opacity: 1; transform: scale(1); filter: blur(0px); }
+          80% { opacity: 1; transform: scale(1.2); filter: blur(0px); }
+          100% { opacity: 0; transform: scale(3.5); filter: blur(10px); }
         }
         @keyframes logoEntrance {
           0% { transform: scale(0.3); opacity: 0; filter: brightness(0) invert(1) blur(20px); }
