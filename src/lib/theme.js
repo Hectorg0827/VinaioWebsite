@@ -11,6 +11,7 @@ export const T = {
   muted:       "#7A7369",
   deep:        "#4A443C",
   ink:         "#1A1815",
+  charcoal:    "#2C2A28", // Explicit dark grey for subpage heroes
   wine:        "#722F37",
   wineDeep:    "#4E1A20",
   wineGlow:    "#722F3712",

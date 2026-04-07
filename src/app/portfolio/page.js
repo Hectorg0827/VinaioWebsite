@@ -147,7 +147,7 @@ export default function PortfolioPage() {
       <section
         style={{
           minHeight: "60vh",
-          background: T.ink,
+          background: T.charcoal,
           display: "flex",
           alignItems: "flex-end",
           padding: "140px 56px 80px",

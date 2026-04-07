@@ -77,7 +77,7 @@ export default function AboutPage() {
     <div style={{ background: T.paper }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{
-        background: T.ink,
+        background: T.charcoal,
         padding: "160px 48px 120px",
         textAlign: "center",
         position: "relative",

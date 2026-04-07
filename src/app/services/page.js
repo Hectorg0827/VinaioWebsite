@@ -119,7 +119,7 @@ export default function ServicesPage() {
     <div style={{ background: T.paper }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{
-        background: T.ink,
+        background: T.charcoal,
         padding: "160px 48px 100px",
         textAlign: "center",
         position: "relative",

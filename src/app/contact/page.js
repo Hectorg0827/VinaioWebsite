@@ -59,7 +59,7 @@ export default function ContactPage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         style={{
-          background: T.ink,
+          background: T.charcoal,
           padding: "140px 56px 80px",
           position: "relative",
           overflow: "hidden",
