@@ -50,7 +50,7 @@ export default function HomePage() {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
       }, 1200); // Wait for the shatter blast to finish
-    }, 3500); // Wait for sequence to play out
+    }, 4000); // Wait for sequence to play out
 
     fetchContent();
   }, []);
@@ -145,24 +145,28 @@ export default function HomePage() {
              />
            ))}
 
-           {/* Rapid Fire Sub Logos */}
-           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             {FALLBACK_LOGOS.map((url, i) => (
-               <img 
-                 key={"sub-" + i}
-                 src={url} 
-                 alt="Vinaio Sub Logo" 
-                 style={{ 
-                   position: "absolute",
-                   height: "120px", 
-                   width: "auto", 
-                   filter: "brightness(0) invert(1) drop-shadow(0 0 20px rgba(255,255,255,0.2))",
-                   opacity: 0,
-                   animation: introFading ? "none" : `flashLogo 0.5s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
-                   animationDelay: `${0.15 * i}s`
-                 }} 
-               />
-             ))}
+           {/* Rapid Fire Sub Logos Carousel */}
+           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+             <div style={{ 
+               display: 'flex', 
+               gap: '15vw',
+               alignItems: 'center',
+               animation: introFading ? "none" : "carouselWhip 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards"
+             }}>
+               {FALLBACK_LOGOS.map((url, i) => (
+                 <img 
+                   key={"sub-" + i}
+                   src={url} 
+                   alt="Vinaio Sub Logo" 
+                   style={{ 
+                     height: "100px", 
+                     width: "auto", 
+                     flexShrink: 0,
+                     filter: "brightness(0) invert(1) drop-shadow(0 0 20px rgba(255,255,255,0.2))",
+                   }} 
+                 />
+               ))}
+             </div>
            </div>
 
            {/* The dramatic Logo */}
@@ -174,8 +178,8 @@ export default function HomePage() {
                  height: "140px", 
                  width: "auto", 
                  filter: "brightness(0) invert(1)",
-                 animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 2s both cubic-bezier(0.2, 0.8, 0.2, 1)",
-                 animationDelay: introFading ? "0s" : "1.2s"
+                 animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.8s both cubic-bezier(0.2, 0.8, 0.2, 1)",
+                 animationDelay: introFading ? "0s" : "2.0s"
                }} 
              />
            </div>
@@ -183,11 +187,11 @@ export default function HomePage() {
       )}
 
       <style>{`
-        @keyframes flashLogo {
-          0% { opacity: 0; transform: scale(0.6); filter: brightness(0) invert(1) blur(10px); }
-          20% { opacity: 1; transform: scale(1.1); filter: brightness(0) invert(1) blur(0px); }
-          80% { opacity: 1; transform: scale(1); filter: brightness(0) invert(1) blur(0px); }
-          100% { opacity: 0; transform: scale(1.5); filter: brightness(0) invert(1) blur(20px); }
+        @keyframes carouselWhip {
+          0% { transform: translateX(100vw); opacity: 0; filter: blur(10px); }
+          15% { opacity: 1; filter: blur(0px); }
+          85% { opacity: 1; filter: blur(0px); }
+          100% { transform: translateX(calc(-100% - 20vw)); opacity: 0; filter: blur(10px); }
         }
         @keyframes logoEntrance {
           0% { transform: scale(0.3); opacity: 0; filter: brightness(0) invert(1) blur(20px); }
