@@ -147,7 +147,7 @@ export default function PortfolioPage() {
       <section
         style={{
           minHeight: "60vh",
-          background: T.charcoal,
+          background: T.metal,
           display: "flex",
           alignItems: "flex-end",
           padding: "140px 56px 80px",
@@ -360,7 +360,7 @@ export default function PortfolioPage() {
 
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
       <section style={{
-        backgroundColor: T.charcoal,
+        background: T.metal,
         padding: "80px 56px",
         textAlign: "center",
         position: "relative",

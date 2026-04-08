@@ -78,7 +78,7 @@ export default function AboutPage() {
     <div style={{ background: T.paper }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{
-        background: T.charcoal,
+        background: T.metal,
         padding: "160px 48px 120px",
         textAlign: "center",
         position: "relative",
@@ -192,7 +192,7 @@ export default function AboutPage() {
         <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
       </div>
       <section style={{
-        backgroundColor: T.charcoal,
+        background: T.metal,
         padding: "120px 48px",
         color: T.paper,
         position: "relative",
@@ -302,7 +302,7 @@ export default function AboutPage() {
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <div style={{
-              backgroundColor: T.charcoal,
+              background: T.metal,
               borderRadius: "12px",
               padding: "80px 48px",
               textAlign: "center",
@@ -392,7 +392,7 @@ export default function AboutPage() {
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section style={{
-        backgroundColor: T.charcoal,
+        background: T.metal,
         padding: "120px 48px",
         textAlign: "center",
         position: "relative",

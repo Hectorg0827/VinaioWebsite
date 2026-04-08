@@ -139,7 +139,7 @@ export default function HomePage() {
                style={{
                  position: 'absolute',
                  inset: 0,
-                 background: T.ink,
+                 background: T.metal,
                  clipPath: shard.clip,
                  transform: introFading ? shard.trans : "translate(0,0) rotate(0)",
                  opacity: introFading ? 0 : 1,
@@ -577,17 +577,12 @@ export default function HomePage() {
       </div>
       <section
         style={{
-          backgroundColor: T.ink,
+          background: T.metal,
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",
         }}
       >
-        <img 
-          src="https://images.unsplash.com/photo-1499695867780-117ee5eb72fe?auto=format&fit=crop&q=80&w=2000&sat=-100" 
-          alt="" 
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none" }} 
-        />
         <div
           style={{
             position: "absolute",

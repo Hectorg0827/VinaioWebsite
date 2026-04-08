@@ -119,7 +119,7 @@ export default function ServicesPage() {
     <div style={{ background: T.paper }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{
-        background: T.charcoal,
+        background: T.metal,
         padding: "160px 48px 100px",
         textAlign: "center",
         position: "relative",
@@ -262,7 +262,7 @@ export default function ServicesPage() {
 
       {/* ── Distribution Map Segment ────────────────────────────────────── */}
       <section style={{
-        backgroundColor: T.charcoal,
+        background: T.metal,
         padding: "120px 48px",
         color: T.paper,
         position: "relative",
