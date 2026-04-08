@@ -185,7 +185,15 @@ export default function AboutPage() {
       </section>
 
       {/* ── Reach ─────────────────────────────────────────────────────────── */}
-      <section style={{ background: T.ink, padding: "120px 48px", color: T.paper }}>
+      <section style={{
+        backgroundColor: T.ink,
+        backgroundImage: "linear-gradient(rgba(26,24,21,0.85), rgba(26,24,21,0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "luminosity",
+        padding: "120px 48px",
+        color: T.paper
+      }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "80px" }}>
@@ -289,7 +297,16 @@ export default function AboutPage() {
       <section style={{ background: T.bg, padding: "100px 48px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
-            <div style={{ background: T.ink, borderRadius: "12px", padding: "80px 48px", textAlign: "center" }}>
+            <div style={{
+              backgroundColor: T.ink,
+              backgroundImage: "linear-gradient(rgba(26,24,21,0.92), rgba(26,24,21,0.92)), url('https://images.unsplash.com/photo-1556761175-5973e2182061?auto=format&fit=crop&q=80&w=2000')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundBlendMode: "luminosity",
+              borderRadius: "12px",
+              padding: "80px 48px",
+              textAlign: "center"
+            }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
               <h2 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "12px" }}>Our Sales Team</h2>
               <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.4)", maxWidth: "520px", margin: "0 auto 48px", lineHeight: 1.7 }}>
@@ -371,7 +388,11 @@ export default function AboutPage() {
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section style={{
-        background: T.ink,
+        backgroundColor: T.ink,
+        backgroundImage: "linear-gradient(rgba(26,24,21,0.85), rgba(26,24,21,0.85)), url('https://images.unsplash.com/photo-1582650058913-66ed4c264bb7?auto=format&fit=crop&q=80&w=2000')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "luminosity",
         padding: "120px 48px",
         textAlign: "center"
       }}>

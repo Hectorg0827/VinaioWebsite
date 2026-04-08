@@ -571,7 +571,11 @@ export default function HomePage() {
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}
       <section
         style={{
-          background: T.ink,
+          backgroundColor: T.ink,
+          backgroundImage: "linear-gradient(rgba(26,24,21,0.85), rgba(26,24,21,0.85)), url('https://images.unsplash.com/photo-1499695867780-117ee5eb72fe?auto=format&fit=crop&q=80&w=2000')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundBlendMode: "luminosity",
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",

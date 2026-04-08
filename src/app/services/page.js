@@ -261,7 +261,15 @@ export default function ServicesPage() {
       </section>
 
       {/* ── Distribution Map Segment ────────────────────────────────────── */}
-      <section style={{ background: T.ink, padding: "120px 48px", color: T.paper }}>
+      <section style={{
+        backgroundColor: T.ink,
+        backgroundImage: "linear-gradient(rgba(26,24,21,0.85), rgba(26,24,21,0.85)), url('https://images.unsplash.com/photo-1517429128955-67ff5c1e29da?auto=format&fit=crop&q=80&w=2000')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "luminosity",
+        padding: "120px 48px",
+        color: T.paper
+      }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "64px" }}>

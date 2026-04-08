@@ -359,7 +359,15 @@ export default function PortfolioPage() {
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section style={{ background: T.ink, padding: "80px 56px", textAlign: "center" }}>
+      <section style={{
+        backgroundColor: T.ink,
+        backgroundImage: "linear-gradient(rgba(26,24,21,0.85), rgba(26,24,21,0.85)), url('https://images.unsplash.com/photo-1580133480036-7cf719eb73d6?auto=format&fit=crop&q=80&w=2000')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "luminosity",
+        padding: "80px 56px",
+        textAlign: "center"
+      }}>
         <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
           <h2 style={{ fontFamily: ff.h, fontSize: "clamp(28px, 4vw, 44px)", color: T.paper, marginBottom: "20px" }}>
