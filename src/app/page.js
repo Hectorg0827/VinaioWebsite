@@ -572,10 +572,9 @@ export default function HomePage() {
       <section
         style={{
           backgroundColor: T.ink,
-          backgroundImage: "linear-gradient(rgba(26,24,21,0.85), rgba(26,24,21,0.85)), url('https://images.unsplash.com/photo-1499695867780-117ee5eb72fe?auto=format&fit=crop&q=80&w=2000')",
+          backgroundImage: "linear-gradient(rgba(26,24,21,0.65), rgba(26,24,21,0.65)), url('https://images.unsplash.com/photo-1499695867780-117ee5eb72fe?auto=format&fit=crop&q=80&w=2000&sat=-100')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundBlendMode: "luminosity",
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",
