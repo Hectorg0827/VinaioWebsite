@@ -5,6 +5,7 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
+import ScrollLine from "@/components/ScrollLine";
 import { createClient } from "@/lib/supabase/client";
 
 // Fallback branding logos if DB is empty
@@ -212,14 +213,14 @@ export default function HomePage() {
           100% { opacity: 0; transform: scale(3.5); filter: blur(10px); }
         }
         @keyframes logoEntrance {
-          0% { transform: scale(0.3); opacity: 0; filter: brightness(0) invert(1) blur(20px); }
-          30% { transform: scale(1.1); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
-          100% { transform: scale(1); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
+          0% { transform: scale(0.3); opacity: 0; filter: blur(20px); }
+          30% { transform: scale(1.1); opacity: 1; filter: blur(0px); }
+          100% { transform: scale(1); opacity: 1; filter: blur(0px); }
         }
         @keyframes shatterBlast {
-          0% { transform: scale(1); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
-          20% { transform: scale(1.4); opacity: 1; filter: brightness(0) invert(1) blur(0px); }
-          100% { transform: scale(5); opacity: 0; filter: brightness(0) invert(1) blur(20px); }
+          0% { transform: scale(1); opacity: 1; filter: blur(0px); }
+          20% { transform: scale(1.4); opacity: 1; filter: blur(0px); }
+          100% { transform: scale(5); opacity: 0; filter: blur(20px); }
         }
         @keyframes kenburns {
           0% { transform: scale(1.05); }
@@ -493,6 +494,8 @@ export default function HomePage() {
             </div>
           </Reveal>
 
+          <ScrollLine height="80px" color={T.wine} bgColor={`${T.wine}10`} nodeBg={T.paper} />
+
           <div
             style={{
               display: "grid",
@@ -569,17 +572,22 @@ export default function HomePage() {
       </section>
 
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}
+      <div style={{ background: T.bg, padding: "40px 0" }}>
+        <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
+      </div>
       <section
         style={{
           backgroundColor: T.ink,
-          backgroundImage: "linear-gradient(rgba(26,24,21,0.65), rgba(26,24,21,0.65)), url('https://images.unsplash.com/photo-1499695867780-117ee5eb72fe?auto=format&fit=crop&q=80&w=2000&sat=-100')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",
         }}
       >
+        <img 
+          src="https://images.unsplash.com/photo-1499695867780-117ee5eb72fe?auto=format&fit=crop&q=80&w=2000&sat=-100" 
+          alt="" 
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none" }} 
+        />
         <div
           style={{
             position: "absolute",

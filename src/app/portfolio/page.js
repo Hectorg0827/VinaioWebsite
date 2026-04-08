@@ -359,15 +359,21 @@ export default function PortfolioPage() {
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
+      {/* ── CTA ───────────────────────────────────────────────────────────── */}
       <section style={{
         backgroundColor: T.ink,
-        backgroundImage: "linear-gradient(rgba(26,24,21,0.65), rgba(26,24,21,0.65)), url('https://images.unsplash.com/photo-1580133480036-7cf719eb73d6?auto=format&fit=crop&q=80&w=2000&sat=-100')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
         padding: "80px 56px",
-        textAlign: "center"
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden"
       }}>
-        <Reveal>
+        <img 
+          src="https://images.unsplash.com/photo-1580133480036-7cf719eb73d6?auto=format&fit=crop&q=80&w=2000&sat=-100" 
+          alt="" 
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
+        />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
           <h2 style={{ fontFamily: ff.h, fontSize: "clamp(28px, 4vw, 44px)", color: T.paper, marginBottom: "20px" }}>
             Interested in our portfolio?
@@ -384,6 +390,7 @@ export default function PortfolioPage() {
             </Link>
           </div>
         </Reveal>
+        </div>
       </section>
 
       {/* ── Lightbox Modal ── */}

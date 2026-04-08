@@ -5,6 +5,7 @@ import { T, ff } from "@/lib/theme";
 import Reveal from "@/components/Reveal";
 import Hr from "@/components/Hr";
 import Link from "next/link";
+import ScrollLine from "@/components/ScrollLine";
 import { createClient } from "@/lib/supabase/client";
 
 const STATS = [
@@ -144,8 +145,10 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <ScrollLine height="140px" color={T.wine} bgColor={`${T.wine}10`} nodeBg={T.paper} />
+
       {/* ── Story ─────────────────────────────────────────────────────────── */}
-      <section style={{ padding: "120px 48px" }}>
+      <section style={{ padding: "0 48px 120px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "80px", alignItems: "start" }}>
             <Reveal>
@@ -185,15 +188,22 @@ export default function AboutPage() {
       </section>
 
       {/* ── Reach ─────────────────────────────────────────────────────────── */}
+      <div style={{ background: T.ink, padding: "40px 0" }}>
+        <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
+      </div>
       <section style={{
         backgroundColor: T.ink,
-        backgroundImage: "linear-gradient(rgba(26,24,21,0.65), rgba(26,24,21,0.65)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000&sat=-100')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
         padding: "120px 48px",
-        color: T.paper
+        color: T.paper,
+        position: "relative",
+        overflow: "hidden"
       }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <img 
+          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000&sat=-100" 
+          alt="" 
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
+        />
+        <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "80px" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>Our Reach</p>
@@ -298,14 +308,19 @@ export default function AboutPage() {
           <Reveal>
             <div style={{
               backgroundColor: T.ink,
-              backgroundImage: "linear-gradient(rgba(26,24,21,0.7), rgba(26,24,21,0.7)), url('https://images.unsplash.com/photo-1556761175-5973e2182061?auto=format&fit=crop&q=80&w=2000&sat=-100')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
               borderRadius: "12px",
               padding: "80px 48px",
-              textAlign: "center"
+              textAlign: "center",
+              position: "relative",
+              overflow: "hidden"
             }}>
-              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
+              <img 
+                src="https://images.unsplash.com/photo-1556761175-5973e2182061?auto=format&fit=crop&q=80&w=2000&sat=-100" 
+                alt="" 
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3, pointerEvents: "none", zIndex: 0 }} 
+              />
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
               <h2 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "12px" }}>Our Sales Team</h2>
               <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.4)", maxWidth: "520px", margin: "0 auto 48px", lineHeight: 1.7 }}>
                 The backbone of Vinaio — our reps bring deep market knowledge and personal relationships to every territory.
@@ -340,6 +355,7 @@ export default function AboutPage() {
                     </div>
                   );
                 })}
+              </div>
               </div>
             </div>
           </Reveal>
@@ -387,14 +403,19 @@ export default function AboutPage() {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section style={{
         backgroundColor: T.ink,
-        backgroundImage: "linear-gradient(rgba(26,24,21,0.65), rgba(26,24,21,0.65)), url('https://images.unsplash.com/photo-1582650058913-66ed4c264bb7?auto=format&fit=crop&q=80&w=2000&sat=-100')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
         padding: "120px 48px",
-        textAlign: "center"
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden"
       }}>
-        <Reveal>
-          <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.paper, marginBottom: "20px" }}>
+        <img 
+          src="https://images.unsplash.com/photo-1582650058913-66ed4c264bb7?auto=format&fit=crop&q=80&w=2000&sat=-100" 
+          alt="" 
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
+        />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <Reveal>
+            <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.paper, marginBottom: "20px" }}>
             Ready to Build Your Brand?
           </h2>
           <p style={{ fontFamily: ff.b, fontSize: "17px", color: "rgba(255,255,255,0.5)", maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.7 }}>
@@ -406,7 +427,8 @@ export default function AboutPage() {
           }}>
             Get in Touch
           </Link>
-        </Reveal>
+          </Reveal>
+        </div>
       </section>
     </div>
   );

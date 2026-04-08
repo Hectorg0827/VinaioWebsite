@@ -263,13 +263,17 @@ export default function ServicesPage() {
       {/* ── Distribution Map Segment ────────────────────────────────────── */}
       <section style={{
         backgroundColor: T.ink,
-        backgroundImage: "linear-gradient(rgba(26,24,21,0.65), rgba(26,24,21,0.65)), url('https://images.unsplash.com/photo-1517429128955-67ff5c1e29da?auto=format&fit=crop&q=80&w=2000&sat=-100')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
         padding: "120px 48px",
-        color: T.paper
+        color: T.paper,
+        position: "relative",
+        overflow: "hidden"
       }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        <img 
+          src="https://images.unsplash.com/photo-1517429128955-67ff5c1e29da?auto=format&fit=crop&q=80&w=2000&sat=-100" 
+          alt="" 
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
+        />
+        <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "64px" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>Network</p>
