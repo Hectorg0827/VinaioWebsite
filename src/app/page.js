@@ -159,7 +159,7 @@ export default function HomePage() {
                    alignItems: "center",
                    justifyContent: "center",
                     opacity: 0,
-                    filter: "drop-shadow(0 0 20px rgba(255,255,255,0.4))",
+                    filter: "drop-shadow(1px 0 0 white) drop-shadow(-1px 0 0 white) drop-shadow(0 1px 0 white) drop-shadow(0 -1px 0 white)",
                     animation: introFading ? "none" : `explodeLogo 1s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
                     animationDelay: `${i * 1.0}s`
                  }}
@@ -168,7 +168,7 @@ export default function HomePage() {
                    style={{
                      width: "280px",
                      height: "150px",
-                     backgroundColor: T.wine,
+                     background: T.wineMetal,
                      WebkitMaskImage: `url('${url}')`,
                      WebkitMaskSize: "contain",
                      WebkitMaskRepeat: "no-repeat",
@@ -189,7 +189,7 @@ export default function HomePage() {
                style={{ 
                  height: "140px", 
                  width: "500px", 
-                 backgroundColor: T.wine,
+                 background: T.wineMetal,
                  WebkitMaskImage: `url('${logoUrl}')`,
                  WebkitMaskSize: "contain",
                  WebkitMaskRepeat: "no-repeat",
@@ -199,7 +199,7 @@ export default function HomePage() {
                  maskRepeat: "no-repeat",
                  maskPosition: "center",
                  opacity: 0,
-                 filter: "drop-shadow(0 0 30px rgba(255,255,255,0.4))",
+                 filter: "drop-shadow(1.5px 0 0 white) drop-shadow(-1.5px 0 0 white) drop-shadow(0 1.5px 0 white) drop-shadow(0 -1.5px 0 white)",
                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.8s both cubic-bezier(0.2, 0.8, 0.2, 1)",
                  animationDelay: introFading ? "0s" : "4.0s"
                }} 
@@ -210,16 +210,16 @@ export default function HomePage() {
 
       <style>{`
         @keyframes explodeLogo {
-          0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px) drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
-          20% { opacity: 1; transform: scale(1.1) translateY(0px); filter: blur(0px) drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
-          50% { opacity: 1; transform: scale(1); filter: blur(0px) drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
-          80% { opacity: 1; transform: scale(1.2); filter: blur(0px) drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
-          100% { opacity: 0; transform: scale(3.5); filter: blur(10px) drop-shadow(0 0 20px rgba(255,255,255,0)); }
+          0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); }
+          20% { opacity: 1; transform: scale(1.1) translateY(0px); filter: blur(0px); }
+          50% { opacity: 1; transform: scale(1); filter: blur(0px); }
+          80% { opacity: 1; transform: scale(1.2); filter: blur(0px); }
+          100% { opacity: 0; transform: scale(3.5); filter: blur(10px); }
         }
         @keyframes logoEntrance {
-          0% { transform: scale(0.3); opacity: 0; filter: blur(20px) drop-shadow(0 0 30px rgba(255,255,255,0)); }
-          30% { transform: scale(1.1); opacity: 1; filter: blur(0px) drop-shadow(0 0 30px rgba(255,255,255,0.4)); }
-          100% { transform: scale(1); opacity: 1; filter: blur(0px) drop-shadow(0 0 30px rgba(255,255,255,0.4)); }
+          0% { transform: scale(0.3); opacity: 0; filter: blur(20px); }
+          30% { transform: scale(1.1); opacity: 1; filter: blur(0px); }
+          100% { transform: scale(1); opacity: 1; filter: blur(0px); }
         }
         @keyframes shatterBlast {
           0% { transform: scale(1); opacity: 1; filter: blur(0px); }
