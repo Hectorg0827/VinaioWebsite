@@ -359,19 +359,13 @@ export default function PortfolioPage() {
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
       <section style={{
-        backgroundColor: T.ink,
+        backgroundColor: T.charcoal,
         padding: "80px 56px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden"
       }}>
-        <img 
-          src="https://images.unsplash.com/photo-1580133480036-7cf719eb73d6?auto=format&fit=crop&q=80&w=2000&sat=-100" 
-          alt="" 
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
-        />
         <div style={{ position: "relative", zIndex: 1 }}>
           <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />

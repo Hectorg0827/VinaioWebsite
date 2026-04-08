@@ -192,17 +192,12 @@ export default function AboutPage() {
         <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
       </div>
       <section style={{
-        backgroundColor: T.ink,
+        backgroundColor: T.charcoal,
         padding: "120px 48px",
         color: T.paper,
         position: "relative",
         overflow: "hidden"
       }}>
-        <img 
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000&sat=-100" 
-          alt="" 
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
-        />
         <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "80px" }}>
@@ -307,18 +302,13 @@ export default function AboutPage() {
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <div style={{
-              backgroundColor: T.ink,
+              backgroundColor: T.charcoal,
               borderRadius: "12px",
               padding: "80px 48px",
               textAlign: "center",
               position: "relative",
               overflow: "hidden"
             }}>
-              <img 
-                src="https://images.unsplash.com/photo-1556761175-5973e2182061?auto=format&fit=crop&q=80&w=2000&sat=-100" 
-                alt="" 
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3, pointerEvents: "none", zIndex: 0 }} 
-              />
               <div style={{ position: "relative", zIndex: 1 }}>
                 <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
               <h2 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "12px" }}>Our Sales Team</h2>
@@ -402,17 +392,12 @@ export default function AboutPage() {
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section style={{
-        backgroundColor: T.ink,
+        backgroundColor: T.charcoal,
         padding: "120px 48px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden"
       }}>
-        <img 
-          src="https://images.unsplash.com/photo-1582650058913-66ed4c264bb7?auto=format&fit=crop&q=80&w=2000&sat=-100" 
-          alt="" 
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.35, pointerEvents: "none", zIndex: 0 }} 
-        />
         <div style={{ position: "relative", zIndex: 1 }}>
           <Reveal>
             <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.paper, marginBottom: "20px" }}>
