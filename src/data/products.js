@@ -113,11 +113,11 @@ export const ORIGINS = [
     isoCode: "do"
   },
   {
-    name: "South America",
+    name: "USA",
     description:
-      "A rich tapestry of high-altitude Argentinian Malbecs, robust Chilean Reds, and boutique spirits from Colombia and Peru.",
-    flag: "🌎",
-    isoCode: "ar" // Using Argentina as the primary visual for the South American block
+      "Innovative craft spirits and premium domestic wines sourced from the country's most vibrant emerging and established regions.",
+    flag: "🇺🇸",
+    isoCode: "us"
   },
   {
     name: "Europe",
@@ -148,10 +148,10 @@ export const ORIGINS = [
     isoCode: "fr"
   },
   {
-    name: "USA",
+    name: "South America",
     description:
-      "Innovative craft spirits and premium domestic wines sourced from the country's most vibrant emerging and established regions.",
-    flag: "🇺🇸",
-    isoCode: "us"
+      "A rich tapestry of high-altitude Argentinian Malbecs, robust Chilean Reds, and boutique spirits from Colombia and Peru.",
+    flag: "🗺️",
+    customIcon: "https://www.svgrepo.com/show/312012/south-america.svg"
   },
 ];

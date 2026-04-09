@@ -442,16 +442,17 @@ export default function PortfolioPage() {
                   <div style={{ padding: "40px 24px 20px" }}>
                     <div style={{ position: "relative", width: "80px", height: "80px", margin: "0 auto" }}>
                       <img 
-                        src={`https://flagcdn.com/w160/${o.isoCode}.png`} 
-                        alt={`${o.name} flag`}
+                        src={o.customIcon || `https://flagcdn.com/w160/${o.isoCode}.png`} 
+                        alt={o.name}
                         style={{
                           width: "100%",
                           height: "100%",
-                          objectFit: "cover",
+                          objectFit: o.customIcon ? "contain" : "cover",
                           borderRadius: "50%",
                           boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
                           border: `4px solid ${T.paper}`,
-                          background: T.paper
+                          background: T.paper,
+                          padding: o.customIcon ? "8px" : "0"
                         }}
                       />
                     </div>
