@@ -33,16 +33,15 @@ export default function ContactPage() {
   const inputStyle = {
     width: "100%",
     padding: "16px 20px",
-    background: T.glass,
-    border: `1px solid ${T.glassBorder}`,
+    background: T.paper,
+    border: `1px solid ${T.cream}`,
     borderRadius: "10px",
     fontFamily: ff.b,
     fontSize: "14px",
-    color: T.paper,
+    color: T.ink,
     outline: "none",
     boxSizing: "border-box",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    backdropFilter: "blur(10px)",
   };
 
   const labelStyle = {
@@ -50,7 +49,7 @@ export default function ContactPage() {
     fontSize: "9px",
     letterSpacing: "3px",
     textTransform: "uppercase",
-    color: T.gold,
+    color: T.wine,
     display: "block",
     marginBottom: "8px",
   };
@@ -60,7 +59,7 @@ export default function ContactPage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         style={{
-          background: T.ink,
+          background: T.bg,
           padding: "140px 56px 80px",
           position: "relative",
           overflow: "hidden",
@@ -68,24 +67,24 @@ export default function ContactPage() {
       >
         <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 50% 70% at 60% 50%, ${T.wineDeep}40 0%, transparent 55%)` }} />
         <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
-          <Hr w="32px" c={T.gold} style={{ marginBottom: "24px" }} />
-          <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
+          <Hr w="32px" c={T.wine} style={{ marginBottom: "24px" }} />
+          <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.wine, marginBottom: "16px" }}>
             Contact
           </p>
-          <h1 style={{ fontFamily: ff.h, fontSize: "clamp(44px, 6vw, 76px)", color: T.paper, lineHeight: 0.92 }}>
+          <h1 style={{ fontFamily: ff.h, fontSize: "clamp(44px, 6vw, 76px)", color: T.ink, lineHeight: 0.92 }}>
             Let&apos;s start<br /><em>a conversation</em>
           </h1>
         </div>
       </section>
 
       {/* ── Main content ──────────────────────────────────────────────────── */}
-      <section style={{ background: T.ink, padding: "100px 56px", borderTop: `1px solid ${T.glassBorder}` }}>
+      <section style={{ background: T.bg, padding: "100px 56px", borderTop: `1px solid ${T.cream}` }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 380px", gap: "64px", alignItems: "flex-start" }}>
 
           {/* ── Form ── */}
           <Reveal>
-            <h2 style={{ fontFamily: ff.h, fontSize: "40px", color: T.paper, marginBottom: "12px" }}>Send a Message</h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", marginBottom: "48px", lineHeight: 1.8 }}>
+            <h2 style={{ fontFamily: ff.h, fontSize: "40px", color: T.ink, marginBottom: "12px" }}>Send a Message</h2>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, marginBottom: "48px", lineHeight: 1.8 }}>
               We respond within 1 business day. For urgent inquiries, call your sales rep directly.
             </p>
 
@@ -126,7 +125,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <label style={labelStyle}>Inquiry Type</label>
-                    <select value={form.inquiry_type} onChange={(e) => set("inquiry_type", e.target.value)} style={{ ...inputStyle, appearance: "none" }}>
+                    <select value={form.inquiry_type} onChange={(e) => set("inquiry_type", e.target.value)} style={{ ...inputStyle, appearance: "none", background: T.paper }}>
                       <option value="general">General Inquiry</option>
                       <option value="distribution">Distribution Partnership</option>
                       <option value="import">Import Services</option>
@@ -182,15 +181,15 @@ export default function ContactPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <Reveal delay={0.15}>
               {/* Sales rep card */}
-              <div style={{ padding: "40px", background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "16px", backdropFilter: "blur(20px)" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, marginBottom: "20px" }}>Support</p>
+              <div style={{ padding: "40px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "16px" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.wine, marginBottom: "20px" }}>Support</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "32px" }}>
-                  <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: T.wineDeep, border: `2px solid ${T.wine}40`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "24px", color: T.paper, boxShadow: `0 0 20px ${T.wine}40` }}>
+                  <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: T.wine, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "24px", color: "white" }}>
                     H
                   </div>
                   <div>
-                    <p style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 600, color: T.paper }}>Administrative Office</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>Customer Service</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 600, color: T.ink }}>Administrative Office</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted }}>Customer Service</p>
                   </div>
                 </div>
                 {[
@@ -198,8 +197,8 @@ export default function ContactPage() {
                   { label: "Email", value: "c.s@vinaioimports.com", href: "mailto:c.s@vinaioimports.com" },
                 ].map((c) => (
                   <div key={c.label} style={{ marginBottom: "12px" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, marginBottom: "4px" }}>{c.label}</p>
-                    <a href={c.href} style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper, textDecoration: "none", transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = T.gold} onMouseLeave={(e) => e.currentTarget.style.color = T.paper}>{c.value}</a>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.wine, marginBottom: "4px" }}>{c.label}</p>
+                    <a href={c.href} style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, textDecoration: "none", transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = T.wine} onMouseLeave={(e) => e.currentTarget.style.color = T.ink}>{c.value}</a>
                   </div>
                 ))}
               </div>
@@ -207,16 +206,16 @@ export default function ContactPage() {
 
             <Reveal delay={0.2}>
               {/* Office info */}
-              <div style={{ padding: "40px", background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "16px", backdropFilter: "blur(20px)" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, marginBottom: "20px" }}>Office</p>
+              <div style={{ padding: "40px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "16px" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.wine, marginBottom: "20px" }}>Office</p>
                 {[
                   ["Location", "608 Tiffany Street, Bronx NY 10474"],
                   ["Hours", "Mon – Fri · 9:00am – 6:00pm ET"],
                   ["Response Time", "Within 1 business day"],
                 ].map(([k, v]) => (
                   <div key={k} style={{ marginBottom: "14px" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, marginBottom: "4px" }}>{k}</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper }}>{v}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.wine, marginBottom: "4px" }}>{k}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink }}>{v}</p>
                   </div>
                 ))}
               </div>
@@ -224,9 +223,9 @@ export default function ContactPage() {
 
             <Reveal delay={0.25}>
               {/* Quick links */}
-              <div style={{ padding: "40px", background: "rgba(122, 24, 54, 0.1)", border: `1px solid ${T.wine}30`, borderRadius: "16px", backdropFilter: "blur(20px)" }}>
+              <div style={{ padding: "40px", background: T.silk, border: `1px solid ${T.wine}20`, borderRadius: "16px" }}>
                 <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.wine, marginBottom: "20px" }}>Existing Customers</p>
-                <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "24px" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, lineHeight: 1.8, marginBottom: "24px" }}>
                   Already a Vinaio customer? Log into the Customer Portal to place orders, manage invoices, and access your account.
                 </p>
                 <a href="/portal" style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.wine, fontWeight: 600 }}>

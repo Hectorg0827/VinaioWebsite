@@ -49,22 +49,24 @@ export default function Nav() {
 
   if (isAdmin) return null; // Admin has its own top bar
 
-  const isDarkHero = true; // Globally transitioning to dark
-  const dark = true;
+  const isDarkHero = isHome || isAbout; 
+  const dark = (isDarkHero && !scrolled) || menuOpen;
 
   const bgColor = menuOpen
-    ? T.ink
-    : T.glass;
+    ? T.paper
+    : scrolled 
+      ? "rgba(255,255,255,0.8)" 
+      : "transparent";
 
   return (
     <>
       <style>{`
         .nav-desktop { display: flex; }
         .nav-hamburger { display: none; }
-        .nav-link { color: ${dark ? "rgba(255,255,255,0.5)" : T.muted}; transition: all 0.3s; }
+        .nav-link { color: ${dark ? "rgba(255,255,255,0.7)" : T.muted}; transition: all 0.3s; }
         .nav-link:hover { color: ${T.wine} !important; }
         .square-tile {
-          width: 50px; height: 50px; background: ${T.glass}; border: 1px solid ${T.glassBorder};
+          width: 50px; height: 50px; background: ${scrolled ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)"}; border: 1px solid ${T.taupe};
           display: flex; align-items: center; justify-content: center;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none; cursor: pointer; position: relative; overflow: hidden;
@@ -86,9 +88,9 @@ export default function Nav() {
           top: 0, left: 0, right: 0,
           zIndex: 900,
           background: bgColor,
-          backdropFilter: "blur(20px) saturate(1.8)",
-          WebkitBackdropFilter: "blur(20px) saturate(1.8)",
-          borderBottom: `1px solid ${T.glassBorder}`,
+          backdropFilter: scrolled ? "blur(20px) saturate(1.8)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.8)" : "none",
+          borderBottom: scrolled ? `1px solid ${T.cream}` : "none",
           transform: scrolled && !menuOpen ? "translateY(-100%)" : "translateY(0%)",
           transition: "background 0.4s, border 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -109,8 +111,8 @@ export default function Nav() {
               style={{ 
                 height: scrolled ? "32px" : "40px",
                 width: "auto",
-                filter: "brightness(0) invert(1)",
-                transition: "height 0.4s",
+                filter: dark ? "brightness(0) invert(1)" : "none",
+                transition: "all 0.4s",
               }} 
             />
           </Link>
@@ -127,7 +129,7 @@ export default function Nav() {
                   letterSpacing: "2.5px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active ? T.wine : "rgba(255,255,255,0.7)",
+                  color: active ? T.wine : (dark ? "rgba(255,255,255,0.7)" : T.muted),
                 }}>
                   {label}
                 </Link>
@@ -143,9 +145,8 @@ export default function Nav() {
               padding: "8px 18px",
               borderRadius: "4px",
               background: isPortal ? T.wine : "transparent",
-              background: isPortal ? T.wine : "transparent",
-              border: `1px solid ${isPortal ? T.wine : T.taupe}`,
-              color: isPortal ? T.paper : T.wine,
+              border: `1px solid ${isPortal ? T.wine : (dark ? "rgba(255,255,255,0.3)" : T.taupe)}`,
+              color: isPortal ? T.paper : (dark ? T.paper : T.wine),
               transition: "all 0.3s",
             }}>
               Customer Portal
@@ -188,8 +189,8 @@ export default function Nav() {
           maxHeight: menuOpen ? "400px" : "0",
           overflow: "hidden",
           transition: "max-height 0.35s ease, visibility 0.35s",
-          background: T.ink,
-          borderTop: menuOpen ? `1px solid ${T.glassBorder}` : "none",
+          background: T.paper,
+          borderTop: menuOpen ? `1px solid ${T.cream}` : "none",
           visibility: menuOpen ? "visible" : "hidden",
           pointerEvents: menuOpen ? "auto" : "none",
         }}>
@@ -209,9 +210,9 @@ export default function Nav() {
                   letterSpacing: "2px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active ? T.gold : "rgba(255,255,255,0.8)",
+                  color: active ? T.wine : T.ink,
                   padding: "16px 0",
-                  borderBottom: `1px solid ${T.glassBorder}`,
+                  borderBottom: `1px solid ${T.cream}`,
                 }}>
                   {label}
                 </Link>

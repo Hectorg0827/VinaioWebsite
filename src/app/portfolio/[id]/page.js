@@ -75,17 +75,17 @@ export default function ProductDetailPage({ params }) {
 
   if (loading) {
     return (
-      <main style={{ height: "100vh", background: T.ink, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <p style={{ fontFamily: ff.b, color: "rgba(255,255,255,0.4)" }}>Loading product profile...</p>
+      <main style={{ height: "100vh", background: T.bg, display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <p style={{ fontFamily: ff.b, color: T.muted }}>Loading product profile...</p>
       </main>
     );
   }
 
   if (!product) {
     return (
-      <main style={{ height: "100vh", background: T.ink, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-        <h1 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper }}>Product Not Found</h1>
-        <Link href="/portfolio" style={{ marginTop: "20px", color: T.gold, fontFamily: ff.b }}>Back to Portfolio</Link>
+      <main style={{ height: "100vh", background: T.bg, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <h1 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink }}>Product Not Found</h1>
+        <Link href="/portfolio" style={{ marginTop: "20px", color: T.wine, fontFamily: ff.b }}>Back to Portfolio</Link>
       </main>
     );
   }
@@ -94,10 +94,10 @@ export default function ProductDetailPage({ params }) {
   const logoUrl  = product.logoUrl || product.logo_url;
 
   return (
-    <main style={{ background: T.ink, minHeight: "100vh", paddingBottom: "100px", color: T.paper }}>
+    <main style={{ background: T.bg, minHeight: "100vh", paddingBottom: "100px", color: T.ink }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{ 
-        background: T.ink, 
+        background: T.bg, 
         padding: "160px 48px 100px", 
         textAlign: "center",
         position: "relative",
@@ -110,21 +110,21 @@ export default function ProductDetailPage({ params }) {
             {/* 1. PRODUCT LOGO */}
             <div style={{ height: "120px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "32px" }}>
               {logoUrl ? (
-                <img src={logoUrl} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "300px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                <img src={logoUrl} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "300px", objectFit: "contain" }} />
               ) : (
-                <div style={{ padding: "10px 20px", border: `1px solid ${T.gold}40`, color: T.gold, fontFamily: ff.h, letterSpacing: "4px", fontSize: "14px", textTransform: "uppercase" }}>{product.brand}</div>
+                <div style={{ padding: "10px 20px", border: `1px solid ${T.wine}40`, color: T.wine, fontFamily: ff.h, letterSpacing: "4px", fontSize: "14px", textTransform: "uppercase" }}>{product.brand}</div>
               )}
             </div>
 
             {/* 2. BRAND NAME & TYPE */}
-            <h1 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 64px)", color: T.paper, lineHeight: 1.1, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "2px" }}>
+            <h1 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 64px)", color: T.ink, lineHeight: 1.1, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "2px" }}>
               {product.brand}
             </h1>
             <p style={{ fontFamily: ff.b, fontSize: "20px", color: T.wine, fontStyle: "italic", fontWeight: 500, marginBottom: "16px" }}>
               {product.name} {product.type ? `· ${product.type}` : ""}
             </p>
             {product.summary && (
-              <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.6)", maxWidth: "800px", margin: "0 auto", lineHeight: 1.6 }}>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "800px", margin: "0 auto", lineHeight: 1.6 }}>
                 {product.summary}
               </p>
             )}
@@ -138,15 +138,15 @@ export default function ProductDetailPage({ params }) {
           
           {/* LEFT: Full Bottle Image */}
           <Reveal>
-            <div style={{ background: T.glass, borderRadius: "20px", padding: "60px", border: `1px solid ${T.glassBorder}`, display: "flex", justifyContent: "center", backdropFilter: "blur(20px)" }}>
+            <div style={{ background: T.paper, borderRadius: "20px", padding: "60px", border: `1px solid ${T.cream}`, display: "flex", justifyContent: "center" }}>
               {imageUrl ? (
                 <img 
                   src={imageUrl} 
                   alt={product.name} 
-                  style={{ maxHeight: "600px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.1))" }} 
+                  style={{ maxHeight: "600px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.05))" }} 
                 />
               ) : (
-                <div style={{ height: "400px", width: "100%", background: "rgba(255,255,255,0.03)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.2)" }}>No Image</div>
+                <div style={{ height: "400px", width: "100%", background: T.silk, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", color: T.muted }}>No Image</div>
               )}
             </div>
           </Reveal>
@@ -155,42 +155,42 @@ export default function ProductDetailPage({ params }) {
           <div>
             <Reveal delay={0.1}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px" }}>
-                <Hr w="40px" c={T.gold} />
-                <h2 style={{ fontFamily: ff.h, fontSize: "40px", color: T.paper }}>Product Story</h2>
+                <Hr w="40px" c={T.wine} />
+                <h2 style={{ fontFamily: ff.h, fontSize: "40px", color: T.ink }}>Product Story</h2>
               </div>
               
-              <p style={{ fontFamily: ff.b, fontSize: "17px", color: "rgba(255,255,255,0.6)", lineHeight: 1.85, marginBottom: "40px" }}>
+              <p style={{ fontFamily: ff.b, fontSize: "17px", color: T.muted, lineHeight: 1.85, marginBottom: "40px" }}>
                 {product.description_en || product.description}
               </p>
 
               {/* Technical Grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", padding: "40px 0", borderTop: `1px solid ${T.glassBorder}` }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", padding: "40px 0", borderTop: `1px solid ${T.cream}` }}>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "8px" }}>Origin</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{product.origin}</p>
-                  <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{product.region}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Origin</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.origin}</p>
+                  <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted }}>{product.region}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "8px" }}>Producer</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{product.producer || product.brand}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Producer</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.producer || product.brand}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "8px" }}>Category</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{(product.categories || []).join(", ")}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Category</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{(product.categories || []).join(", ")}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "8px" }}>Format / Unit</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{product.format || product.unit}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Format / Unit</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.format || product.unit}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "8px" }}>SKU</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{product.sku || product.product_code}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>SKU</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.sku || product.product_code}</p>
                 </div>
               </div>
 
               {/* Portal CTA */}
-              <div style={{ marginTop: "40px", padding: "32px", background: T.glass, borderRadius: "12px", border: `1px solid ${T.glassBorder}` }}>
-                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "16px" }}>Member Benefits</p>
+              <div style={{ marginTop: "40px", padding: "32px", background: T.paper, borderRadius: "12px", border: `1px solid ${T.cream}` }}>
+                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "16px" }}>Member Benefits</p>
                 <div style={{ display: "flex", gap: "16px" }}>
                   <Link href="/portal/login" style={{ flex: 1, textAlign: "center", background: T.wine, color: "white", padding: "14px", borderRadius: "6px", textDecoration: "none", fontSize: "11px", fontWeight: 700, letterSpacing: "2px" }}>LOGIN FOR PRICE</Link>
                   <Link href="/contact" style={{ flex: 1, textAlign: "center", border: `1px solid ${T.wine}`, color: T.wine, padding: "14px", borderRadius: "6px", textDecoration: "none", fontSize: "11px", fontWeight: 700, letterSpacing: "2px" }}>BECOME A PARTNER</Link>
@@ -203,15 +203,15 @@ export default function ProductDetailPage({ params }) {
 
       {/* ── Suggestions Sections ────────────────────────────────────────── */}
       {(brandProducts.length > 0 || similarProducts.length > 0) && (
-        <section style={{ borderTop: `1px solid ${T.glassBorder}`, marginTop: "60px", padding: "100px 48px", background: T.ink }}>
+        <section style={{ borderTop: `1px solid ${T.cream}`, marginTop: "60px", padding: "100px 48px", background: T.bg }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             
             {/* Same Brand */}
             {brandProducts.length > 0 && (
               <div style={{ marginBottom: "80px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "40px" }}>
-                  <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper }}>More from {product.brand}</h3>
-                  <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "11px", color: T.gold, letterSpacing: "3px", textTransform: "uppercase" }}>VIEW ALL PRODUCERS →</Link>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink }}>More from {product.brand}</h3>
+                  <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "11px", color: T.wine, letterSpacing: "3px", textTransform: "uppercase" }}>VIEW ALL PRODUCERS →</Link>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
                   {brandProducts.map(p => <SuggestionCard key={p.id} product={p} />)}
@@ -223,8 +223,8 @@ export default function ProductDetailPage({ params }) {
             {similarProducts.length > 0 && (
               <div>
                 <div style={{ marginBottom: "40px" }}>
-                  <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper }}>You Might Also Like</h3>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.4)" }}>Other curated {(product.categories || [])[0]} selections</p>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink }}>You Might Also Like</h3>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted }}>Other curated {(product.categories || [])[0]} selections</p>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
                   {similarProducts.map(p => <SuggestionCard key={p.id} product={p} />)}
@@ -238,7 +238,7 @@ export default function ProductDetailPage({ params }) {
 
       {/* ── navigation ───────────────────────────────────────────────────── */}
       <section style={{ maxWidth: "1200px", margin: "40px auto", padding: "0 48px" }}>
-        <Link href="/portfolio" style={{ display: "flex", alignItems: "center", gap: "12px", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", textDecoration: "none", transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = T.gold} onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.4)"}>
+        <Link href="/portfolio" style={{ display: "flex", alignItems: "center", gap: "12px", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.muted, textDecoration: "none", transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = T.wine} onMouseLeave={(e) => e.currentTarget.style.color = T.muted}>
           ← Back to Portfolio
         </Link>
       </section>
@@ -251,15 +251,15 @@ function SuggestionCard({ product }) {
   const logo   = product.logoUrl || product.logo_url;
     return (
     <Link href={`/portfolio/${product.id || product.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
-      <div style={{ background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "16px", padding: "24px", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", transition: "transform 0.4s", backdropFilter: "blur(10px)" }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-8px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
-        <div style={{ height: "40px", marginBottom: "20px", opacity: 0.8 }}>
-           {logo ? <img src={logo} style={{ maxHeight: "100%", maxWidth: "130px", objectFit: "contain", filter: "brightness(0) invert(1)" }} /> : <span style={{ fontFamily: ff.h, fontSize: "14px", textTransform: "uppercase", color: T.gold }}>{product.brand}</span>}
+      <div style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "16px", padding: "24px", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", transition: "transform 0.4s" }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-8px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
+        <div style={{ height: "40px", marginBottom: "20px" }}>
+           {logo ? <img src={logo} style={{ maxHeight: "100%", maxWidth: "130px", objectFit: "contain" }} /> : <span style={{ fontFamily: ff.h, fontSize: "14px", textTransform: "uppercase", color: T.wine }}>{product.brand}</span>}
         </div>
         <div style={{ height: "180px", marginBottom: "24px" }}>
-           {bottle && <img src={bottle} style={{ height: "100%", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))" }} />}
+           {bottle && <img src={bottle} style={{ height: "100%", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.05))" }} />}
         </div>
-        <h4 style={{ fontFamily: ff.h, fontSize: "16px", color: T.paper, marginBottom: "6px", textTransform: "uppercase", letterSpacing: "1px" }}>{product.brand}</h4>
-        <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.gold, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
+        <h4 style={{ fontFamily: ff.h, fontSize: "16px", color: T.ink, marginBottom: "6px", textTransform: "uppercase", letterSpacing: "1px" }}>{product.brand}</h4>
+        <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
       </div>
     </Link>
   );

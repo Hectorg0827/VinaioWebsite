@@ -38,7 +38,7 @@ export default function PortalShell({ children, user }) {
       <aside
         style={{
           width: "260px",
-          background: T.ink,
+          background: T.silk,
           padding: "32px 0",
           position: "fixed",
           top: "80px",
@@ -48,11 +48,12 @@ export default function PortalShell({ children, user }) {
           zIndex: 50,
           display: "flex",
           flexDirection: "column",
+          borderRight: `1px solid ${T.cream}`
         }}
       >
-        <div style={{ padding: "0 24px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
-          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 500 }}>{displayName}</p>
-          <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.warm, marginTop: "2px" }}>{user?.email}</p>
+        <div style={{ padding: "0 24px 24px", borderBottom: `1px solid ${T.cream}`, flexShrink: 0 }}>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink, fontWeight: 500 }}>{displayName}</p>
+          <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, marginTop: "2px" }}>{user?.email}</p>
         </div>
 
         <nav style={{ padding: "16px 0", flex: 1 }}>
@@ -68,14 +69,14 @@ export default function PortalShell({ children, user }) {
                   display: "flex",
                   alignItems: "center",
                   gap: "14px",
-                  background: active ? "rgba(255,255,255,0.06)" : "transparent",
+                  background: active ? T.paper : "transparent",
                   borderLeft: active ? `3px solid ${T.wine}` : "3px solid transparent",
                   transition: "all 0.25s",
                   textDecoration: "none",
                 }}
               >
-                <span style={{ fontSize: "14px", color: active ? T.gold : T.warm, width: "20px", textAlign: "center" }}>{icon}</span>
-                <span style={{ fontFamily: ff.b, fontSize: "12px", color: active ? T.paper : T.warm, fontWeight: active ? 500 : 400, transition: "color 0.25s" }}>
+                <span style={{ fontSize: "14px", color: active ? T.wine : T.muted, width: "20px", textAlign: "center" }}>{icon}</span>
+                <span style={{ fontFamily: ff.b, fontSize: "12px", color: active ? T.ink : T.muted, fontWeight: active ? 500 : 400, transition: "color 0.25s" }}>
                   {label}
                 </span>
               </Link>
@@ -83,8 +84,8 @@ export default function PortalShell({ children, user }) {
           })}
         </nav>
 
-        <div style={{ padding: "20px 24px", borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
-          <button onClick={signOut} style={{ fontFamily: ff.b, fontSize: "11px", color: T.warm, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+        <div style={{ padding: "20px 24px", borderTop: `1px solid ${T.cream}`, flexShrink: 0 }}>
+          <button onClick={signOut} style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
             Sign Out →
           </button>
         </div>
