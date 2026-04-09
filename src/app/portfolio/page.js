@@ -109,7 +109,7 @@ export default function PortfolioPage() {
       title: "International Wines & Spirits", 
       desc: "Global excellence sourced from the world's most renowned regions.",
       img: "/images/portfolios/portfolio_intl_wines_spirits_1775108839217.png",
-      brands: ["French", "Argentinian"] // Descriptive for filtering
+      brands: ["France", "Argentina"] // Matching against origin
     },
   ];
 
@@ -240,23 +240,30 @@ export default function PortfolioPage() {
                       }}
                       onClick={() => selectPortfolio(card.id)}
                     >
-                      {/* B&W background image */}
+                      {/* Stylized background image with brand-grey match */}
+                      <div style={{ position: "absolute", inset: 0, background: T.metal, zIndex: 0 }} />
                       <img 
                         src={card.img} 
                         alt={card.title} 
                         style={{ 
                           position: "absolute", inset: 0, width: "100%", height: "100%", 
-                          objectFit: "cover", zIndex: 0, 
-                          filter: "grayscale(100%) brightness(0.6)",
+                          objectFit: "cover", zIndex: 1, 
+                          filter: "grayscale(100%) opacity(0.35)",
                           transition: "all 0.6s ease" 
                         }} 
                       />
+                      {/* Deep overlay for text/bottle contrast */}
+                      <div style={{ 
+                        position: "absolute", inset: 0, 
+                        background: `linear-gradient(135deg, rgba(72,68,64,0.7) 0%, rgba(26,24,21,0.9) 100%)`, 
+                        zIndex: 2 
+                      }} />
                       
                       {/* Product bottle overlays */}
                       <div style={{ 
-                        position: "absolute", top: "10%", right: "5%", bottom: "10%", left: "40%", 
+                        position: "absolute", top: "5%", right: "5%", bottom: "5%", left: "40%", 
                         display: "flex", alignItems: "flex-end", justifyContent: "flex-end", 
-                        gap: "-40px", zIndex: 2, pointerEvents: "none"
+                        gap: "-40px", zIndex: 4, pointerEvents: "none"
                       }}>
                         {bottleShots.map((shot, idx) => (
                           <img 
@@ -264,21 +271,20 @@ export default function PortfolioPage() {
                             src={shot} 
                             alt="product" 
                             style={{ 
-                              height: idx === 1 ? "90%" : "75%", 
+                              height: idx === 1 ? "95%" : "80%", 
                               objectFit: "contain",
-                              marginRight: "-60px",
-                              filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
-                              transform: `rotate(${idx === 0 ? -5 : idx === 2 ? 5 : 0}deg)`,
+                              marginRight: "-65px",
+                              filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.5))",
+                              transform: `rotate(${idx === 0 ? -6 : idx === 2 ? 6 : 0}deg) translateY(${idx === 1 ? -10 : 0}px)`,
                               transition: "all 0.5s ease"
                             }} 
                           />
                         ))}
                       </div>
 
-                      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${T.ink} 0%, transparent 60%)`, zIndex: 1 }} />
-                      <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 3 }}>
+                      <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 5 }}>
                         <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
-                        <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.7)", lineHeight: 1.6, maxWidth: "60%" }}>{card.desc}</p>
+                        <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.6, maxWidth: "60%" }}>{card.desc}</p>
                       </div>
                     </div>
                   </Reveal>
@@ -406,9 +412,23 @@ export default function PortfolioPage() {
                   overflow: "hidden",
                   textAlign: "center"
                 }}>
-                  {/* Flag on top */}
+                  {/* High-Impact Flag Icon on top */}
                   <div style={{ padding: "40px 24px 20px" }}>
-                    <div style={{ fontSize: "56px", marginBottom: "0" }}>{o.flag}</div>
+                    <div style={{ position: "relative", width: "80px", height: "80px", margin: "0 auto" }}>
+                      <img 
+                        src={`https://flagcdn.com/w160/${o.isoCode}.png`} 
+                        alt={`${o.name} flag`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                          boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                          border: `4px solid ${T.paper}`,
+                          background: T.paper
+                        }}
+                      />
+                    </div>
                   </div>
                   
                   {/* Description in center */}

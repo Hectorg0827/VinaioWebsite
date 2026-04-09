@@ -103,29 +103,55 @@ export const ORIGINS = [
     description:
       "Old-vine Garnacha and structured reds from Iberia's iconic appellations — the cornerstone of our European expansion.",
     flag: "🇪🇸",
+    isoCode: "es"
   },
   {
     name: "Dominican Republic",
     description:
       "The heart of Vinaio's Caribbean portfolio. From aged rums to vibrant lagers, Dominican producers represent the soul of our founding catalog.",
     flag: "🇩🇴",
+    isoCode: "do"
   },
   {
-    name: "Latin American",
+    name: "South America",
     description:
-      "World-class expressions from the Central Valleys of Chile to the high altitudes of Argentina. Exceptional quality and character.",
+      "A rich tapestry of high-altitude Argentinian Malbecs, robust Chilean Reds, and boutique spirits from Colombia and Peru.",
     flag: "🌎",
+    isoCode: "ar" // Using Argentina as the primary visual for the South American block
   },
   {
     name: "Europe",
     description:
       "Sourcing global excellence from the world's most renowned regions, from the hills of Tuscany to the cellars of Bordeaux.",
     flag: "🇪🇺",
+    isoCode: "eu"
   },
   {
     name: "South African",
     description:
       "Bold, sun-drenched varietals from Stellenbosch and the Western Cape. Quality-driven wines with a focus on sustainable production.",
     flag: "🇿🇦",
+    isoCode: "za"
+  },
+  {
+    name: "Italy",
+    description:
+      "Masterfully balanced varietals from the rolling hills of Tuscany to the crisp peaks of Alto Adige — the essence of Mediterranean heritage.",
+    flag: "🇮🇹",
+    isoCode: "it"
+  },
+  {
+    name: "France",
+    description:
+      "Legendary terroir and timeless technique. Our French selections represent the pinnacle of winemaking from Bordeaux to Provence.",
+    flag: "🇫🇷",
+    isoCode: "fr"
+  },
+  {
+    name: "USA",
+    description:
+      "Innovative craft spirits and premium domestic wines sourced from the country's most vibrant emerging and established regions.",
+    flag: "🇺🇸",
+    isoCode: "us"
   },
 ];
