@@ -81,7 +81,7 @@ export default function PortfolioPage() {
       title: "Vinaio Elite", 
       desc: "An exclusive selection of rare vintages and premium reserves.",
       img: "/images/portfolios/elite_bg.png",
-      brands: ["Valduero", "Perica", "Pazo de la Cuesta"]
+      brands: []
     },
     { 
       id: "caribbean", 
