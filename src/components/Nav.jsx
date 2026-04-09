@@ -24,6 +24,8 @@ export default function Nav() {
   const isHome      = pathname === "/";
   const isPortfolio = pathname === "/portfolio";
   const isAbout     = pathname === "/about";
+  const isServices  = pathname === "/services";
+  const isDetail    = pathname.includes("/portfolio/");
 
   useEffect(() => {
     const fetchBranding = async () => {
@@ -49,7 +51,7 @@ export default function Nav() {
 
   if (isAdmin) return null; // Admin has its own top bar
 
-  const isDarkHero = isHome || isAbout; 
+  const isDarkHero = isHome || isAbout || isServices || isPortfolio || isDetail; 
   const dark = (isDarkHero && !scrolled) || menuOpen;
 
   const bgColor = menuOpen
@@ -88,11 +90,12 @@ export default function Nav() {
           top: 0, left: 0, right: 0,
           zIndex: 900,
           background: bgColor,
-          backdropFilter: scrolled ? "blur(20px) saturate(1.8)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.8)" : "none",
+          backdropFilter: (scrolled || menuOpen) ? "blur(20px) saturate(1.8)" : "none",
+          WebkitBackdropFilter: (scrolled || menuOpen) ? "blur(20px) saturate(1.8)" : "none",
           borderBottom: scrolled ? `1px solid ${T.cream}` : "none",
-          transform: scrolled && !menuOpen ? "translateY(-100%)" : "translateY(0%)",
-          transition: "background 0.4s, border 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+          boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.03)" : "none",
+          transform: "translateY(0%)",
+          transition: "background 0.4s, border 0.4s, transform 0.4s",
         }}
       >
         {/* ── Main bar ── */}
@@ -145,7 +148,7 @@ export default function Nav() {
               padding: "8px 18px",
               borderRadius: "4px",
               background: isPortal ? T.wine : "transparent",
-              border: `1px solid ${isPortal ? T.wine : (dark ? "rgba(255,255,255,0.3)" : T.taupe)}`,
+              border: `1px solid ${isPortal ? T.wine : (dark ? "rgba(255,255,255,0.4)" : T.cream)}`,
               color: isPortal ? T.paper : (dark ? T.paper : T.wine),
               transition: "all 0.3s",
             }}>

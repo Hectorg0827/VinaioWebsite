@@ -47,7 +47,12 @@ export default function RootLayout({ children }) {
         <style>{`
           * { margin: 0; padding: 0; box-sizing: border-box; }
           html { scroll-behavior: smooth; }
-          body { background: ${T.bg}; color: ${T.ink}; }
+          body { 
+            background: ${T.bg}; 
+            color: ${T.ink}; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
           ::selection { background: ${T.wineGlow}; color: ${T.wine}; }
           ::-webkit-scrollbar { width: 6px; }
           ::-webkit-scrollbar-track { background: ${T.bg}; }

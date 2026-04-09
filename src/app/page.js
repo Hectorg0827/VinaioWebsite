@@ -330,9 +330,10 @@ export default function HomePage() {
               marginBottom: "32px",
               opacity: loaded ? 1 : 0,
               transition: "all 1s ease 0.4s",
-              textShadow: "0 4px 30px rgba(0,0,0,0.5)",
+              textShadow: "0 10px 40px rgba(0,0,0,0.3), 0 2px 10px rgba(0,0,0,0.2)",
               maxWidth: "1100px",
-              fontWeight: 400
+              fontWeight: 400,
+              WebkitFontSmoothing: "antialiased"
             }}
           >
             {hero.title}
@@ -346,12 +347,13 @@ export default function HomePage() {
               opacity: loaded ? 0.9 : 0,
               transition: "all 1s ease 0.5s",
               marginBottom: "56px",
-              textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+              textShadow: "0 2px 8px rgba(0,0,0,0.3)",
               maxWidth: "800px",
               lineHeight: 1.6,
               fontWeight: 500,
               letterSpacing: "4px",
-              textTransform: "uppercase"
+              textTransform: "uppercase",
+              WebkitFontSmoothing: "antialiased"
             }}
           >
             {hero.subtitle}
