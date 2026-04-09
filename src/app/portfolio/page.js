@@ -81,14 +81,14 @@ export default function PortfolioPage() {
       title: "Vinaio Elite", 
       desc: "An exclusive selection of rare vintages and premium reserves.",
       img: "/images/portfolios/elite_bg.png",
-      brands: ["Valduero", "Perica", "Puntacana"]
+      brands: ["Valduero", "Perica", "Pazo de la Cuesta"]
     },
     { 
       id: "caribbean", 
       title: "Vinaio Caribbean", 
       desc: "The heart of the islands: Authentic rums and regional spirits.",
-      img: "/images/portfolios/portfolio_caribbean_1775108770795.png",
-      brands: ["La Fuerza", "El Legado", "Royal Jamaican"]
+      img: "/images/portfolios/caribbean_bg.png",
+      brands: ["La Fuerza", "Kalembu", "Bermudez", "Puntacana"]
     },
     { 
       id: "beer_low_alc", 
@@ -280,21 +280,30 @@ export default function PortfolioPage() {
                             display: "flex", alignItems: "flex-end", justifyContent: "flex-end", 
                             gap: "-45px", zIndex: 4, pointerEvents: "none"
                           }}>
-                            {bottleShots.map((shot, idx) => (
-                              <img 
-                                key={idx} 
-                                src={shot} 
-                                alt="authentic product" 
-                                style={{ 
-                                  height: idx === 1 ? "100%" : "85%", 
-                                  objectFit: "contain",
-                                  marginRight: "-70px",
-                                  filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.6))",
-                                  transform: `rotate(${idx === 0 ? -6 : idx === 2 ? 6 : 0}deg) translateY(${idx === 1 ? -15 : 0}px)`,
-                                  transition: "all 0.5s ease"
-                                }} 
-                              />
-                            ))}
+                            {bottleShots.map((shot, idx) => {
+                              const total = bottleShots.length;
+                              // Stagger height: Middle ones taller
+                              const isMiddle = idx > 0 && idx < total - 1;
+                              const height = total > 3 ? (isMiddle ? "95%" : "80%") : (idx === 1 ? "100%" : "85%");
+                              const rotation = total > 3 ? (idx - (total-1)/2) * 4 : (idx === 0 ? -6 : idx === 2 ? 6 : 0);
+                              const translateY = isMiddle ? -12 : 0;
+
+                              return (
+                                <img 
+                                  key={idx} 
+                                  src={shot} 
+                                  alt="authentic product" 
+                                  style={{ 
+                                    height: height, 
+                                    objectFit: "contain",
+                                    marginRight: total > 3 ? "-80px" : "-70px",
+                                    filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.6))",
+                                    transform: `rotate(${rotation}deg) translateY(${translateY}px)`,
+                                    transition: "all 0.5s ease"
+                                  }} 
+                                />
+                              );
+                            })}
                           </div>
                         );
                       })()}
