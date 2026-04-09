@@ -15,7 +15,7 @@ export const T = {
   metal:       "linear-gradient(135deg, #7A7570 0%, #484440 50%, #5C5853 100%)", // Metallic grey gradient
   wine:        "#722F37",
   wineDeep:    "#4E1A20",
-  wineMetal:   "linear-gradient(135deg, #4E1A20 0%, #722F37 50%, #351216 100%)", // Metallic darker burgundy
+  wineMetal:   "linear-gradient(180deg, #5D1F27 0%, #4E1A20 100%)", // Subdued luxury burgundy metal
   wineGlow:    "#722F3712",
   gold:        "#C2A355",
   green:       "#1B7A4E",
