@@ -33,8 +33,8 @@ export default function Reveal({ children, delay = 0 }) {
         position: "relative",
         zIndex: 1,
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translateY(0)" : "translateY(30px)",
-        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+        transform: isVisible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)",
+        transition: `opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
         pointerEvents: "auto"
       }}
     >

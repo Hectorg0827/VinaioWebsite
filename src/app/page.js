@@ -513,7 +513,7 @@ export default function HomePage() {
               { title: "Importer & Wholesaler",   desc: "Sourcing direct from global producers" },
               { title: "White Label",             desc: "Private-label wines, spirits, and beer — fully sourced and market-ready." },
             ].map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.1}>
+              <Reveal key={s.title} delay={i * 0.2}>
                 <div
                   style={{
                     background: T.bg,
@@ -694,7 +694,7 @@ export default function HomePage() {
               { label: "Curated Portfolio",       sub: "Over 100+ award winning world wide brands" },
               { label: "White Glove Delivery",    sub: "70 Refrigerated delivery trucks" },
             ].map((s, i) => (
-              <Reveal key={s.label} delay={i * 0.1}>
+              <Reveal key={s.label} delay={i * 0.2}>
                 <div
                   className="territory-box"
                   style={{
