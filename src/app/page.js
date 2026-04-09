@@ -467,7 +467,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Services Strip ───────────────────────────────────────────────── */}
-      <section style={{ background: T.paper, padding: "80px 56px" }}>
+      <section style={{ background: T.ink, padding: "80px 56px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "56px" }}>
@@ -476,7 +476,7 @@ export default function HomePage() {
                 style={{
                   fontFamily: ff.h,
                   fontSize: "clamp(32px, 4vw, 48px)",
-                  color: T.ink,
+                  color: T.paper,
                   marginBottom: "16px",
                 }}
               >
@@ -486,7 +486,7 @@ export default function HomePage() {
                 style={{
                   fontFamily: ff.b,
                   fontSize: "15px",
-                  color: T.muted,
+                  color: "rgba(255,255,255,0.6)",
                   maxWidth: "560px",
                   margin: "0 auto",
                   lineHeight: 1.8,
@@ -516,7 +516,7 @@ export default function HomePage() {
               <Reveal key={s.title} delay={i * 0.2}>
                 <div
                   style={{
-                    background: T.bg,
+                    background: T.charcoal,
                     border: `1px solid ${T.cream}`,
                     borderRadius: "12px",
                     overflow: "hidden",
@@ -543,7 +543,7 @@ export default function HomePage() {
                       style={{
                         fontFamily: ff.b,
                         fontSize: "14px",
-                        color: T.muted,
+                        color: "rgba(255,255,255,0.6)",
                         lineHeight: 1.6,
                         margin: 0
                       }}
@@ -576,7 +576,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}
-      <div style={{ background: T.bg, padding: "40px 0" }}>
+      <div style={{ background: T.ink, padding: "40px 0" }}>
         <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
       </div>
       <section
@@ -659,7 +659,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Territory ────────────────────────────────────────────────────── */}
-      <section style={{ background: T.cream, padding: "80px 56px" }}>
+      <section style={{ background: T.ink, padding: "80px 56px" }}>
         <div
           style={{
             maxWidth: "1200px",
@@ -673,7 +673,7 @@ export default function HomePage() {
               style={{
                 fontFamily: ff.h,
                 fontSize: "clamp(28px, 3.5vw, 42px)",
-                color: T.ink,
+                color: T.paper,
                 marginBottom: "40px",
               }}
             >
@@ -698,7 +698,7 @@ export default function HomePage() {
                 <div
                   className="territory-box"
                   style={{
-                    background: T.paper,
+                    background: T.charcoal,
                     border: `1px solid ${T.cream}`,
                     borderRadius: "12px",
                     transition: "all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)",
@@ -727,7 +727,7 @@ export default function HomePage() {
                       style={{
                         fontFamily: ff.b,
                         fontSize: "14px",
-                        color: T.muted,
+                        color: "rgba(255,255,255,0.6)",
                         lineHeight: 1.6,
                         margin: 0
                       }}
@@ -767,7 +767,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section style={{ background: T.paper, padding: "100px 56px" }}>
+      <section style={{ background: T.ink, padding: "100px 56px" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
@@ -775,7 +775,7 @@ export default function HomePage() {
               style={{
                 fontFamily: ff.h,
                 fontSize: "clamp(32px, 4vw, 50px)",
-                color: T.ink,
+                color: T.paper,
                 marginBottom: "20px",
               }}
             >
@@ -785,7 +785,7 @@ export default function HomePage() {
               style={{
                 fontFamily: ff.b,
                 fontSize: "14px",
-                color: T.muted,
+                color: "rgba(255,255,255,0.6)",
                 lineHeight: 1.8,
                 marginBottom: "40px",
               }}

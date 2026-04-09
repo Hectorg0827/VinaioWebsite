@@ -135,7 +135,7 @@ export default function AboutPage() {
           gap: "40px"
         }}>
           {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.1}>
+            <Reveal key={s.label} delay={i * 0.3}>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontFamily: ff.h, fontSize: "52px", color: T.wine, lineHeight: 1 }}>{s.number}</div>
                 <div style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, letterSpacing: "2px", marginTop: "12px", textTransform: "uppercase" }}>{s.label}</div>
@@ -272,7 +272,7 @@ export default function AboutPage() {
                ? FALLBACK_LEADERSHIP 
                : team.leadership
             ).map((m, i) => (
-              <Reveal key={m.name} delay={i * 0.05}>
+              <Reveal key={m.name} delay={i * 0.2}>
                 <div style={{
                   background: T.paper, border: `1px solid ${T.cream}`, padding: "40px", borderRadius: "8px",
                   display: "flex", gap: "24px", alignItems: "flex-start", height: "100%"
@@ -300,7 +300,6 @@ export default function AboutPage() {
       {/* ── Sales Team ────────────────────────────────────────────────────── */}
       <section style={{ background: T.bg, padding: "100px 48px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-          <Reveal>
             <div style={{
               background: T.metal,
               borderRadius: "12px",
@@ -319,61 +318,63 @@ export default function AboutPage() {
               {/* If we have dynamic sales members with photos, show them differently? */}
               {/* For now, maintain the badge-style list if they have no photos, or grid if they do */}
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
-                {(useFallback ? FALLBACK_SALES : team.sales).map((m) => {
+                {(useFallback ? FALLBACK_SALES : team.sales).map((m, i) => {
                   const name = typeof m === "string" ? m : m.name;
                   const photo = typeof m === "string" ? null : m.photo_url;
                   
                   return (
-                    <div key={name} style={{
-                      padding: "8px 24px 8px 8px",
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: "40px",
-                      display: "flex", alignItems: "center", gap: "12px",
-                      transition: "all 0.3s"
-                    }}>
-                      <div style={{ 
-                        width: "36px", height: "36px", borderRadius: "50%", 
-                        background: photo ? `url(${photo}) center/cover` : T.wine,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontFamily: ff.h, fontSize: "11px", color: "white", flexShrink: 0, overflow: "hidden",
-                        boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+                    <Reveal key={name} delay={i * 0.1}>
+                      <div style={{
+                        padding: "8px 24px 8px 8px",
+                        background: "rgba(255,255,255,0.04)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        borderRadius: "40px",
+                        display: "flex", alignItems: "center", gap: "12px",
+                        transition: "all 0.3s"
                       }}>
-                        {!photo && getInitials(name)}
+                        <div style={{ 
+                          width: "36px", height: "36px", borderRadius: "50%", 
+                          background: photo ? `url(${photo}) center/cover` : T.wine,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: ff.h, fontSize: "11px", color: "white", flexShrink: 0, overflow: "hidden",
+                          boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+                        }}>
+                          {!photo && getInitials(name)}
+                        </div>
+                        <span style={{ fontFamily: ff.h, fontSize: "13px", color: T.paper, letterSpacing: "0.5px" }}>{name}</span>
                       </div>
-                      <span style={{ fontFamily: ff.h, fontSize: "13px", color: T.paper, letterSpacing: "0.5px" }}>{name}</span>
-                    </div>
+                    </Reveal>
                   );
                 })}
               </div>
               </div>
             </div>
-          </Reveal>
         </div>
       </section>
 
-      {/* ── Advisors ────────────────────────────────────────────────────── */}
       <section style={{ padding: "80px 48px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "40px" }}>
-           <Reveal delay={0.2}>
-            <div style={{ background: T.paper, padding: "48px", borderTop: `4px solid ${T.gold}`, height: "100%" }}>
+
+          <div style={{ background: T.paper, padding: "48px", borderTop: `4px solid ${T.gold}`, height: "100%" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>Advisors</p>
               <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.ink, marginBottom: "24px" }}>Expert Counsel</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                {(useFallback ? FALLBACK_ADVISORS : team.advisor).map((a) => (
-                  <div key={a.name} style={{ display: "flex", gap: "20px" }}>
-                    <div style={{ 
-                      width: "48px", height: "48px", borderRadius: "50%", background: a.photo_url ? `url(${a.photo_url}) center/cover` : T.wine, 
-                      flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "14px", overflow: "hidden",
-                      color: "white"
-                    }}>
-                      {!a.photo_url && getInitials(a.name)}
+                {(useFallback ? FALLBACK_ADVISORS : team.advisor).map((a, i) => (
+                  <Reveal key={a.name} delay={i * 0.15}>
+                    <div style={{ display: "flex", gap: "20px" }}>
+                      <div style={{ 
+                        width: "48px", height: "48px", borderRadius: "50%", background: a.photo_url ? `url(${a.photo_url}) center/cover` : T.wine, 
+                        flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "14px", overflow: "hidden",
+                        color: "white"
+                      }}>
+                        {!a.photo_url && getInitials(a.name)}
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: ff.h, fontSize: "18px", color: T.ink, marginBottom: "2px" }}>{a.name}</p>
+                        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.wine, fontWeight: 600, textTransform: "uppercase" }}>{a.role}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p style={{ fontFamily: ff.h, fontSize: "18px", color: T.ink, marginBottom: "2px" }}>{a.name}</p>
-                      <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.wine, fontWeight: 600, textTransform: "uppercase" }}>{a.role}</p>
-                    </div>
-                  </div>
+                  </Reveal>
                 ))}
               </div>
             </div>
