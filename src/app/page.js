@@ -421,7 +421,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Brand Marquee ────────────────────────────────────────────────── */}
-      <section style={{ background: T.bg, padding: "40px 0", borderBottom: `1px solid ${T.cream}`, overflow: "hidden" }}>
+      <section style={{ background: T.ink, padding: "50px 0", borderBottom: `1px solid ${T.glassBorder}`, overflow: "hidden" }}>
         <style>{`
           @keyframes marquee {
             0% { transform: translateX(0); }
@@ -448,15 +448,15 @@ export default function HomePage() {
                   style={{ 
                     height: "45px", 
                     width: "auto", 
-                    filter: "grayscale(1) opacity(0.5)",
+                    filter: "grayscale(1) invert(1) opacity(0.4)",
                     transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.filter = "grayscale(0) opacity(1)";
-                    e.currentTarget.style.transform = "scale(1.1)";
+                    e.currentTarget.style.filter = "grayscale(0) invert(0) opacity(1)";
+                    e.currentTarget.style.transform = "scale(1.15)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.filter = "grayscale(1) opacity(0.5)";
+                    e.currentTarget.style.filter = "grayscale(1) invert(1) opacity(0.4)";
                     e.currentTarget.style.transform = "scale(1)";
                   }}
                 />
@@ -581,17 +581,20 @@ export default function HomePage() {
       </div>
       <section
         style={{
-          background: T.silk,
-          padding: "100px 56px",
+          background: T.ink,
+          padding: "120px 56px",
           position: "relative",
           overflow: "hidden",
+          borderTop: `1px solid ${T.glassBorder}`,
+          borderBottom: `1px solid ${T.glassBorder}`,
         }}
       >
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(ellipse 60% 60% at 80% 50%, ${T.wineDeep}40 0%, transparent 60%)`,
+            background: `radial-gradient(circle at 70% 50%, ${T.wineDeep}40 0%, transparent 70%)`,
+            opacity: 0.6
           }}
         />
         <div
@@ -698,8 +701,8 @@ export default function HomePage() {
                 <div
                   className="territory-box"
                   style={{
-                    background: T.charcoal,
-                    border: `1px solid ${T.cream}`,
+                    background: T.glass,
+                    border: `1px solid ${T.glassBorder}`,
                     borderRadius: "12px",
                     transition: "all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)",
                     cursor: "default",
@@ -708,7 +711,8 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
-                    minHeight: "220px"
+                    minHeight: "220px",
+                    backdropFilter: "blur(10px)"
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-10px)";

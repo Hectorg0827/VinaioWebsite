@@ -32,16 +32,17 @@ export default function ContactPage() {
 
   const inputStyle = {
     width: "100%",
-    padding: "13px 16px",
-    background: T.bg,
-    border: `1px solid ${T.cream}`,
-    borderRadius: "6px",
+    padding: "16px 20px",
+    background: T.glass,
+    border: `1px solid ${T.glassBorder}`,
+    borderRadius: "10px",
     fontFamily: ff.b,
     fontSize: "14px",
-    color: T.ink,
+    color: T.paper,
     outline: "none",
     boxSizing: "border-box",
-    transition: "border-color 0.2s",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    backdropFilter: "blur(10px)",
   };
 
   const labelStyle = {
@@ -49,7 +50,7 @@ export default function ContactPage() {
     fontSize: "9px",
     letterSpacing: "3px",
     textTransform: "uppercase",
-    color: T.warm,
+    color: T.gold,
     display: "block",
     marginBottom: "8px",
   };
@@ -59,7 +60,7 @@ export default function ContactPage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         style={{
-          background: T.charcoal,
+          background: T.ink,
           padding: "140px 56px 80px",
           position: "relative",
           overflow: "hidden",
@@ -78,13 +79,13 @@ export default function ContactPage() {
       </section>
 
       {/* ── Main content ──────────────────────────────────────────────────── */}
-      <section style={{ background: T.bg, padding: "80px 56px" }}>
+      <section style={{ background: T.ink, padding: "100px 56px", borderTop: `1px solid ${T.glassBorder}` }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 380px", gap: "64px", alignItems: "flex-start" }}>
 
           {/* ── Form ── */}
           <Reveal>
-            <h2 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink, marginBottom: "8px" }}>Send a Message</h2>
-            <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, marginBottom: "40px", lineHeight: 1.7 }}>
+            <h2 style={{ fontFamily: ff.h, fontSize: "40px", color: T.paper, marginBottom: "12px" }}>Send a Message</h2>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", marginBottom: "48px", lineHeight: 1.8 }}>
               We respond within 1 business day. For urgent inquiries, call your sales rep directly.
             </p>
 
@@ -158,7 +159,7 @@ export default function ContactPage() {
                     padding: "16px 40px",
                     background: T.wine,
                     border: "none",
-                    borderRadius: "6px",
+                    borderRadius: "8px",
                     color: T.paper,
                     fontFamily: ff.b,
                     fontSize: "11px",
@@ -181,15 +182,15 @@ export default function ContactPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <Reveal delay={0.15}>
               {/* Sales rep card */}
-              <div style={{ padding: "32px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "10px" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, marginBottom: "16px" }}>Your Sales Rep</p>
-                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
-                  <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: T.wineGlow, border: `2px solid ${T.wine}20`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "22px", color: T.wine }}>
+              <div style={{ padding: "40px", background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "16px", backdropFilter: "blur(20px)" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, marginBottom: "20px" }}>Support</p>
+                <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "32px" }}>
+                  <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: T.wineDeep, border: `2px solid ${T.wine}40`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "24px", color: T.paper, boxShadow: `0 0 20px ${T.wine}40` }}>
                     H
                   </div>
                   <div>
-                    <p style={{ fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink }}>Katja Kohl</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted }}>Customer Service</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 600, color: T.paper }}>Administrative Office</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>Customer Service</p>
                   </div>
                 </div>
                 {[
@@ -197,8 +198,8 @@ export default function ContactPage() {
                   { label: "Email", value: "c.s@vinaioimports.com", href: "mailto:c.s@vinaioimports.com" },
                 ].map((c) => (
                   <div key={c.label} style={{ marginBottom: "12px" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "2px" }}>{c.label}</p>
-                    <a href={c.href} style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, textDecoration: "none" }}>{c.value}</a>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, marginBottom: "4px" }}>{c.label}</p>
+                    <a href={c.href} style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper, textDecoration: "none", transition: "color 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.color = T.gold} onMouseLeave={(e) => e.currentTarget.style.color = T.paper}>{c.value}</a>
                   </div>
                 ))}
               </div>
@@ -206,16 +207,16 @@ export default function ContactPage() {
 
             <Reveal delay={0.2}>
               {/* Office info */}
-              <div style={{ padding: "28px 32px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "10px" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, marginBottom: "16px" }}>Office</p>
+              <div style={{ padding: "40px", background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "16px", backdropFilter: "blur(20px)" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, marginBottom: "20px" }}>Office</p>
                 {[
                   ["Location", "608 Tiffany Street, Bronx NY 10474"],
                   ["Hours", "Mon – Fri · 9:00am – 6:00pm ET"],
                   ["Response Time", "Within 1 business day"],
                 ].map(([k, v]) => (
                   <div key={k} style={{ marginBottom: "14px" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "2px" }}>{k}</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink }}>{v}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, marginBottom: "4px" }}>{k}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper }}>{v}</p>
                   </div>
                 ))}
               </div>
@@ -223,9 +224,9 @@ export default function ContactPage() {
 
             <Reveal delay={0.25}>
               {/* Quick links */}
-              <div style={{ padding: "28px 32px", background: T.cream, borderRadius: "10px" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, marginBottom: "16px" }}>Existing Customers</p>
-                <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.deep, lineHeight: 1.7, marginBottom: "16px" }}>
+              <div style={{ padding: "40px", background: "rgba(122, 24, 54, 0.1)", border: `1px solid ${T.wine}30`, borderRadius: "16px", backdropFilter: "blur(20px)" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.wine, marginBottom: "20px" }}>Existing Customers</p>
+                <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "24px" }}>
                   Already a Vinaio customer? Log into the Customer Portal to place orders, manage invoices, and access your account.
                 </p>
                 <a href="/portal" style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.wine, fontWeight: 600 }}>

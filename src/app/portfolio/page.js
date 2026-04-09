@@ -180,12 +180,12 @@ export default function PortfolioPage() {
 
       {/* ── Featured ──────────────────────────────────────────────────────── */}
       {featured.length > 0 && (
-        <section style={{ background: T.paper, padding: "80px 56px" }}>
+        <section style={{ background: T.ink, padding: "80px 56px", borderBottom: `1px solid ${T.glassBorder}` }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <Reveal>
               <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
-                <Hr w="32px" c={T.wine} />
-                <h2 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink }}>Featured Selections</h2>
+                <Hr w="32px" c={T.gold} />
+                <h2 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper }}>Featured Selections</h2>
               </div>
             </Reveal>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" }}>
@@ -201,13 +201,13 @@ export default function PortfolioPage() {
 
       {/* ── Portfolio Selection Mode ────────────────────────────────────── */}
       {viewMode === "selection" && (
-        <section style={{ background: T.bg, padding: "80px 56px", position: "relative", zIndex: 10 }}>
+        <section style={{ background: T.ink, padding: "100px 56px", position: "relative", zIndex: 10 }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <Reveal>
-              <div style={{ textAlign: "center", marginBottom: "64px" }}>
-                <Hr w="40px" c={T.wine} style={{ margin: "0 auto 24px" }} />
-                <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.ink }}>Explore Our Collections</h2>
-                <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", margin: "16px auto 0" }}>
+              <div style={{ textAlign: "center", marginBottom: "80px" }}>
+                <Hr w="40px" c={T.gold} style={{ margin: "0 auto 24px" }} />
+                <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.paper }}>Explore Our Collections</h2>
+                <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", margin: "20px auto 0", lineHeight: 1.8 }}>
                   Select a specialized portfolio to view our curated brands and products.
                 </p>
               </div>
@@ -218,10 +218,10 @@ export default function PortfolioPage() {
                 <Reveal key={card.id} delay={i * 0.1}>
                   <div 
                     style={{ 
-                      width: "100%", height: "320px", position: "relative", borderRadius: "16px", 
-                      overflow: "hidden", border: `1px solid ${T.cream}`, background: T.paper,
+                      width: "100%", height: "340px", position: "relative", borderRadius: "16px", 
+                      overflow: "hidden", border: `1px solid ${T.glassBorder}`, background: T.glass,
                       display: "block", zIndex: 20, transition: "all 0.4s",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.05)"
+                      boxShadow: "0 10px 40px rgba(0,0,0,0.2)"
                     }}
                   >
                     <img src={card.img} alt={card.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
@@ -247,18 +247,18 @@ export default function PortfolioPage() {
 
       {/* ── Catalog Mode ────────────────────────────────────────────────── */}
       {viewMode === "grid" && (
-        <section style={{ background: T.bg, padding: "80px 56px" }}>
+        <section style={{ background: T.ink, padding: "80px 56px" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <Reveal>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "24px", marginBottom: "48px" }}>
                 <div>
                   <button 
                     onClick={() => setViewMode("selection")}
-                    style={{ background: "none", border: "none", color: T.wine, fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", cursor: "pointer", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px", padding: 0 }}
+                    style={{ background: "none", border: "none", color: T.gold, fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", cursor: "pointer", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px", padding: 0 }}
                   >
                     ← Back to Portfolios
                   </button>
-                  <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink }}>
+                  <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.paper }}>
                     {PORTFOLIO_CARDS.find(c => c.id === currentPortfolio)?.title}
                   </h2>
                 </div>
@@ -268,17 +268,18 @@ export default function PortfolioPage() {
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Quick search brands or products..."
                   style={{
-                    padding: "14px 20px", background: T.paper, border: `1px solid ${T.cream}`,
-                    borderRadius: "10px", fontFamily: ff.b, fontSize: "14px", color: T.ink,
-                    outline: "none", width: "320px", boxShadow: "0 4px 12px rgba(0,0,0,0.03)"
+                    padding: "16px 24px", background: T.glass, border: `1px solid ${T.glassBorder}`,
+                    borderRadius: "12px", fontFamily: ff.b, fontSize: "14px", color: T.paper,
+                    outline: "none", width: "360px", boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                    backdropFilter: "blur(10px)"
                   }}
                 />
               </div>
 
               {/* Advanced Professional Filter Bar */}
               <div style={{ 
-                display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "40px", 
-                paddingBottom: "24px", borderBottom: `1px solid ${T.cream}` 
+                display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "48px", 
+                paddingBottom: "32px", borderBottom: `1px solid ${T.glassBorder}` 
               }}>
                  {[
                    { label: "Category", val: category, set: setCategory, options: dynamicCategories },
@@ -288,16 +289,17 @@ export default function PortfolioPage() {
                    { label: "Type", val: selectedType, set: setSelectedType, options: uniqueTypes },
                  ].map(f => (
                    <div key={f.label} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                      <span style={{ fontSize: "9px", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 700, color: T.muted }}>{f.label}</span>
+                      <span style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, color: "rgba(255,255,255,0.4)" }}>{f.label}</span>
                       <select 
                         value={f.val} 
                         onChange={(e) => f.set(e.target.value)}
                         style={{
-                          padding: "10px 16px", background: T.paper, color: T.ink, border: `1px solid ${T.cream}`, 
-                          borderRadius: "8px", fontSize: "13px", fontFamily: ff.b, outline: "none", minWidth: "150px"
+                          padding: "12px 20px", background: T.glass, color: T.paper, border: `1px solid ${T.glassBorder}`, 
+                          borderRadius: "10px", fontSize: "13px", fontFamily: ff.b, outline: "none", minWidth: "160px",
+                          backdropFilter: "blur(10px)"
                         }}
                       >
-                        {f.options.map(o => <option key={o} value={o}>{o === "All" ? `All ${f.label}s` : o}</option>)}
+                        {f.options.map(o => <option key={o} value={o} style={{ background: T.ink }}>{o === "All" ? `All ${f.label}s` : o}</option>)}
                       </select>
                    </div>
                  ))}
@@ -310,7 +312,7 @@ export default function PortfolioPage() {
                     setSelectedType("All Types");
                     setSearch("");
                   }}
-                  style={{ alignSelf: "flex-end", fontSize: "11px", color: T.wine, background: "none", border: "none", cursor: "pointer", height: "40px", padding: "0 10px" }}
+                  style={{ alignSelf: "flex-end", fontSize: "11px", color: T.gold, background: "none", border: "none", cursor: "pointer", height: "46px", padding: "0 10px", letterSpacing: "1px" }}
                  >
                    Reset Filters
                  </button>
@@ -334,23 +336,26 @@ export default function PortfolioPage() {
       )}
 
       {/* ── Origins ───────────────────────────────────────────────────────── */}
-      <section style={{ background: T.paper, padding: "80px 56px" }}>
+      <section style={{ background: T.ink, padding: "100px 56px", borderTop: `1px solid ${T.glassBorder}` }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <div style={{ textAlign: "center", marginBottom: "56px" }}>
-              <Hr w="32px" c={T.wine} style={{ margin: "0 auto 20px" }} />
-              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(28px, 4vw, 42px)", color: T.ink }}>
+            <div style={{ textAlign: "center", marginBottom: "72px" }}>
+              <Hr w="40px" c={T.gold} style={{ margin: "0 auto 24px" }} />
+              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(28px, 4vw, 44px)", color: T.paper }}>
                 Sourced from the World&apos;s Best
               </h2>
             </div>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
             {ORIGINS.map((o, i) => (
               <Reveal key={o.name} delay={i * 0.08}>
-                <div style={{ padding: "28px 24px", background: T.bg, border: `1px solid ${T.cream}`, borderRadius: "8px" }}>
-                  <div style={{ fontSize: "28px", marginBottom: "12px" }}>{o.flag}</div>
-                  <h3 style={{ fontFamily: ff.b, fontSize: "13px", fontWeight: 600, color: T.ink, marginBottom: "8px" }}>{o.name}</h3>
-                  <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.7 }}>{o.description}</p>
+                <div style={{ padding: "32px 24px", background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "12px", textAlign: "center", transition: "all 0.4s" }} 
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = T.gold}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = T.glassBorder}
+                >
+                  <div style={{ fontSize: "32px", marginBottom: "16px", filter: "drop-shadow(0 0 8px rgba(255,255,255,0.1))" }}>{o.flag}</div>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "16px", color: T.paper, marginBottom: "8px", letterSpacing: "1px" }}>{o.name}</h3>
+                  <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.4)", lineHeight: 1.7 }}>{o.description}</p>
                 </div>
               </Reveal>
             ))}
@@ -445,28 +450,30 @@ function ProductCard({ product }) {
   return (
     <div
       style={{ 
-        background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "12px", 
+        background: T.glass, border: `1px solid ${T.glassBorder}`, borderRadius: "16px", 
         display: "flex", flexDirection: "column", overflow: "hidden", height: "100%",
-        transition: "all 0.4s", transform: isHovered ? "translateY(-4px)" : "none",
-        boxShadow: isHovered ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 12px rgba(0,0,0,0.02)"
+        transition: "all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)", 
+        transform: isHovered ? "translateY(-8px)" : "none",
+        boxShadow: isHovered ? `0 20px 40px rgba(0,0,0,0.4)` : "0 8px 16px rgba(0,0,0,0.1)",
+        backdropFilter: "blur(10px)"
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={{ height: "100px", padding: "20px", display: "flex", alignItems: "center", justifyContent: "center", background: "white", borderBottom: `1px solid ${T.bg}` }}>
-        {logo ? <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} /> : <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", textTransform: "uppercase" }}>{product.brand}</span>}
+      <div style={{ height: "120px", padding: "24px", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.02)", borderBottom: `1px solid ${T.glassBorder}` }}>
+        {logo ? <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "85%", maxHeight: "85%", objectFit: "contain", filter: "brightness(0) invert(1)" }} /> : <span style={{ fontFamily: ff.h, color: T.gold, fontSize: "20px", textTransform: "uppercase" }}>{product.brand}</span>}
       </div>
-      <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
+      <div style={{ padding: "28px", display: "flex", flexDirection: "column", gap: "20px", flexGrow: 1 }}>
         <div style={{ textAlign: "center" }}>
-          <h3 style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 700, color: T.ink, marginBottom: "4px", textTransform: "uppercase" }}>{product.brand}</h3>
-          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
+          <h3 style={{ fontFamily: ff.h, fontSize: "18px", color: T.paper, marginBottom: "6px", textTransform: "uppercase", letterSpacing: "1px" }}>{product.brand}</h3>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.gold, fontStyle: "italic", opacity: 0.8 }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
         </div>
-        <div style={{ height: "240px", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }} onClick={() => product.onImageClick?.(bottle)}>
-          {bottle ? <img src={bottle} alt={product.name} style={{ height: "100%", maxWidth: "100%", objectFit: "contain", transition: "all 0.5s" }} /> : <div style={{ width: "100%", height: "100%", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>No Image</div>}
+        <div style={{ height: "260px", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }} onClick={() => product.onImageClick?.(bottle)}>
+          {bottle ? <img src={bottle} alt={product.name} style={{ height: "100%", maxWidth: "100%", objectFit: "contain", transition: "all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)", transform: isHovered ? "scale(1.05)" : "scale(1)" }} /> : <div style={{ width: "100%", height: "100%", background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.2)" }}>No Image</div>}
         </div>
-        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>{teaser}</p>
+        <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.5)", lineHeight: 1.7, textAlign: "center", flexGrow: 1 }}>{teaser}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, background: T.wine, padding: "10px 32px", borderRadius: "4px", textDecoration: "none", fontWeight: 600 }}>Details</Link>
+          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.paper, background: T.wine, padding: "12px 36px", borderRadius: "4px", textDecoration: "none", fontWeight: 600, boxShadow: `0 8px 20px ${T.wine}40` }}>Details</Link>
         </div>
       </div>
     </div>

@@ -49,14 +49,12 @@ export default function Nav() {
 
   if (isAdmin) return null; // Admin has its own top bar
 
-  const isDarkHero = (isHome || isPortfolio || isAbout) && !scrolled;
-  const dark = isDarkHero || isPortal;
+  const isDarkHero = true; // Globally transitioning to dark
+  const dark = true;
 
-  const bgColor = isPortal
+  const bgColor = menuOpen
     ? T.ink
-    : menuOpen
-    ? T.bg
-    : "rgba(248,246,243,0.96)";
+    : T.glass;
 
   return (
     <>
@@ -66,7 +64,7 @@ export default function Nav() {
         .nav-link { color: ${dark ? "rgba(255,255,255,0.5)" : T.muted}; transition: all 0.3s; }
         .nav-link:hover { color: ${T.wine} !important; }
         .square-tile {
-          width: 50px; height: 50px; background: ${T.bg}; border: 1px solid ${T.cream};
+          width: 50px; height: 50px; background: ${T.glass}; border: 1px solid ${T.glassBorder};
           display: flex; align-items: center; justify-content: center;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none; cursor: pointer; position: relative; overflow: hidden;
@@ -88,8 +86,9 @@ export default function Nav() {
           top: 0, left: 0, right: 0,
           zIndex: 900,
           background: bgColor,
-          backdropFilter: isPortal || menuOpen ? "none" : "blur(24px) saturate(1.6)",
-          borderBottom: isPortal && !menuOpen ? "none" : `1px solid ${T.cream}`,
+          backdropFilter: "blur(20px) saturate(1.8)",
+          WebkitBackdropFilter: "blur(20px) saturate(1.8)",
+          borderBottom: `1px solid ${T.glassBorder}`,
           transform: scrolled && !menuOpen ? "translateY(-100%)" : "translateY(0%)",
           transition: "background 0.4s, border 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -110,7 +109,7 @@ export default function Nav() {
               style={{ 
                 height: scrolled ? "32px" : "40px",
                 width: "auto",
-                filter: "none",
+                filter: "brightness(0) invert(1)",
                 transition: "height 0.4s",
               }} 
             />
@@ -128,7 +127,7 @@ export default function Nav() {
                   letterSpacing: "2.5px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active ? (isPortal ? T.paper : T.wine) : (isPortal ? "rgba(255,255,255,0.5)" : T.muted),
+                  color: active ? T.wine : "rgba(255,255,255,0.7)",
                 }}>
                   {label}
                 </Link>
@@ -189,8 +188,8 @@ export default function Nav() {
           maxHeight: menuOpen ? "400px" : "0",
           overflow: "hidden",
           transition: "max-height 0.35s ease, visibility 0.35s",
-          background: T.bg,
-          borderTop: menuOpen ? `1px solid ${T.cream}` : "none",
+          background: T.ink,
+          borderTop: menuOpen ? `1px solid ${T.glassBorder}` : "none",
           visibility: menuOpen ? "visible" : "hidden",
           pointerEvents: menuOpen ? "auto" : "none",
         }}>
@@ -210,9 +209,9 @@ export default function Nav() {
                   letterSpacing: "2px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active ? T.wine : T.deep,
-                  padding: "14px 0",
-                  borderBottom: `1px solid ${T.cream}`,
+                  color: active ? T.gold : "rgba(255,255,255,0.8)",
+                  padding: "16px 0",
+                  borderBottom: `1px solid ${T.glassBorder}`,
                 }}>
                   {label}
                 </Link>
