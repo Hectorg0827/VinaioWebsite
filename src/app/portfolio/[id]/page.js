@@ -164,7 +164,10 @@ export default function ProductDetailPage({ params }) {
               </p>
 
               {/* Technical Grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", padding: "40px 0", borderTop:                    <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{product.origin}</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", padding: "40px 0", borderTop: `1px solid ${T.glassBorder}` }}>
+                <div>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "8px" }}>Origin</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, fontWeight: 600 }}>{product.origin}</p>
                   <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{product.region}</p>
                 </div>
                 <div>

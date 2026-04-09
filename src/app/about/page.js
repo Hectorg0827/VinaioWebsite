@@ -362,10 +362,20 @@ export default function AboutPage() {
 
       <section style={{ padding: "120px 48px", background: T.ink }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "40px" }}>
-
-          <div style={{ background: T.glass, backdropFilter: "blur(10px)", padding: "48px", border: `1px solid ${T.glassBorder}`, borderTop: `4px solid ${T.gold}`, height: "100%", borderRadius: "12px" }}>
+          <Reveal>
+            <div style={{ background: T.glass, backdropFilter: "blur(10px)", padding: "48px", border: `1px solid ${T.glassBorder}`, borderTop: `4px solid ${T.gold}`, height: "100%", borderRadius: "12px" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>Advisors</p>
-              <h3 styl                         color: "rgba(255,255,255,0.8)"
+              <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "32px" }}>Expert Guidance</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                {(useFallback ? FALLBACK_ADVISORS : team.advisor).map((a, i) => (
+                  <Reveal key={a.name} delay={i * 0.1}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                      <div style={{ 
+                        width: "48px", height: "48px", borderRadius: "50%", 
+                        background: a.photo_url ? `url(${a.photo_url}) center/cover` : T.gold,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: ff.h, fontSize: "14px", color: "white", flexShrink: 0, overflow: "hidden",
+                        border: `1px solid rgba(255,255,255,0.1)`
                       }}>
                         {!a.photo_url && getInitials(a.name)}
                       </div>
@@ -379,6 +389,8 @@ export default function AboutPage() {
               </div>
             </div>
           </Reveal>
+
+          <Reveal delay={0.2}>
             <div style={{ background: T.glass, backdropFilter: "blur(10px)", padding: "48px", border: `1px solid ${T.glassBorder}`, borderTop: `4px solid ${T.wine}`, height: "100%", borderRadius: "12px" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wine, marginBottom: "16px", textTransform: "uppercase" }}>Administration</p>
               <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "20px" }}>Built for a Complex World</h3>
@@ -387,8 +399,6 @@ export default function AboutPage() {
               </p>
             </div>
           </Reveal>
-        </div>
-      </section>
         </div>
       </section>
 
