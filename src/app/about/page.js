@@ -150,6 +150,7 @@ export default function AboutPage() {
       {/* ── Story ─────────────────────────────────────────────────────────── */}
       <section style={{ padding: "0 48px 120px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "80px", alignItems: "start" }}>
             <Reveal>
               <div>
                 <Hr w="40px" c={T.wine} style={{ marginBottom: "24px" }} />
@@ -166,6 +167,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </Reveal>
+
             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
               <Reveal delay={0.2}>
                 <div style={{ background: T.paper, padding: "40px", borderLeft: `2px solid ${T.wine}`, borderRight: `1px solid ${T.cream}`, borderTop: `1px solid ${T.cream}`, borderBottom: `1px solid ${T.cream}`, borderRadius: "4px" }}>
