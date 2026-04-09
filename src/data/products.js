@@ -99,33 +99,33 @@ export const ACTIVE_CATEGORIES = [
 // ─── Origin regions ───────────────────────────────────────────────────────────
 export const ORIGINS = [
   {
-    name: "Dominican Republic",
-    description:
-      "The heart of Vinaio's Caribbean portfolio. From aged rums to vibrant lagers, Dominican producers represent the soul of our founding catalog.",
-    flag: "🇩🇴",
-  },
-  {
-    name: "Chile",
-    description:
-      "World-class value from the Maipo and Central Valleys. Chilean expressions offer premium quality at accessible price points.",
-    flag: "🇨🇱",
-  },
-  {
     name: "Spain",
     description:
       "Old-vine Garnacha and structured reds from Iberia's iconic appellations — the cornerstone of our European expansion.",
     flag: "🇪🇸",
   },
   {
-    name: "Italy",
+    name: "Dominican Republic",
     description:
-      "Bright, food-friendly Italian varietals sourced from artisan producers across Tuscany and beyond.",
-    flag: "🇮🇹",
+      "The heart of Vinaio's Caribbean portfolio. From aged rums to vibrant lagers, Dominican producers represent the soul of our founding catalog.",
+    flag: "🇩🇴",
+  },
+  {
+    name: "Latin American",
+    description:
+      "World-class expressions from the Central Valleys of Chile to the high altitudes of Argentina. Exceptional quality and character.",
+    flag: "🌎",
   },
   {
     name: "Europe",
     description:
-      "Premium spirits and wines sourced from across the European continent for the discerning US on-premise and retail market.",
+      "Sourcing global excellence from the world's most renowned regions, from the hills of Tuscany to the cellars of Bordeaux.",
     flag: "🇪🇺",
+  },
+  {
+    name: "South African",
+    description:
+      "Bold, sun-drenched varietals from Stellenbosch and the Western Cape. Quality-driven wines with a focus on sustainable production.",
+    flag: "🇿🇦",
   },
 ];

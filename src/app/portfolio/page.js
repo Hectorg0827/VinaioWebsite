@@ -73,37 +73,43 @@ export default function PortfolioPage() {
       id: "all", 
       title: "All Products", 
       desc: "Our complete master catalog of fine wines and spirits.",
-      img: "/images/portfolios/portfolio_all_products_1775108733532.png" 
+      img: "/images/portfolios/portfolio_all_products_1775108733532.png",
+      brands: [] 
     },
     { 
       id: "elite", 
       title: "Vinaio Elite", 
       desc: "An exclusive selection of rare vintages and premium reserves.",
-      img: "/images/portfolios/portfolio_elite_1775108751487.png" 
+      img: "/images/portfolios/portfolio_elite_1775108751487.png",
+      brands: ["Valduaro", "Perica", "Puntacana"]
     },
     { 
       id: "caribbean", 
       title: "Vinaio Caribbean", 
       desc: "The heart of the islands: Authentic rums and regional spirits.",
-      img: "/images/portfolios/portfolio_caribbean_1775108770795.png" 
+      img: "/images/portfolios/portfolio_caribbean_1775108770795.png",
+      brands: ["La Fuerza", "El Legado", "Royal Jamaican"]
     },
     { 
       id: "beer_low_alc", 
       title: "Beer & Low Alcohol", 
       desc: "Craft brews and refreshingly crisp low-alcohol selections.",
-      img: "/images/portfolios/portfolio_beer_low_alc_1775108793231.png" 
+      img: "/images/portfolios/portfolio_beer_low_alc_1775108793231.png",
+      brands: []
     },
     { 
       id: "kosher", 
       title: "Kosher Selections", 
       desc: "A curated collection of certified premium kosher wines.",
-      img: "/images/portfolios/portfolio_kosher_1775108815199.png" 
+      img: "/images/portfolios/portfolio_kosher_1775108815199.png",
+      brands: ["Desto"]
     },
     { 
       id: "intl_wines_spirits", 
       title: "International Wines & Spirits", 
       desc: "Global excellence sourced from the world's most renowned regions.",
-      img: "/images/portfolios/portfolio_intl_wines_spirits_1775108839217.png" 
+      img: "/images/portfolios/portfolio_intl_wines_spirits_1775108839217.png",
+      brands: ["French", "Argentinian"] // Descriptive for filtering
     },
   ];
 
@@ -213,33 +219,71 @@ export default function PortfolioPage() {
               </div>
             </Reveal>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "24px" }}>
-              {PORTFOLIO_CARDS.map((card, i) => (
-                <Reveal key={card.id} delay={i * 0.1}>
-                  <div 
-                    style={{ 
-                      width: "100%", height: "320px", position: "relative", borderRadius: "16px", 
-                      overflow: "hidden", border: `1px solid ${T.cream}`, background: T.paper,
-                      display: "block", zIndex: 20, transition: "all 0.4s",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.05)"
-                    }}
-                  >
-                    <img src={card.img} alt={card.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-                    <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${T.ink} 0%, transparent 60%)`, zIndex: 1 }} />
-                    <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 2 }}>
-                      <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
-                      <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.7)", lineHeight: 1.6 }}>{card.desc}</p>
-                    </div>
-                    <button
-                      onClick={() => selectPortfolio(card.id)}
-                      style={{
-                        position: "absolute", inset: 0, width: "100%", height: "100%",
-                        background: "transparent", border: "none", cursor: "pointer", zIndex: 10, outline: "none"
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "24px" }}>
+              {PORTFOLIO_CARDS.map((card, i) => {
+                // Find bottle shots for the requested brands
+                const bottleShots = card.brands.map(bName => {
+                  const prod = products.find(p => p.brand?.includes(bName) || p.origin?.includes(bName));
+                  return prod?.imageUrl || prod?.image_url;
+                }).filter(Boolean);
+
+                return (
+                  <Reveal key={card.id} delay={i * 0.1}>
+                    <div 
+                      className="portfolio-card"
+                      style={{ 
+                        width: "100%", height: "360px", position: "relative", borderRadius: "16px", 
+                        overflow: "hidden", border: `1px solid ${T.cream}`, background: T.paper,
+                        display: "block", zIndex: 20, transition: "all 0.4s",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                        cursor: "pointer"
                       }}
-                    />
-                  </div>
-                </Reveal>
-              ))}
+                      onClick={() => selectPortfolio(card.id)}
+                    >
+                      {/* B&W background image */}
+                      <img 
+                        src={card.img} 
+                        alt={card.title} 
+                        style={{ 
+                          position: "absolute", inset: 0, width: "100%", height: "100%", 
+                          objectFit: "cover", zIndex: 0, 
+                          filter: "grayscale(100%) brightness(0.6)",
+                          transition: "all 0.6s ease" 
+                        }} 
+                      />
+                      
+                      {/* Product bottle overlays */}
+                      <div style={{ 
+                        position: "absolute", top: "10%", right: "5%", bottom: "10%", left: "40%", 
+                        display: "flex", alignItems: "flex-end", justifyContent: "flex-end", 
+                        gap: "-40px", zIndex: 2, pointerEvents: "none"
+                      }}>
+                        {bottleShots.map((shot, idx) => (
+                          <img 
+                            key={idx} 
+                            src={shot} 
+                            alt="product" 
+                            style={{ 
+                              height: idx === 1 ? "90%" : "75%", 
+                              objectFit: "contain",
+                              marginRight: "-60px",
+                              filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
+                              transform: `rotate(${idx === 0 ? -5 : idx === 2 ? 5 : 0}deg)`,
+                              transition: "all 0.5s ease"
+                            }} 
+                          />
+                        ))}
+                      </div>
+
+                      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${T.ink} 0%, transparent 60%)`, zIndex: 1 }} />
+                      <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 3 }}>
+                        <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
+                        <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.7)", lineHeight: 1.6, maxWidth: "60%" }}>{card.desc}</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -344,13 +388,55 @@ export default function PortfolioPage() {
               </h2>
             </div>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }}>
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", 
+            gap: "24px",
+            alignItems: "stretch"
+          }}>
             {ORIGINS.map((o, i) => (
               <Reveal key={o.name} delay={i * 0.08}>
-                <div style={{ padding: "28px 24px", background: T.bg, border: `1px solid ${T.cream}`, borderRadius: "8px" }}>
-                  <div style={{ fontSize: "28px", marginBottom: "12px" }}>{o.flag}</div>
-                  <h3 style={{ fontFamily: ff.b, fontSize: "13px", fontWeight: 600, color: T.ink, marginBottom: "8px" }}>{o.name}</h3>
-                  <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.7 }}>{o.description}</p>
+                <div style={{ 
+                  height: "100%", 
+                  display: "flex", 
+                  flexDirection: "column", 
+                  background: T.bg, 
+                  border: `1px solid ${T.cream}`, 
+                  borderRadius: "12px", 
+                  overflow: "hidden",
+                  textAlign: "center"
+                }}>
+                  {/* Flag on top */}
+                  <div style={{ padding: "40px 24px 20px" }}>
+                    <div style={{ fontSize: "56px", marginBottom: "0" }}>{o.flag}</div>
+                  </div>
+                  
+                  {/* Description in center */}
+                  <div style={{ padding: "0 24px 80px", flexGrow: 1, display: "flex", alignItems: "center" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, lineHeight: 1.8 }}>
+                      {o.description}
+                    </p>
+                  </div>
+                  
+                  {/* Burgundy strip at bottom */}
+                  <div style={{ 
+                    background: T.wine, 
+                    padding: "16px 20px", 
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}>
+                    <h3 style={{ 
+                      fontFamily: ff.h, 
+                      fontSize: "18px", 
+                      color: T.paper, 
+                      margin: 0,
+                      letterSpacing: "0.5px"
+                    }}>
+                      {o.name}
+                    </h3>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -472,3 +558,4 @@ function ProductCard({ product }) {
     </div>
   );
 }
+
