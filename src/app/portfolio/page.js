@@ -80,8 +80,8 @@ export default function PortfolioPage() {
       id: "elite", 
       title: "Vinaio Elite", 
       desc: "An exclusive selection of rare vintages and premium reserves.",
-      img: "/images/portfolios/portfolio_elite_1775108751487.png",
-      brands: ["Valduaro", "Perica", "Puntacana"]
+      img: "/images/portfolios/elite_bg.png",
+      brands: ["Valduero", "Perica", "Puntacana"]
     },
     { 
       id: "caribbean", 
@@ -221,12 +221,6 @@ export default function PortfolioPage() {
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "24px" }}>
               {PORTFOLIO_CARDS.map((card, i) => {
-                // Find bottle shots for the requested brands
-                const bottleShots = card.brands.map(bName => {
-                  const prod = products.find(p => p.brand?.includes(bName) || p.origin?.includes(bName));
-                  return prod?.imageUrl || prod?.image_url;
-                }).filter(Boolean);
-
                 return (
                   <Reveal key={card.id} delay={i * 0.1}>
                     <div 
@@ -248,39 +242,62 @@ export default function PortfolioPage() {
                         style={{ 
                           position: "absolute", inset: 0, width: "100%", height: "100%", 
                           objectFit: "cover", zIndex: 1, 
-                          filter: "grayscale(100%) opacity(0.35)",
+                          filter: "grayscale(100%) opacity(0.65)",
                           transition: "all 0.6s ease" 
                         }} 
                       />
-                      {/* Deep overlay for text/bottle contrast */}
+                      {/* Lighter overlay for better background visibility */}
                       <div style={{ 
                         position: "absolute", inset: 0, 
-                        background: `linear-gradient(135deg, rgba(72,68,64,0.7) 0%, rgba(26,24,21,0.9) 100%)`, 
+                        background: `linear-gradient(135deg, rgba(72,68,64,0.4) 0%, rgba(26,24,21,0.7) 100%)`, 
                         zIndex: 2 
                       }} />
                       
-                      {/* Product bottle overlays */}
-                      <div style={{ 
-                        position: "absolute", top: "5%", right: "5%", bottom: "5%", left: "40%", 
-                        display: "flex", alignItems: "flex-end", justifyContent: "flex-end", 
-                        gap: "-40px", zIndex: 4, pointerEvents: "none"
-                      }}>
-                        {bottleShots.map((shot, idx) => (
-                          <img 
-                            key={idx} 
-                            src={shot} 
-                            alt="product" 
-                            style={{ 
-                              height: idx === 1 ? "95%" : "80%", 
-                              objectFit: "contain",
-                              marginRight: "-65px",
-                              filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.5))",
-                              transform: `rotate(${idx === 0 ? -6 : idx === 2 ? 6 : 0}deg) translateY(${idx === 1 ? -10 : 0}px)`,
-                              transition: "all 0.5s ease"
-                            }} 
-                          />
-                        ))}
-                      </div>
+                      {/* Product bottle overlays - USING REAL CATALOG IMAGES */}
+                      {(() => {
+                        const bottleShots = card.brands.map(bName => {
+                          const prod = products.find(p => {
+                            const brand = (p.brand || "").toLowerCase();
+                            const producer = (p.producer || "").toLowerCase();
+                            const target = bName.toLowerCase();
+                            return brand.includes(target) || producer.includes(target);
+                          });
+                          
+                          if (!prod) return null;
+                          
+                          // Prioritize image_url, then construct Bunny.net URL from image_file
+                          let url = prod.imageUrl || prod.image_url;
+                          if (!url && prod.image_file && !prod.image_file.includes('placeholder.png')) {
+                            url = `https://vinaio-bottles.b-cdn.net/${encodeURI(prod.image_file)}`;
+                          }
+                          
+                          return url || null;
+                        }).filter(Boolean);
+
+                        return (
+                          <div style={{ 
+                            position: "absolute", top: "5%", right: "8%", bottom: "5%", left: "40%", 
+                            display: "flex", alignItems: "flex-end", justifyContent: "flex-end", 
+                            gap: "-45px", zIndex: 4, pointerEvents: "none"
+                          }}>
+                            {bottleShots.map((shot, idx) => (
+                              <img 
+                                key={idx} 
+                                src={shot} 
+                                alt="authentic product" 
+                                style={{ 
+                                  height: idx === 1 ? "100%" : "85%", 
+                                  objectFit: "contain",
+                                  marginRight: "-70px",
+                                  filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.6))",
+                                  transform: `rotate(${idx === 0 ? -6 : idx === 2 ? 6 : 0}deg) translateY(${idx === 1 ? -15 : 0}px)`,
+                                  transition: "all 0.5s ease"
+                                }} 
+                              />
+                            ))}
+                          </div>
+                        );
+                      })()}
 
                       <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 5 }}>
                         <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
