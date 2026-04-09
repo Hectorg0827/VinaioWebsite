@@ -139,7 +139,7 @@ export default function HomePage() {
                style={{
                  position: 'absolute',
                  inset: 0,
-                 background: T.metal,
+                 background: T.silk,
                  clipPath: shard.clip,
                  transform: introFading ? shard.trans : "translate(0,0) rotate(0)",
                  opacity: introFading ? 0 : 1,
@@ -148,27 +148,7 @@ export default function HomePage() {
              />
            ))}
 
-                       {/* ── Spotlight Lighting Effect ────────────────────────────────── */}
-            {!introFading && (
-              <div style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 0,
-                pointerEvents: "none"
-              }}>
-                <div style={{
-                  width: "600px",
-                  height: "600px",
-                  background: "radial-gradient(circle, rgba(194,163,85,0.15) 0%, rgba(194,163,85,0.05) 40%, transparent 70%)",
-                  filter: "blur(60px)",
-                  animation: "spotlightPulse 1.2s infinite alternate ease-in-out"
-                }} />
-              </div>
-            )}
-            {/* Cinematic Exploding Sub Logos */}
+                                   {/* Cinematic Exploding Sub Logos */}
            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
              {INTRO_LOGOS.map((url, i) => (
                <div 
@@ -179,7 +159,7 @@ export default function HomePage() {
                    alignItems: "center",
                    justifyContent: "center",
                     opacity: 0,
-                    filter: `drop-shadow(1.5px 0 0 ${T.gold}) drop-shadow(-1.5px 0 0 ${T.gold}) drop-shadow(0 1.5px 0 ${T.gold}) drop-shadow(0 -1.5px 0 ${T.gold}) drop-shadow(0 8px 24px rgba(0,0,0,0.6))`,
+                    filter: `drop-shadow(1.5px 0 0 ${T.gold}) drop-shadow(-1.5px 0 0 ${T.gold}) drop-shadow(0 1.5px 0 ${T.gold}) drop-shadow(0 -1.5px 0 ${T.gold}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
                     animation: introFading ? "none" : `explodeLogo 1s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
                     animationDelay: `${i * 1.0}s`
                  }}
@@ -219,7 +199,7 @@ export default function HomePage() {
                  maskRepeat: "no-repeat",
                  maskPosition: "center",
                  opacity: 0,
-                 filter: `drop-shadow(2px 0 0 ${T.gold}) drop-shadow(-2px 0 0 ${T.gold}) drop-shadow(0 2px 0 ${T.gold}) drop-shadow(0 -2px 0 ${T.gold}) drop-shadow(0 12px 32px rgba(0,0,0,0.7))`,
+                 filter: `drop-shadow(2px 0 0 ${T.gold}) drop-shadow(-2px 0 0 ${T.gold}) drop-shadow(0 2px 0 ${T.gold}) drop-shadow(0 -2px 0 ${T.gold}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.8s both cubic-bezier(0.2, 0.8, 0.2, 1)",
                  animationDelay: introFading ? "0s" : "4.0s"
                }} 
@@ -245,10 +225,6 @@ export default function HomePage() {
           0% { transform: scale(1); opacity: 1; filter: blur(0px); }
           20% { transform: scale(1.4); opacity: 1; filter: blur(0px); }
           100% { transform: scale(5); opacity: 0; filter: blur(20px); }
-        }
-        @keyframes spotlightPulse {
-          0% { transform: scale(0.8); opacity: 0.3; }
-          100% { transform: scale(1.1); opacity: 1; }
         }
         @keyframes kenburns {
           0% { transform: scale(1.05); }
@@ -605,7 +581,7 @@ export default function HomePage() {
       </div>
       <section
         style={{
-          background: T.metal,
+          background: T.silk,
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",

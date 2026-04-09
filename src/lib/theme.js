@@ -18,6 +18,7 @@ export const T = {
   wineMetal:   "linear-gradient(180deg, #5D1F27 0%, #4E1A20 100%)", // Subdued luxury burgundy metal
   wineGlow:    "#722F3712",
   gold:        "#C2A355",
+  silk:        "linear-gradient(135deg, #FFFDF9 0%, #F5F2EE 50%, #FFFDF9 100%)", // Silky white pearl
   green:       "#1B7A4E",
   greenLight:  "#E8F5EE",
   red:         "#C0392B",
