@@ -41,10 +41,10 @@ export default function PortalLoginPage() {
   const inputStyle = {
     width: "100%",
     padding: "14px 16px",
-    background: T.paper,
-    border: `1px solid ${T.cream}`,
+    background: "rgba(255,255,255,0.06)",
+    border: "1px solid rgba(255,255,255,0.1)",
     borderRadius: "6px",
-    color: T.ink,
+    color: T.paper,
     fontFamily: ff.b,
     fontSize: "14px",
     outline: "none",
@@ -55,7 +55,7 @@ export default function PortalLoginPage() {
     <section
       style={{
         minHeight: "100vh",
-        background: T.bg,
+        background: T.ink,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -67,25 +67,25 @@ export default function PortalLoginPage() {
 
       <div style={{ width: "420px", position: "relative" }}>
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
-          <Hr w="32px" c={T.wine} style={{ margin: "0 auto 20px" }} />
-          <h1 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink, marginBottom: "8px" }}>Customer Portal</h1>
-          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted }}>Sign in to manage orders, invoices, and more</p>
+          <Hr w="32px" c={T.gold} style={{ margin: "0 auto 20px" }} />
+          <h1 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "8px" }}>Customer Portal</h1>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.warm }}>Sign in to manage orders, invoices, and more</p>
         </div>
 
-        <div style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "10px", padding: "40px 36px", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
+        <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "40px 36px" }}>
           {resetSent ? (
             <div style={{ textAlign: "center" }}>
-              <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, marginBottom: "8px" }}>Password reset email sent</p>
-              <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted }}>Check your inbox for a reset link.</p>
+              <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper, marginBottom: "8px" }}>Password reset email sent</p>
+              <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.warm }}>Check your inbox for a reset link.</p>
             </div>
           ) : (
             <form onSubmit={login}>
               <div style={{ marginBottom: "20px" }}>
-                <label style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.muted, display: "block", marginBottom: "8px" }}>Email</label>
+                <label style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, display: "block", marginBottom: "8px" }}>Email</label>
                 <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} placeholder="you@yourcompany.com" />
               </div>
               <div style={{ marginBottom: "28px" }}>
-                <label style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.muted, display: "block", marginBottom: "8px" }}>Password</label>
+                <label style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, display: "block", marginBottom: "8px" }}>Password</label>
                 <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} placeholder="••••••••" />
               </div>
               {error && <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.red, marginBottom: "16px" }}>{error}</p>}
@@ -98,15 +98,15 @@ export default function PortalLoginPage() {
               </button>
             </form>
           )}
-          <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, textAlign: "center", marginTop: "20px" }}>
+          <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.warm, textAlign: "center", marginTop: "20px" }}>
             Forgot password?{" "}
-            <span onClick={resetPassword} style={{ color: T.wine, cursor: "pointer", fontWeight: 600 }}>Reset here</span>
+            <span onClick={resetPassword} style={{ color: T.gold, cursor: "pointer" }}>Reset here</span>
           </p>
         </div>
 
-        <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, textAlign: "center", marginTop: "24px" }}>
+        <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.warm, textAlign: "center", marginTop: "24px" }}>
           Not a customer?{" "}
-          <a href="/contact" style={{ color: T.wine, fontWeight: 600 }}>Get in touch →</a>
+          <a href="/contact" style={{ color: T.gold }}>Get in touch →</a>
         </p>
       </div>
     </section>

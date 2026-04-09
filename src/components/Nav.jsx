@@ -24,8 +24,6 @@ export default function Nav() {
   const isHome      = pathname === "/";
   const isPortfolio = pathname === "/portfolio";
   const isAbout     = pathname === "/about";
-  const isServices  = pathname === "/services";
-  const isDetail    = pathname.includes("/portfolio/");
 
   useEffect(() => {
     const fetchBranding = async () => {
@@ -51,24 +49,24 @@ export default function Nav() {
 
   if (isAdmin) return null; // Admin has its own top bar
 
-  const isDarkHero = isHome || isAbout || isServices || isPortfolio || isDetail; 
-  const dark = (isDarkHero && !scrolled) || menuOpen;
+  const isDarkHero = (isHome || isPortfolio || isAbout) && !scrolled;
+  const dark = isDarkHero || isPortal;
 
-  const bgColor = menuOpen
-    ? T.paper
-    : scrolled 
-      ? "rgba(255,255,255,0.8)" 
-      : "transparent";
+  const bgColor = isPortal
+    ? T.ink
+    : menuOpen
+    ? T.bg
+    : "rgba(248,246,243,0.96)";
 
   return (
     <>
       <style>{`
         .nav-desktop { display: flex; }
         .nav-hamburger { display: none; }
-        .nav-link { color: ${dark ? "rgba(255,255,255,0.7)" : T.muted}; transition: all 0.3s; }
+        .nav-link { color: ${dark ? "rgba(255,255,255,0.5)" : T.muted}; transition: all 0.3s; }
         .nav-link:hover { color: ${T.wine} !important; }
         .square-tile {
-          width: 50px; height: 50px; background: ${scrolled ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.1)"}; border: 1px solid ${T.taupe};
+          width: 50px; height: 50px; background: ${T.bg}; border: 1px solid ${T.cream};
           display: flex; align-items: center; justify-content: center;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none; cursor: pointer; position: relative; overflow: hidden;
@@ -90,12 +88,10 @@ export default function Nav() {
           top: 0, left: 0, right: 0,
           zIndex: 900,
           background: bgColor,
-          backdropFilter: (scrolled || menuOpen) ? "blur(20px) saturate(1.8)" : "none",
-          WebkitBackdropFilter: (scrolled || menuOpen) ? "blur(20px) saturate(1.8)" : "none",
-          borderBottom: scrolled ? `1px solid ${T.cream}` : "none",
-          boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.03)" : "none",
-          transform: "translateY(0%)",
-          transition: "background 0.4s, border 0.4s, transform 0.4s",
+          backdropFilter: isPortal || menuOpen ? "none" : "blur(24px) saturate(1.6)",
+          borderBottom: isPortal && !menuOpen ? "none" : `1px solid ${T.cream}`,
+          transform: scrolled && !menuOpen ? "translateY(-100%)" : "translateY(0%)",
+          transition: "background 0.4s, border 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         {/* ── Main bar ── */}
@@ -114,8 +110,8 @@ export default function Nav() {
               style={{ 
                 height: scrolled ? "32px" : "40px",
                 width: "auto",
-                filter: dark ? "brightness(0) invert(1)" : "none",
-                transition: "all 0.4s",
+                filter: "none",
+                transition: "height 0.4s",
               }} 
             />
           </Link>
@@ -132,7 +128,7 @@ export default function Nav() {
                   letterSpacing: "2.5px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active ? T.wine : (dark ? "rgba(255,255,255,0.7)" : T.muted),
+                  color: active ? (isPortal ? T.paper : T.wine) : (isPortal ? "rgba(255,255,255,0.5)" : T.muted),
                 }}>
                   {label}
                 </Link>
@@ -148,8 +144,9 @@ export default function Nav() {
               padding: "8px 18px",
               borderRadius: "4px",
               background: isPortal ? T.wine : "transparent",
-              border: `1px solid ${isPortal ? T.wine : (dark ? "rgba(255,255,255,0.4)" : T.cream)}`,
-              color: isPortal ? T.paper : (dark ? T.paper : T.wine),
+              background: isPortal ? T.wine : "transparent",
+              border: `1px solid ${isPortal ? T.wine : T.taupe}`,
+              color: isPortal ? T.paper : T.wine,
               transition: "all 0.3s",
             }}>
               Customer Portal
@@ -192,7 +189,7 @@ export default function Nav() {
           maxHeight: menuOpen ? "400px" : "0",
           overflow: "hidden",
           transition: "max-height 0.35s ease, visibility 0.35s",
-          background: T.paper,
+          background: T.bg,
           borderTop: menuOpen ? `1px solid ${T.cream}` : "none",
           visibility: menuOpen ? "visible" : "hidden",
           pointerEvents: menuOpen ? "auto" : "none",
@@ -213,8 +210,8 @@ export default function Nav() {
                   letterSpacing: "2px",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: active ? T.wine : T.ink,
-                  padding: "16px 0",
+                  color: active ? T.wine : T.deep,
+                  padding: "14px 0",
                   borderBottom: `1px solid ${T.cream}`,
                 }}>
                   {label}

@@ -116,7 +116,7 @@ export default function ServicesPage() {
   const [audience, setAudience] = useState("suppliers");
 
   return (
-    <div style={{ background: T.bg, color: T.ink }}>
+    <div style={{ background: T.paper }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{
         background: T.metal,
@@ -135,12 +135,11 @@ export default function ServicesPage() {
           <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "20px" }}>What We Do</p>
           <h1 style={{
             fontFamily: ff.h,
-            fontSize: "clamp(48px, 7vw, 92px)",
+            fontSize: "clamp(48px, 7vw, 88px)",
             fontWeight: 400,
             color: T.paper,
-            lineHeight: 0.95,
-            marginBottom: "32px",
-            textShadow: `0 10px 30px rgba(0,0,0,0.5)`
+            lineHeight: 1,
+            marginBottom: "32px"
           }}>
             Full-Service Import<br />
             <em style={{ color: T.gold }}>& Distribution</em>
@@ -148,7 +147,7 @@ export default function ServicesPage() {
           <p style={{
             fontFamily: ff.b,
             fontSize: "18px",
-            color: T.muted,
+            color: "rgba(255,255,255,0.5)",
             maxWidth: "600px",
             margin: "0 auto",
             lineHeight: 1.75
@@ -160,23 +159,21 @@ export default function ServicesPage() {
 
       {/* ── Audience Toggle ─────────────────────────────────────────────── */}
       <section style={{
-        background: T.bg,
-        padding: "80px 48px 20px",
+        background: T.paper,
+        padding: "60px 48px 0",
+        borderBottom: `1px solid ${T.cream}`,
         textAlign: "center",
         position: "sticky",
         top: "80px",
-        zIndex: 10,
-        backdropFilter: "blur(20px)",
-        borderBottom: `1px solid ${T.cream}`
+        zIndex: 10
       }}>
         <div style={{
           display: "inline-flex",
           gap: "8px",
-          background: T.silk,
+          background: T.bg,
           padding: "6px",
-          borderRadius: "12px",
-          border: `1px solid ${T.cream}`,
-          boxShadow: `0 8px 32px rgba(0,0,0,0.05)`
+          borderRadius: "8px",
+          boxShadow: `0 4px 12px ${T.ink}08`
         }}>
           {[
             { id: "suppliers", label: "For Brands & Suppliers" },
@@ -212,13 +209,13 @@ export default function ServicesPage() {
           {/* Header */}
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "80px" }}>
-              <Hr w="40px" c={T.gold} style={{ margin: "0 auto 24px" }} />
-              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(36px, 5vw, 56px)", color: T.ink, lineHeight: 1.1, marginBottom: "24px" }}>
+              <Hr w="40px" c={T.wine} style={{ margin: "0 auto 24px" }} />
+              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(36px, 5vw, 52px)", color: T.ink, lineHeight: 1.1, marginBottom: "20px" }}>
                 {audience === "suppliers" 
                   ? "Your Partner for US Market Entry"
                   : "A Curated Portfolio, Backed by Real Support"}
               </h2>
-              <p style={{ fontFamily: ff.b, fontSize: "17px", color: T.muted, maxWidth: "600px", margin: "0 auto", lineHeight: 1.8 }}>
+              <p style={{ fontFamily: ff.b, fontSize: "17px", color: T.muted, maxWidth: "600px", margin: "0 auto", lineHeight: 1.75 }}>
                 {audience === "suppliers"
                   ? "We don't just move boxes — we build brands. Every supplier relationship is a commitment to market strategy, transparency, and execution."
                   : "From wine bars to retail chains, we make it easy to discover, order, and grow your program with authentic, high-quality products."}
@@ -234,34 +231,24 @@ export default function ServicesPage() {
                   padding: "48px",
                   background: T.paper,
                   border: `1px solid ${T.cream}`,
-                  borderRadius: "16px",
+                  borderRadius: "10px",
                   borderTop: `4px solid ${audience === "suppliers" ? T.wine : T.gold}`,
-                  height: "100%",
-                  transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-10px)";
-                  e.currentTarget.style.boxShadow = `0 20px 40px rgba(0,0,0,0.05)`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-                >
-                  <div style={{ fontSize: "36px", marginBottom: "24px" }}>{s.icon}</div>
+                  height: "100%"
+                }}>
+                  <div style={{ fontSize: "32px", marginBottom: "24px" }}>{s.icon}</div>
                   <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.ink, marginBottom: "20px" }}>{s.title}</h3>
-                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "14px" }}>
+                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
                     {s.items.map((item) => (
                       <li key={item} style={{
                         fontFamily: ff.b,
                         fontSize: "14px",
-                        color: T.muted,
+                        color: T.deep,
                         display: "flex",
                         gap: "12px",
                         alignItems: "flex-start",
-                        lineHeight: 1.7
+                        lineHeight: 1.6
                       }}>
-                        <span style={{ color: audience === "suppliers" ? T.wine : T.gold, flexShrink: 0, marginTop: "4px", fontSize: "12px" }}>◆</span>
+                        <span style={{ color: audience === "suppliers" ? T.wine : T.gold, flexShrink: 0, marginTop: "4px" }}>→</span>
                         {item}
                       </li>
                     ))}
@@ -293,20 +280,18 @@ export default function ServicesPage() {
               <Reveal key={m.market}>
                 <div style={{
                   padding: "32px",
-                  borderRadius: "12px",
-                  background: m.active ? T.wine : T.paper,
-                  border: m.active ? `1px solid ${T.wine}` : `1px solid ${T.cream}`,
-                  textAlign: "center",
-                  boxShadow: m.active ? `0 0 20px ${T.wine}20` : "none",
-                  transition: "all 0.4s"
+                  borderRadius: "8px",
+                  background: m.active ? T.wine : "rgba(255,255,255,0.03)",
+                  border: m.active ? "none" : "1px solid rgba(255,255,255,0.08)",
+                  textAlign: "center"
                 }}>
-                  <p style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "8px" }}>{m.market}</p>
+                  <p style={{ fontFamily: ff.h, fontSize: "22px", marginBottom: "8px" }}>{m.market}</p>
                   <p style={{ 
                     fontFamily: ff.b, 
                     fontSize: "10px", 
-                    letterSpacing: "3px", 
+                    letterSpacing: "2px", 
                     textTransform: "uppercase", 
-                    color: m.active ? "rgba(255,255,255,0.9)" : T.muted 
+                    color: m.active ? "rgba(255,255,255,0.7)" : T.muted 
                   }}>{m.type}</p>
                 </div>
               </Reveal>
@@ -320,8 +305,8 @@ export default function ServicesPage() {
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "80px" }}>
-              <Hr w="40px" c={T.gold} style={{ margin: "0 auto 24px" }} />
-              <h2 style={{ fontFamily: ff.h, fontSize: "44px", color: T.ink }}>The Vinaio Way</h2>
+              <Hr w="40px" c={T.wine} style={{ margin: "0 auto 24px" }} />
+              <h2 style={{ fontFamily: ff.h, fontSize: "40px", color: T.ink }}>The Vinaio Way</h2>
             </div>
           </Reveal>
 
@@ -334,9 +319,9 @@ export default function ServicesPage() {
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.1}>
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: ff.h, fontSize: "56px", color: T.gold, opacity: 0.6, marginBottom: "16px" }}>{s.n}</div>
+                  <div style={{ fontFamily: ff.h, fontSize: "48px", color: T.gold, opacity: 0.5, marginBottom: "16px" }}>{s.n}</div>
                   <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "12px" }}>{s.t}</h3>
-                  <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.7 }}>{s.d}</p>
+                  <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.6 }}>{s.d}</p>
                 </div>
               </Reveal>
             ))}
@@ -346,19 +331,19 @@ export default function ServicesPage() {
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section style={{
-        background: T.bg,
-        padding: "120px 48px",
+        background: T.paper,
+        padding: "100px 48px",
         textAlign: "center",
         borderTop: `1px solid ${T.cream}`
       }}>
         <Reveal>
-          <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 56px)", color: T.ink, marginBottom: "24px" }}>
+          <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 52px)", color: T.ink, marginBottom: "20px" }}>
             Let&apos;s Build Together
           </h2>
-          <p style={{ fontFamily: ff.b, fontSize: "18px", color: T.muted, maxWidth: "500px", margin: "0 auto 48px", lineHeight: 1.8 }}>
+          <p style={{ fontFamily: ff.b, fontSize: "18px", color: T.muted, maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.75 }}>
             Ready to learn how Vinaio can represent your brand or support your business? Let&apos;s talk.
           </p>
-          <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/contact" style={{
               fontFamily: ff.b,
               fontSize: "11px",
@@ -368,8 +353,7 @@ export default function ServicesPage() {
               padding: "18px 44px",
               display: "inline-block",
               textTransform: "uppercase",
-              fontWeight: 600,
-              boxShadow: `0 10px 30px ${T.wine}40`
+              fontWeight: 600
             }}>
               Contact Us
             </Link>
@@ -378,12 +362,11 @@ export default function ServicesPage() {
               fontSize: "11px",
               letterSpacing: "4px",
               color: T.wine,
-              border: `1px solid ${T.wine}40`,
-              background: "transparent",
+              border: `1px solid ${T.taupe}`,
               padding: "18px 44px",
               display: "inline-block",
               textTransform: "uppercase",
-              fontWeight: 600,
+              fontWeight: 600
             }}>
               Explore Portfolio
             </Link>

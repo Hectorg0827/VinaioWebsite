@@ -252,7 +252,7 @@ export default function HomePage() {
           height: "100vh",
           position: "relative",
           overflow: "hidden",
-          background: T.paper,
+          background: T.ink,
         }}
       >
         {slides.map((url, idx) => (
@@ -273,7 +273,7 @@ export default function HomePage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: `linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.6) 100%)`,
+            background: `linear-gradient(to bottom, ${T.ink} 0%, transparent 30%, transparent 70%, ${T.ink} 100%)`,
             zIndex: 2
           }}
         />
@@ -330,10 +330,9 @@ export default function HomePage() {
               marginBottom: "32px",
               opacity: loaded ? 1 : 0,
               transition: "all 1s ease 0.4s",
-              textShadow: "0 10px 40px rgba(0,0,0,0.3), 0 2px 10px rgba(0,0,0,0.2)",
+              textShadow: "0 4px 30px rgba(0,0,0,0.5)",
               maxWidth: "1100px",
-              fontWeight: 400,
-              WebkitFontSmoothing: "antialiased"
+              fontWeight: 400
             }}
           >
             {hero.title}
@@ -347,13 +346,12 @@ export default function HomePage() {
               opacity: loaded ? 0.9 : 0,
               transition: "all 1s ease 0.5s",
               marginBottom: "56px",
-              textShadow: "0 2px 8px rgba(0,0,0,0.3)",
+              textShadow: "0 2px 10px rgba(0,0,0,0.5)",
               maxWidth: "800px",
               lineHeight: 1.6,
               fontWeight: 500,
               letterSpacing: "4px",
-              textTransform: "uppercase",
-              WebkitFontSmoothing: "antialiased"
+              textTransform: "uppercase"
             }}
           >
             {hero.subtitle}
@@ -423,7 +421,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Brand Marquee ────────────────────────────────────────────────── */}
-      <section style={{ background: T.silk, padding: "50px 0", borderBottom: `1px solid ${T.cream}`, overflow: "hidden" }}>
+      <section style={{ background: T.bg, padding: "40px 0", borderBottom: `1px solid ${T.cream}`, overflow: "hidden" }}>
         <style>{`
           @keyframes marquee {
             0% { transform: translateX(0); }
@@ -450,15 +448,15 @@ export default function HomePage() {
                   style={{ 
                     height: "45px", 
                     width: "auto", 
-                    filter: "grayscale(1) opacity(0.3)",
+                    filter: "grayscale(1) opacity(0.5)",
                     transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.filter = "grayscale(0) invert(0) opacity(1)";
-                    e.currentTarget.style.transform = "scale(1.15)";
+                    e.currentTarget.style.filter = "grayscale(0) opacity(1)";
+                    e.currentTarget.style.transform = "scale(1.1)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.filter = "grayscale(1) opacity(0.3)";
+                    e.currentTarget.style.filter = "grayscale(1) opacity(0.5)";
                     e.currentTarget.style.transform = "scale(1)";
                   }}
                 />
@@ -518,7 +516,7 @@ export default function HomePage() {
               <Reveal key={s.title} delay={i * 0.2}>
                 <div
                   style={{
-                    background: T.paper,
+                    background: T.bg,
                     border: `1px solid ${T.cream}`,
                     borderRadius: "12px",
                     overflow: "hidden",
@@ -578,25 +576,22 @@ export default function HomePage() {
       </section>
 
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}
-      <div style={{ background: T.paper, padding: "40px 0" }}>
-        <ScrollLine height="100px" color={T.gold} bgColor={T.cream} nodeBg={T.paper} />
+      <div style={{ background: T.bg, padding: "40px 0" }}>
+        <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
       </div>
       <section
         style={{
           background: T.silk,
-          padding: "120px 56px",
+          padding: "100px 56px",
           position: "relative",
           overflow: "hidden",
-          borderTop: `1px solid ${T.cream}`,
-          borderBottom: `1px solid ${T.cream}`,
         }}
       >
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(circle at 70% 50%, ${T.wineDeep}40 0%, transparent 70%)`,
-            opacity: 0.6
+            background: `radial-gradient(ellipse 60% 60% at 80% 50%, ${T.wineDeep}40 0%, transparent 60%)`,
           }}
         />
         <div
@@ -621,7 +616,7 @@ export default function HomePage() {
                 style={{
                   fontFamily: ff.h,
                   fontSize: "clamp(36px, 5vw, 60px)",
-                  color: T.ink,
+                  color: T.paper,
                   lineHeight: 1.1,
                   marginBottom: "24px",
                 }}
@@ -632,7 +627,7 @@ export default function HomePage() {
                 style={{
                   fontFamily: ff.b,
                   fontSize: "15px",
-                  color: T.muted,
+                  color: "rgba(255,255,255,0.55)",
                   lineHeight: 1.8,
                   marginBottom: "40px",
                 }}
@@ -664,7 +659,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Territory ────────────────────────────────────────────────────── */}
-      <section style={{ background: T.bg, padding: "80px 56px" }}>
+      <section style={{ background: T.cream, padding: "80px 56px" }}>
         <div
           style={{
             maxWidth: "1200px",
@@ -713,7 +708,7 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
-                    minHeight: "220px",
+                    minHeight: "220px"
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-10px)";

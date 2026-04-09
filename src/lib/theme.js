@@ -27,10 +27,6 @@ export const T = {
   blueLight:   "#EBF2FA",
   orange:      "#D4760A",
   orangeLight: "#FFF3E0",
-  // ── Glassmorphism ──
-  glass:       "rgba(26, 24, 21, 0.7)", // Semi-transparent ink
-  glassBorder: "rgba(255, 253, 249, 0.08)", // Very subtle light border
-  glassLight:  "rgba(255, 253, 249, 0.03)", // For layering on dark
 };
 
 export const ff = {
