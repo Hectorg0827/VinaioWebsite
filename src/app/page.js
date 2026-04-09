@@ -581,7 +581,7 @@ export default function HomePage() {
       </div>
       <section
         style={{
-          background: T.silk,
+          background: T.metal,
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",
