@@ -573,6 +573,70 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+      {/* ── Experience Hubs ──────────────────────────────────────────────── */}
+      <section style={{ background: T.bg, padding: "100px 56px", borderTop: `1px solid ${T.cream}` }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <Reveal>
+            <div style={{ textAlign: "center", marginBottom: "64px" }}>
+              <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
+              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
+                Curating Authority
+              </p>
+              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 4.5vw, 56px)", color: T.ink, marginBottom: "20px" }}>
+                Discover the Vinaio Experience
+              </h2>
+              <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", margin: "0 auto", lineHeight: 1.8 }}>
+                Step into the stories, traditions, and craftsmanship behind our curated portfolio through our immersive educational hubs.
+              </p>
+            </div>
+          </Reveal>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "32px" }}>
+            {[
+              { 
+                title: "World of Wines", 
+                href: "/experiences/wine", 
+                img: "/images/experiences/wine_experience.png",
+                desc: "A curated journey through the world's most iconic regions, grapes, and producers."
+              },
+              { 
+                title: "Vinaio House of Rum", 
+                href: "/experiences/rum", 
+                img: "/images/experiences/rum_experience.png",
+                desc: "An exploration of heritage, aging traditions, and the soul of the Caribbean spirit."
+              }
+            ].map((exp, i) => (
+              <Reveal key={exp.href} delay={i * 0.2}>
+                <Link href={exp.href} style={{ textDecoration: "none", display: "block", position: "relative", overflow: "hidden", borderRadius: "16px", height: "480px" }}>
+                  <div style={{ position: "absolute", inset: 0, transition: "transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1)" }} onMouseEnter={e => e.currentTarget.style.transform = "scale(1.08)"} onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
+                    <img src={exp.img} alt={exp.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%)" }} />
+                  </div>
+                  
+                  <div style={{ position: "absolute", bottom: "48px", left: "48px", right: "48px", zIndex: 10 }}>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper, marginBottom: "12px" }}>{exp.title}</h3>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.6, marginBottom: "24px", maxWidth: "400px" }}>
+                      {exp.desc}
+                    </p>
+                    <div style={{ 
+                      display: "inline-block", 
+                      padding: "12px 24px", 
+                      border: "1px solid rgba(255,255,255,0.3)", 
+                      color: T.paper, 
+                      fontFamily: ff.b, 
+                      fontSize: "10px", 
+                      letterSpacing: "3px", 
+                      textTransform: "uppercase",
+                      transition: "all 0.3s"
+                    }}>
+                      Enter Experience →
+                    </div>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}

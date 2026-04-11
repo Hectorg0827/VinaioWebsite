@@ -8,6 +8,14 @@ import { T, ff } from "@/lib/theme";
 const LINKS = [
   { href: "/",          label: "Home" },
   { href: "/portfolio", label: "Portfolio" },
+  { 
+    href: "#", 
+    label: "Experiences",
+    items: [
+      { href: "/experiences/wine", label: "World of Wines" },
+      { href: "/experiences/rum",  label: "House of Rum" }
+    ]
+  },
   { href: "/about",     label: "About Us" },
   { href: "/services",  label: "Services" },
   { href: "/contact",   label: "Contact" },
@@ -17,6 +25,7 @@ export default function Nav() {
   const pathname    = usePathname();
   const [scrolled, setScrolled]   = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const [logoUrl, setLogoUrl]     = useState("/logo.png");
 
   const isPortal = pathname.startsWith("/portal");
@@ -118,20 +127,80 @@ export default function Nav() {
 
           {/* Desktop nav */}
           <nav className="nav-desktop" style={{ gap: "28px", alignItems: "center" }}>
-            {LINKS.map(({ href, label }) => {
-              const active = pathname === href;
+            {LINKS.map(({ href, label, items }) => {
+              const active = pathname === href || (items && items.some(item => pathname === item.href));
+              const hasSub = !!items;
+
               return (
-                <Link key={href} href={href} className="nav-link" style={{
-                  fontFamily: ff.b,
-                  fontSize: "10px",
-                  fontWeight: active ? 600 : 400,
-                  letterSpacing: "2.5px",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  color: active ? (isPortal ? T.paper : T.wine) : (isPortal ? "rgba(255,255,255,0.5)" : T.muted),
-                }}>
-                  {label}
-                </Link>
+                <div 
+                  key={label}
+                  className="nav-item-container"
+                  onMouseEnter={() => hasSub && setActiveDropdown(label)}
+                  onMouseLeave={() => hasSub && setActiveDropdown(null)}
+                  style={{ position: "relative" }}
+                >
+                  <Link href={href} className="nav-link" style={{
+                    fontFamily: ff.b,
+                    fontSize: "10px",
+                    fontWeight: active ? 600 : 400,
+                    letterSpacing: "2.5px",
+                    textTransform: "uppercase",
+                    textDecoration: "none",
+                    color: active ? (isPortal ? T.paper : T.wine) : (isPortal ? "rgba(255,255,255,0.5)" : T.muted),
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px"
+                  }}>
+                    {label}
+                    {hasSub && (
+                      <span style={{ fontSize: "8px", transform: activeDropdown === label ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.3s" }}>▼</span>
+                    )}
+                  </Link>
+
+                  {hasSub && (
+                    <div style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: "50%",
+                      transform: activeDropdown === label ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(10px)",
+                      opacity: activeDropdown === label ? 1 : 0,
+                      visibility: activeDropdown === label ? "visible" : "hidden",
+                      background: "rgba(255,255,255,0.98)",
+                      backdropFilter: "blur(20px)",
+                      border: `1px solid ${T.cream}`,
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                      borderRadius: "8px",
+                      padding: "16px",
+                      minWidth: "200px",
+                      transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
+                      zIndex: 1000,
+                      marginTop: "20px"
+                    }}>
+                      {items.map(sub => (
+                        <Link 
+                          key={sub.href} 
+                          href={sub.href}
+                          style={{
+                            display: "block",
+                            padding: "12px 16px",
+                            fontFamily: ff.b,
+                            fontSize: "10px",
+                            letterSpacing: "1.5px",
+                            textTransform: "uppercase",
+                            textDecoration: "none",
+                            color: pathname === sub.href ? T.wine : T.muted,
+                            transition: "all 0.3s",
+                            whiteSpace: "nowrap"
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.color = T.wine}
+                          onMouseLeave={(e) => e.currentTarget.style.color = (pathname === sub.href ? T.wine : T.muted)}
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               );
             })}
             <Link href="/portal" style={{
@@ -200,22 +269,65 @@ export default function Nav() {
             padding: "16px 32px 28px",
             gap: "0",
           }}>
-            {LINKS.map(({ href, label }) => {
-              const active = pathname === href;
+            {LINKS.map(({ href, label, items }) => {
+              const active = pathname === href || (items && items.some(item => pathname === item.href));
+              const hasSub = !!items;
+
               return (
-                <Link key={href} href={href} style={{
-                  fontFamily: ff.b,
-                  fontSize: "13px",
-                  fontWeight: active ? 600 : 400,
-                  letterSpacing: "2px",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  color: active ? T.wine : T.deep,
-                  padding: "14px 0",
-                  borderBottom: `1px solid ${T.cream}`,
-                }}>
-                  {label}
-                </Link>
+                <div key={label} style={{ borderBottom: `1px solid ${T.cream}` }}>
+                  <div 
+                    onClick={() => hasSub && setActiveDropdown(activeDropdown === label ? null : label)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "14px 0",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <Link href={hasSub ? "#" : href} style={{
+                      fontFamily: ff.b,
+                      fontSize: "13px",
+                      fontWeight: active ? 600 : 400,
+                      letterSpacing: "2px",
+                      textTransform: "uppercase",
+                      textDecoration: "none",
+                      color: active ? T.wine : T.deep,
+                      flexGrow: 1
+                    }}>
+                      {label}
+                    </Link>
+                    {hasSub && (
+                      <span style={{ fontSize: "10px", color: T.muted }}>
+                        {activeDropdown === label ? "−" : "+"}
+                      </span>
+                    )}
+                  </div>
+                  
+                  {hasSub && (
+                    <div style={{
+                      maxHeight: activeDropdown === label ? "200px" : "0",
+                      overflow: "hidden",
+                      transition: "all 0.4s ease",
+                      paddingLeft: "20px"
+                    }}>
+                      {items.map(sub => (
+                        <Link key={sub.href} href={sub.href} style={{
+                          display: "block",
+                          padding: "12px 0",
+                          fontFamily: ff.b,
+                          fontSize: "11px",
+                          letterSpacing: "1.5px",
+                          textTransform: "uppercase",
+                          textDecoration: "none",
+                          color: pathname === sub.href ? T.wine : T.muted,
+                        }}>
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               );
             })}
             <Link href="/portal" style={{
