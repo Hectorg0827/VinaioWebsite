@@ -573,6 +573,8 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+      </section>
+
       {/* ── Experience Hubs ──────────────────────────────────────────────── */}
       <section style={{ background: T.bg, padding: "100px 56px", borderTop: `1px solid ${T.cream}` }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
