@@ -19,6 +19,14 @@ export default function AdminMediaManager() {
   const [savingBranding, setSavingBranding] = useState(false);
   const [msg, setMsg] = useState(null);
 
+  // ── Video Management State ──
+  const [videos, setVideos] = useState({
+    wine: [],
+    rum: [],
+  });
+  const [savingVideos, setSavingVideos] = useState(false);
+  const [newVideo, setNewVideo] = useState({ section: "wine", title: "", youtubeUrl: "", placement: "" });
+
   useEffect(() => {
     fetchMedia();
   }, []);
@@ -47,9 +55,50 @@ export default function AdminMediaManager() {
       const resConfig = await fetch("/api/admin/config?key=branding");
       const dataConfig = await resConfig.json();
       if (dataConfig.config?.value) setBranding(dataConfig.config.value);
+
+      // Fetch experience videos
+      const resVideos = await fetch("/api/admin/config?key=experience_videos");
+      const dataVideos = await resVideos.json();
+      if (dataVideos.config?.value) setVideos(dataVideos.config.value);
     } catch (err) {
       console.error("Fetch media error:", err);
     }
+  };
+
+  const saveVideos = async () => {
+    setSavingVideos(true);
+    try {
+      const res = await fetch("/api/admin/config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: "experience_videos", value: videos }),
+      });
+      if (res.ok) {
+        setMsg({ type: "success", text: "Experience videos updated!" });
+      } else {
+        throw new Error("Save failed");
+      }
+    } catch (err) {
+      setMsg({ type: "error", text: "Failed to save videos." });
+    }
+    setSavingVideos(false);
+  };
+
+  const addVideo = () => {
+    if (!newVideo.title || !newVideo.youtubeUrl) return;
+    const section = newVideo.section;
+    const entry = {
+      id: Date.now().toString(),
+      title: newVideo.title,
+      youtubeUrl: newVideo.youtubeUrl,
+      placement: newVideo.placement || "general",
+    };
+    setVideos(prev => ({ ...prev, [section]: [...(prev[section] || []), entry] }));
+    setNewVideo({ section: newVideo.section, title: "", youtubeUrl: "", placement: "" });
+  };
+
+  const removeVideo = (section, id) => {
+    setVideos(prev => ({ ...prev, [section]: prev[section].filter(v => v.id !== id) }));
   };
 
   const saveHero = async () => {
@@ -379,6 +428,116 @@ export default function AdminMediaManager() {
               {uploadingLogo ? "Uploading..." : "Add Brand"}
             </span>
           </label>
+        </div>
+      </section>
+
+      {/* ── Experience Videos Management ── */}
+      <section style={cardStyle}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+          <div>
+            <h2 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "8px" }}>Experience Hub Videos</h2>
+            <p style={{ fontSize: "13px", color: T.muted }}>Manage YouTube videos embedded in the World of Wines and House of Rum experience pages.</p>
+          </div>
+          <button onClick={saveVideos} disabled={savingVideos} style={{ padding: "12px 32px", background: T.wine, color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 600 }}>
+            {savingVideos ? "Saving..." : "Save Videos"}
+          </button>
+        </div>
+
+        {/* Add new video form */}
+        <div style={{ background: T.bg, padding: "24px", borderRadius: "12px", marginBottom: "32px", border: `1px solid ${T.cream}` }}>
+          <p style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700, marginBottom: "16px", color: T.deep }}>Add New Video</p>
+          <div style={{ display: "grid", gridTemplateColumns: "140px 1fr 1fr 140px auto", gap: "12px", alignItems: "end" }}>
+            <div>
+              <label style={{ fontSize: "10px", display: "block", marginBottom: "6px", color: T.muted }}>Section</label>
+              <select 
+                value={newVideo.section} 
+                onChange={(e) => setNewVideo({ ...newVideo, section: e.target.value })}
+                style={{ ...inputStyle, marginBottom: 0 }}
+              >
+                <option value="wine">World of Wines</option>
+                <option value="rum">House of Rum</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: "10px", display: "block", marginBottom: "6px", color: T.muted }}>Video Title</label>
+              <input 
+                value={newVideo.title} 
+                onChange={(e) => setNewVideo({ ...newVideo, title: e.target.value })}
+                placeholder="e.g. How Wine is Made" 
+                style={{ ...inputStyle, marginBottom: 0 }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: "10px", display: "block", marginBottom: "6px", color: T.muted }}>YouTube URL</label>
+              <input 
+                value={newVideo.youtubeUrl} 
+                onChange={(e) => setNewVideo({ ...newVideo, youtubeUrl: e.target.value })}
+                placeholder="https://youtube.com/watch?v=..." 
+                style={{ ...inputStyle, marginBottom: 0 }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: "10px", display: "block", marginBottom: "6px", color: T.muted }}>Placement</label>
+              <select 
+                value={newVideo.placement} 
+                onChange={(e) => setNewVideo({ ...newVideo, placement: e.target.value })}
+                style={{ ...inputStyle, marginBottom: 0 }}
+              >
+                <option value="general">General</option>
+                <option value="hero">Hero Section</option>
+                <option value="producer">Producer Story</option>
+                <option value="education">Education</option>
+              </select>
+            </div>
+            <button 
+              onClick={addVideo}
+              style={{ padding: "12px 20px", background: T.wine, color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontFamily: ff.b, fontSize: "11px", fontWeight: 600, height: "43px" }}
+            >
+              + Add
+            </button>
+          </div>
+        </div>
+
+        {/* Wine Videos */}
+        <div style={{ marginBottom: "32px" }}>
+          <h3 style={{ fontFamily: ff.h, fontSize: "18px", color: T.wine, marginBottom: "16px" }}>
+            🍷 World of Wines Videos ({videos.wine?.length || 0})
+          </h3>
+          {videos.wine?.length === 0 && <p style={{ fontSize: "13px", color: T.muted, fontStyle: "italic" }}>No videos added yet. Add YouTube URLs above.</p>}
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {(videos.wine || []).map((v) => (
+              <div key={v.id} style={{ display: "flex", alignItems: "center", gap: "16px", padding: "12px 16px", background: T.bg, borderRadius: "8px", border: `1px solid ${T.cream}` }}>
+                <span style={{ fontSize: "12px", color: T.muted }}>▶</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontFamily: ff.b, fontSize: "13px", fontWeight: 600, color: T.ink }}>{v.title}</p>
+                  <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>{v.youtubeUrl}</p>
+                </div>
+                <span style={{ padding: "4px 10px", background: T.wineGlow, borderRadius: "12px", fontSize: "10px", color: T.wine, fontWeight: 600 }}>{v.placement}</span>
+                <button onClick={() => removeVideo('wine', v.id)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px" }}>🗑️</button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Rum Videos */}
+        <div>
+          <h3 style={{ fontFamily: ff.h, fontSize: "18px", color: T.gold, marginBottom: "16px" }}>
+            🥃 House of Rum Videos ({videos.rum?.length || 0})
+          </h3>
+          {videos.rum?.length === 0 && <p style={{ fontSize: "13px", color: T.muted, fontStyle: "italic" }}>No videos added yet. Add YouTube URLs above.</p>}
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {(videos.rum || []).map((v) => (
+              <div key={v.id} style={{ display: "flex", alignItems: "center", gap: "16px", padding: "12px 16px", background: T.bg, borderRadius: "8px", border: `1px solid ${T.cream}` }}>
+                <span style={{ fontSize: "12px", color: T.muted }}>▶</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontFamily: ff.b, fontSize: "13px", fontWeight: 600, color: T.ink }}>{v.title}</p>
+                  <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted }}>{v.youtubeUrl}</p>
+                </div>
+                <span style={{ padding: "4px 10px", background: `${T.gold}20`, borderRadius: "12px", fontSize: "10px", color: T.gold, fontWeight: 600 }}>{v.placement}</span>
+                <button onClick={() => removeVideo('rum', v.id)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px" }}>🗑️</button>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
