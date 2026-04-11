@@ -26,6 +26,7 @@ const IconWineGlass = () => (
 /* ── Navigation sections ─────────────────────────────────────────────────── */
 const SECTIONS = [
   { id: "journey",     label: "Journey" },
+  { id: "winemap",     label: "Map" },
   { id: "regions",     label: "Regions" },
   { id: "grapes",      label: "Grapes" },
   { id: "pairings",    label: "Pairings" },
@@ -41,40 +42,55 @@ const WINE_REGIONS = [
     iso: "es",
     terroir: "Dramatic limestone plateaus, old-vine Garnacha, and sun-baked Tempranillo. Spain is the heart of the Vinaio European expansion.",
     climate: "Continental & Mediterranean",
+    grapes: ["Tempranillo", "Garnacha", "Verdejo", "Albariño"],
+    pairings: "Jamón ibérico, grilled lamb, paella, manchego",
     featured: ["Cepa 21", "Campos Reales", "Castillo de Sajazarra"],
-    img: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#8B2332"
   },
   {
     name: "Italy",
     iso: "it",
     terroir: "From the Valpolicella highlands to the Primitivo vineyards of Salento — Italian wine is the language of balance and heritage.",
     climate: "Alpine to Mediterranean",
+    grapes: ["Primitivo", "Corvina", "Negroamaro", "Glera"],
+    pairings: "Osso buco, truffle pasta, aged Parmigiano, bruschetta",
     featured: ["Italo Cescon", "Cantine Leuci", "Monte Tondo"],
-    img: "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#2E7D32"
   },
   {
     name: "South Africa",
     iso: "za",
     terroir: "Stellenbosch's granite-rich soils and the cool-climate vineyards of the Western Cape produce wines of intensity and elegance.",
     climate: "Maritime Mediterranean",
+    grapes: ["Chenin Blanc", "Shiraz", "Cabernet Sauvignon", "Pinotage"],
+    pairings: "Braai meats, bobotie, grilled seafood, biltong",
     featured: ["Babylonstoren"],
-    img: "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#E65100"
   },
   {
     name: "South America",
     iso: "ar",
     terroir: "High-altitude Malbecs from Mendoza, robust Chilean Cabernets from the Maipo Valley — the New World's boldest expressions.",
     climate: "Andean Continental",
+    grapes: ["Malbec", "Cabernet Sauvignon", "Carménère", "Tannat"],
+    pairings: "Asado, empanadas, chimichurri steak, provoleta",
     featured: ["Viña Maipo", "Barrica 29"],
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#1565C0"
   },
   {
     name: "France",
     iso: "fr",
     terroir: "Legendary terroir and centuries of technique. From organic Bordeaux blends to the sun-warmed rosés of Provence.",
     climate: "Oceanic & Continental",
+    grapes: ["Merlot", "Cabernet Franc", "Grenache", "Syrah"],
+    pairings: "Duck confit, coq au vin, brie, ratatouille",
     featured: ["Château des Deux Rives"],
-    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#283593"
   }
 ];
 
@@ -181,6 +197,7 @@ function StickySubnav({ sections, activeSection }) {
 export default function WorldOfWinesPage() {
   const [activeSection, setActiveSection] = useState("journey");
   const [showNav, setShowNav] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -312,9 +329,162 @@ export default function WorldOfWinesPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
+          §3.5 — INTERACTIVE WINE MAP
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="winemap" style={{ padding: "120px 56px", background: T.bg }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <Reveal>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
+              Explore the Vinaio Wine World
+            </h2>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+              Click a region to discover its terroir, signature grapes, food pairings, and the Vinaio producers who call it home.
+            </p>
+          </Reveal>
+
+          <div style={{ display: "grid", gridTemplateColumns: selectedRegion ? "1fr 1.1fr" : "1fr", gap: "40px", transition: "all 0.4s" }}>
+            {/* Map Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", alignContent: "start" }}>
+              {WINE_REGIONS.map((region) => {
+                const isSelected = selectedRegion?.name === region.name;
+                return (
+                  <div
+                    key={region.name}
+                    onClick={() => setSelectedRegion(isSelected ? null : region)}
+                    style={{
+                      position: "relative",
+                      height: "180px",
+                      borderRadius: "16px",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      border: isSelected ? `3px solid ${T.wine}` : `1px solid ${T.cream}`,
+                      transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
+                      transform: isSelected ? "scale(1.02)" : "scale(1)",
+                      boxShadow: isSelected ? `0 12px 40px ${T.wine}20` : "none",
+                    }}
+                    onMouseEnter={e => { if (!isSelected) e.currentTarget.style.transform = "scale(1.03)"; }}
+                    onMouseLeave={e => { if (!isSelected) e.currentTarget.style.transform = "scale(1)"; }}
+                  >
+                    <img src={region.img} alt={region.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: isSelected ? "brightness(0.5)" : "brightness(0.7)" }} />
+                    <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${region.mapColor}CC 0%, transparent 70%)` }} />
+                    <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", zIndex: 2 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <img
+                          src={`https://flagcdn.com/w80/${region.iso}.png`}
+                          alt={region.name}
+                          style={{ width: "24px", height: "24px", objectFit: "cover", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.5)" }}
+                        />
+                        <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.paper, textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>{region.name}</h3>
+                      </div>
+                      <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginTop: "4px" }}>
+                        {region.featured.length} producer{region.featured.length > 1 ? "s" : ""} · {region.grapes.length} grapes
+                      </p>
+                    </div>
+                    {isSelected && (
+                      <div style={{ position: "absolute", top: "12px", right: "12px", background: T.wine, color: T.paper, padding: "4px 12px", borderRadius: "20px", fontFamily: ff.b, fontSize: "9px", letterSpacing: "1px", textTransform: "uppercase" }}>
+                        Selected
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Detail Panel */}
+            {selectedRegion && (
+              <Reveal>
+                <div style={{
+                  background: T.paper,
+                  borderRadius: "20px",
+                  border: `1px solid ${T.cream}`,
+                  overflow: "hidden",
+                  position: "sticky",
+                  top: "80px",
+                }}>
+                  <div style={{ height: "200px", overflow: "hidden", position: "relative" }}>
+                    <img src={selectedRegion.img} alt={selectedRegion.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent, ${T.paper})` }} />
+                    <button
+                      onClick={() => setSelectedRegion(null)}
+                      style={{ position: "absolute", top: "16px", right: "16px", background: "rgba(0,0,0,0.5)", color: "white", border: "none", borderRadius: "50%", width: "32px", height: "32px", cursor: "pointer", fontSize: "14px" }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div style={{ padding: "32px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "6px" }}>
+                      <img
+                        src={`https://flagcdn.com/w80/${selectedRegion.iso}.png`}
+                        alt={selectedRegion.name}
+                        style={{ width: "32px", height: "32px", objectFit: "cover", borderRadius: "50%", border: `2px solid ${T.cream}` }}
+                      />
+                      <h3 style={{ fontFamily: ff.h, fontSize: "30px", color: T.ink }}>{selectedRegion.name}</h3>
+                    </div>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.wine, marginBottom: "16px" }}>
+                      {selectedRegion.climate}
+                    </p>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.8, marginBottom: "24px" }}>
+                      {selectedRegion.terroir}
+                    </p>
+
+                    {/* Key Grapes */}
+                    <div style={{ marginBottom: "20px" }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.deep, marginBottom: "8px" }}>Key Grapes</p>
+                      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                        {selectedRegion.grapes.map(g => (
+                          <span key={g} style={{ padding: "5px 12px", background: T.bg, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", color: T.deep }}>{g}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Food Pairings */}
+                    <div style={{ marginBottom: "24px" }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.deep, marginBottom: "6px" }}>Classic Pairings</p>
+                      <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, fontStyle: "italic" }}>{selectedRegion.pairings}</p>
+                    </div>
+
+                    {/* Featured Producers */}
+                    <div style={{ borderTop: `1px solid ${T.cream}`, paddingTop: "20px", marginBottom: "24px" }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.deep, marginBottom: "8px" }}>Vinaio Producers</p>
+                      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                        {selectedRegion.featured.map(f => (
+                          <span key={f} style={{ padding: "6px 14px", background: T.wineGlow, color: T.wine, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600 }}>{f}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/portfolio"
+                      style={{
+                        display: "block",
+                        textAlign: "center",
+                        padding: "14px",
+                        background: T.wine,
+                        color: T.paper,
+                        borderRadius: "8px",
+                        fontFamily: ff.b,
+                        fontSize: "10px",
+                        letterSpacing: "2px",
+                        textTransform: "uppercase",
+                        textDecoration: "none",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Explore Wines from {selectedRegion.name} →
+                    </Link>
+                  </div>
+                </div>
+              </Reveal>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
           §4 — WINE REGIONS WE CHAMPION
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="regions" style={{ padding: "120px 56px", background: T.bg }}>
+      <section id="regions" style={{ padding: "120px 56px", background: T.paper }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />

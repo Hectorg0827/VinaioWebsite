@@ -19,11 +19,70 @@ const SECTIONS = [
 /* ── Content Data ────────────────────────────────────────────────────────── */
 
 const RUM_TIMELINE = [
-  { year: "1493", event: "Columbus brings sugarcane to the Caribbean", detail: "Sugarcane is planted for the first time in Hispaniola — the island that would become the Dominican Republic and Haiti." },
-  { year: "1650s", event: "First distillation of rum", detail: "Caribbean colonists discover that molasses — a byproduct of sugar production — can be fermented and distilled into a fiery spirit." },
-  { year: "1852", event: "Bermúdez founded in Santo Domingo", detail: "Don Erasmo Bermúdez establishes one of the Dominican Republic's first rum houses, setting the standard for Caribbean rum craftsmanship." },
-  { year: "1970s", event: "Premium rum renaissance begins", detail: "Master blenders begin applying wine-inspired aging techniques: extended barrel maturation, solera systems, and single-cask releases." },
-  { year: "Today", event: "Vinaio brings heritage to the US market", detail: "Through direct partnerships with Dominican, Jamaican, and Nepalese distilleries, Vinaio imports authentic, unaltered spirits that tell the story of their origin." },
+  { 
+    year: "1493", 
+    event: "Sugarcane arrives in the New World", 
+    detail: "Columbus plants the first sugarcane in Hispaniola. Within decades, sugar plantations spread across the Caribbean, setting the stage for a spirit that would define the region.", 
+    inGlass: "Every rum begins with sugarcane — its sweetness is the foundation of the spirit.", 
+    brand: null,
+    img: "https://images.unsplash.com/photo-1596435031111-cc367a78018e?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "1620s", 
+    event: "The first rum is distilled", 
+    detail: "Caribbean colonists discover that molasses — a byproduct of sugar production — can be fermented and distilled. The result is raw, potent, and unlike anything produced in Europe.", 
+    inGlass: "Unaged white rums still carry this original sugarcane purity.", 
+    brand: "Macorix Silver",
+    img: "https://images.unsplash.com/photo-1540822601931-e40706536554?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "1655", 
+    event: "The Royal Navy adopts rum", 
+    detail: "The British Navy replaces beer rations with rum. The 'tot' becomes a daily ritual for sailors — cementing rum as the spirit of the sea and the tropics.", 
+    inGlass: "Navy-strength dark rums preserve this bold, full-bodied tradition.", 
+    brand: "Royal Jamaican Blackstrap",
+    img: "https://images.unsplash.com/photo-1534017772609-b42d763a8a97?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "1852", 
+    event: "Bermúdez founded in Santo Domingo", 
+    detail: "Don Erasmo Bermúdez establishes one of the Dominican Republic's first rum houses. His commitment to quality and barrel aging sets the standard for Dominican rum for the next 170 years.", 
+    inGlass: "Bermúdez Añejo carries this founding DNA — rich, complex, and deeply Dominican.", 
+    brand: "Bermúdez Ron Añejo",
+    img: "https://images.unsplash.com/photo-1589407137812-78d10ed7df0a?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "Early 1900s", 
+    event: "The cocktail revolution", 
+    detail: "The Daiquiri, the Mojito, the Cuba Libre — bartenders in Havana and beyond discover that rum is the most versatile cocktail spirit. It pairs with citrus, sugar, herbs, and spice like nothing else.", 
+    inGlass: "Light, clean rums made for mixing remain essential to every cocktail bar.", 
+    brand: "Jamaican Lion Gold",
+    img: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "1970s", 
+    event: "Premium rum renaissance begins", 
+    detail: "Master blenders apply wine-inspired aging techniques: extended barrel maturation, solera systems, and single-cask releases. Rum begins its journey from party spirit to sipping spirit.", 
+    inGlass: "Aged expressions develop dried fruit, tobacco, and cocoa complexity from extra time in oak.", 
+    brand: "Puntacana Espléndido",
+    img: "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "2000s", 
+    event: "Heritage brands meet global demand", 
+    detail: "Dominican, Jamaican, and Nepalese distillers begin exporting their finest expressions to discerning markets. Authenticity and provenance become the new luxury.", 
+    inGlass: "Spiced and infused rums bring cultural botanicals — cinnamon, allspice, Himalayan herbs — to new audiences.", 
+    brand: "Khukri Spiced Rum",
+    img: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=600"
+  },
+  { 
+    year: "Today", 
+    event: "Vinaio brings heritage to the US market", 
+    detail: "Through direct partnerships with family-owned distilleries, Vinaio imports authentic, unaltered spirits that tell the story of their origin. No additives, no shortcuts — just the barrel, the blender, and the land.", 
+    inGlass: "Every bottle in the Vinaio rum portfolio is a direct line to its source — unfiltered and honest.", 
+    brand: null,
+    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600"
+  },
 ];
 
 const RUM_STYLES = [
@@ -283,7 +342,7 @@ export default function HouseOfRumPage() {
 
             {RUM_TIMELINE.map((item, i) => (
               <Reveal key={item.year} delay={i * 0.1}>
-                <div style={{ marginBottom: "56px", position: "relative" }}>
+                <div style={{ marginBottom: "80px", position: "relative" }}>
                   <div style={{
                     position: "absolute",
                     left: "-34px",
@@ -294,15 +353,48 @@ export default function HouseOfRumPage() {
                     background: T.gold,
                     boxShadow: `0 0 20px ${T.gold}40`,
                   }} />
-                  <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.gold, marginBottom: "8px", fontWeight: 700 }}>
-                    {item.year}
-                  </p>
-                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "12px" }}>
-                    {item.event}
-                  </h3>
-                  <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}>
-                    {item.detail}
-                  </p>
+                  
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 200px", gap: "32px", alignItems: "start" }}>
+                    <div>
+                      <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.gold, marginBottom: "8px", fontWeight: 700 }}>
+                        {item.year}
+                      </p>
+                      <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "16px" }}>
+                        {item.event}
+                      </h3>
+                      <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, marginBottom: "20px" }}>
+                        {item.detail}
+                      </p>
+                    </div>
+                    {item.img && (
+                      <div style={{ height: "150px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
+                        <img src={item.img} alt={item.event} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ 
+                    padding: "20px", 
+                    background: "rgba(255,255,255,0.03)", 
+                    borderRadius: "12px", 
+                    borderLeft: `2px solid ${T.gold}40`,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px"
+                  }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.4)", fontStyle: "italic", lineHeight: 1.6 }}>
+                      <strong style={{ color: T.gold, textTransform: "uppercase", fontSize: "10px", letterSpacing: "1px", fontStyle: "normal", marginRight: "8px" }}>In the Glass:</strong>
+                      {item.inGlass}
+                    </p>
+                    {item.brand && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "4px" }}>
+                        <span style={{ fontFamily: ff.b, fontSize: "10px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px" }}>Related Vinaio Spirit:</span>
+                        <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "13px", color: T.gold, textDecoration: "none", borderBottom: `1px solid ${T.gold}40`, paddingBottom: "2px" }}>
+                          {item.brand} →
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Reveal>
             ))}
