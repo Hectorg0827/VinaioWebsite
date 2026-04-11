@@ -52,8 +52,8 @@ export default function HomePage() {
       setTimeout(() => {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
-      }, 1200); // Wait for the shatter blast to finish
-    }, 6000); // Wait for 4 sequence explosions + main logo to play out
+      }, 1000); // Shorter exit blast duration
+    }, 5500); // Reduced total sequence time from 6s to 5.5s
 
     fetchContent();
   }, []);
@@ -127,12 +127,10 @@ export default function HomePage() {
         <div style={{ position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none' }}>
            {/* The Shards that make up the solid background initially */}
            {[
-             { clip: "polygon(0% 0%, 50% 0%, 50% 50%)", trans: "translate(-50vw, -50vh) rotate(-15deg)" },
-             { clip: "polygon(50% 0%, 100% 0%, 50% 50%)", trans: "translate(50vw, -40vh) rotate(20deg)" },
-             { clip: "polygon(100% 0%, 100% 100%, 50% 50%)", trans: "translate(60vw, 10vh) rotate(10deg)" },
-             { clip: "polygon(100% 100%, 50% 100%, 50% 50%)", trans: "translate(40vw, 50vh) rotate(-20deg)" },
-             { clip: "polygon(50% 100%, 0% 100%, 50% 50%)", trans: "translate(-60vw, 40vh) rotate(25deg)" },
-             { clip: "polygon(0% 100%, 0% 0%, 50% 50%)", trans: "translate(-50vw, -10vh) rotate(-10deg)" },
+             { clip: "polygon(-2% -2%, 102% -2%, 50% 51%)", trans: "translate(0, -60vh) scale(0.8)" },
+             { clip: "polygon(102% -2%, 102% 102%, 49% 50%)", trans: "translate(60vw, 0) scale(0.8)" },
+             { clip: "polygon(102% 102%, -2% 102%, 50% 49%)", trans: "translate(0, 60vh) scale(0.8)" },
+             { clip: "polygon(-2% 102%, -2% -2%, 51% 50%)", trans: "translate(-60vw, 0) scale(0.8)" },
            ].map((shard, i) => (
              <div 
                key={i}
@@ -158,10 +156,10 @@ export default function HomePage() {
                    display: "flex",
                    alignItems: "center",
                    justifyContent: "center",
-                    opacity: 0,
-                    filter: `drop-shadow(1.5px 0 0 ${T.gold}) drop-shadow(-1.5px 0 0 ${T.gold}) drop-shadow(0 1.5px 0 ${T.gold}) drop-shadow(0 -1.5px 0 ${T.gold}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
-                    animation: introFading ? "none" : `explodeLogo 1s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
-                    animationDelay: `${i * 1.0}s`
+                     opacity: 0,
+                     filter: `drop-shadow(1.5px 0 0 ${T.gold}) drop-shadow(-1.5px 0 0 ${T.gold}) drop-shadow(0 1.5px 0 ${T.gold}) drop-shadow(0 -1.5px 0 ${T.gold}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
+                     animation: introFading ? "none" : `explodeLogo 1.6s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
+                     animationDelay: `${i * 1.1}s`
                  }}
                >
                  <div
@@ -199,9 +197,9 @@ export default function HomePage() {
                  maskRepeat: "no-repeat",
                  maskPosition: "center",
                  opacity: 0,
-                 filter: `drop-shadow(2px 0 0 ${T.gold}) drop-shadow(-2px 0 0 ${T.gold}) drop-shadow(0 2px 0 ${T.gold}) drop-shadow(0 -2px 0 ${T.gold}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
-                 animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.8s both cubic-bezier(0.2, 0.8, 0.2, 1)",
-                 animationDelay: introFading ? "0s" : "4.0s"
+                  filter: `drop-shadow(2px 0 0 ${T.gold}) drop-shadow(-2px 0 0 ${T.gold}) drop-shadow(0 2px 0 ${T.gold}) drop-shadow(0 -2px 0 ${T.gold}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
+                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.6s both cubic-bezier(0.2, 0.8, 0.2, 1)",
+                  animationDelay: introFading ? "0s" : "4.4s"
                }} 
              />
            </div>
@@ -210,11 +208,11 @@ export default function HomePage() {
 
       <style>{`
         @keyframes explodeLogo {
-          0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); }
-          20% { opacity: 1; transform: scale(1.1) translateY(0px); filter: blur(0px); }
+          0% { opacity: 0; transform: scale(0.6) translateY(10px); filter: blur(4px); }
+          25% { opacity: 1; transform: scale(1.05) translateY(0px); filter: blur(0px); }
           50% { opacity: 1; transform: scale(1); filter: blur(0px); }
-          80% { opacity: 1; transform: scale(1.2); filter: blur(0px); }
-          100% { opacity: 0; transform: scale(3.5); filter: blur(10px); }
+          75% { opacity: 1; transform: scale(1.1); filter: blur(0px); }
+          100% { opacity: 0; transform: scale(1.8); filter: blur(8px); }
         }
         @keyframes logoEntrance {
           0% { transform: scale(0.3); opacity: 0; filter: blur(20px); }
@@ -576,7 +574,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Experience Hubs ──────────────────────────────────────────────── */}
-      <section style={{ background: T.bg, padding: "100px 56px", borderTop: `1px solid ${T.cream}` }}>
+      <section style={{ background: T.editorialGrey, padding: "100px 56px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "64px" }}>
@@ -584,10 +582,10 @@ export default function HomePage() {
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
                 Curating Authority
               </p>
-              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 4.5vw, 56px)", color: T.ink, marginBottom: "20px" }}>
+              <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 4.5vw, 56px)", color: T.paper, marginBottom: "20px" }}>
                 Discover the Vinaio Experience
               </h2>
-              <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", margin: "0 auto", lineHeight: 1.8 }}>
+              <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.7)", maxWidth: "600px", margin: "0 auto", lineHeight: 1.8 }}>
                 Step into the stories, traditions, and craftsmanship behind our curated portfolio through our immersive educational hubs.
               </p>
             </div>
@@ -642,8 +640,8 @@ export default function HomePage() {
       </section>
 
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}
-      <div style={{ background: T.bg, padding: "40px 0" }}>
-        <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.ink} />
+      <div style={{ background: T.editorialGrey, padding: "40px 0" }}>
+        <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.editorialGrey} />
       </div>
       <section
         style={{

@@ -180,9 +180,9 @@ function StickySubnav({ sections, activeSection }) {
       position: "sticky",
       top: 0,
       zIndex: 800,
-      background: "rgba(26,24,21,0.95)",
+      background: "rgba(120,120,120,0.95)",
       backdropFilter: "blur(16px)",
-      borderBottom: "1px solid rgba(255,255,255,0.06)",
+      borderBottom: "1px solid rgba(255,255,255,0.1)",
       padding: "0 56px",
     }}>
       <div style={{
@@ -208,8 +208,8 @@ function StickySubnav({ sections, activeSection }) {
               letterSpacing: "2px",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: activeSection === s.id ? T.gold : "rgba(255,255,255,0.4)",
-              borderBottom: activeSection === s.id ? `2px solid ${T.gold}` : "2px solid transparent",
+              color: activeSection === s.id ? "#FFFFFF" : "rgba(255,255,255,0.45)",
+              borderBottom: activeSection === s.id ? "2px solid #FFFFFF" : "2px solid transparent",
               whiteSpace: "nowrap",
               transition: "all 0.3s",
               fontWeight: activeSection === s.id ? 700 : 400,
@@ -244,7 +244,7 @@ export default function HouseOfRumPage() {
   }, []);
 
   return (
-    <main style={{ background: T.ink, minHeight: "100vh", color: T.paper }}>
+    <main style={{ background: T.editorialGrey, minHeight: "100vh", color: T.paper }}>
 
       {/* ══════════════════════════════════════════════════════════════════
           §1 — HERO
@@ -260,9 +260,9 @@ export default function HouseOfRumPage() {
         <img
           src="/images/experiences/rum_experience.png"
           alt="Vinaio House of Rum"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
         />
-        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 0%, ${T.ink} 100%)` }} />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 0%, ${T.editorialGrey} 100%)` }} />
 
         <div style={{ position: "relative", textAlign: "center", padding: "0 20px", zIndex: 10 }}>
           <Reveal>
@@ -324,7 +324,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §3 — THE ORIGINS OF RUM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="origins" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="origins" style={{ padding: "120px 56px", background: T.editorialGrey }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -338,7 +338,7 @@ export default function HouseOfRumPage() {
 
           {/* Timeline */}
           <div style={{ position: "relative", paddingLeft: "40px" }}>
-            <div style={{ position: "absolute", left: "12px", top: 0, bottom: 0, width: "2px", background: `linear-gradient(to bottom, ${T.gold}, ${T.gold}30)` }} />
+            <div style={{ position: "absolute", left: "12px", top: 0, bottom: 0, width: "2px", background: "rgba(255,255,255,0.1)" }} />
 
             {RUM_TIMELINE.map((item, i) => (
               <Reveal key={item.year} delay={i * 0.1}>
@@ -374,10 +374,10 @@ export default function HouseOfRumPage() {
                   </div>
 
                   <div style={{ 
-                    padding: "20px", 
-                    background: "rgba(255,255,255,0.03)", 
+                    padding: "24px", 
+                    background: "rgba(255,255,255,0.06)", 
                     borderRadius: "12px", 
-                    borderLeft: `2px solid ${T.gold}40`,
+                    borderLeft: `2px solid ${T.gold}`,
                     display: "flex",
                     flexDirection: "column",
                     gap: "12px"
@@ -388,8 +388,8 @@ export default function HouseOfRumPage() {
                     </p>
                     {item.brand && (
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "4px" }}>
-                        <span style={{ fontFamily: ff.b, fontSize: "10px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px" }}>Related Vinaio Spirit:</span>
-                        <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "13px", color: T.gold, textDecoration: "none", borderBottom: `1px solid ${T.gold}40`, paddingBottom: "2px" }}>
+                        <span style={{ fontFamily: ff.b, fontSize: "10px", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "1px" }}>Related Vinaio Spirit:</span>
+                        <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "13px", color: T.gold, textDecoration: "none", borderBottom: `1px solid ${T.gold}80`, paddingBottom: "2px" }}>
                           {item.brand} →
                         </Link>
                       </div>
@@ -405,8 +405,8 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §4 — THE BARREL ROOM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="barrel" style={{ padding: "120px 56px", background: "rgba(255,255,255,0.02)", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 80% 80% at 50% 100%, ${T.gold}08 0%, transparent 60%)` }} />
+      <section id="barrel" style={{ padding: "120px 56px", background: T.editorialGrey, position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(194,163,85,0.12) 0%, transparent 60%)" }} />
         <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -426,15 +426,15 @@ export default function HouseOfRumPage() {
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.1}>
                 <div style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: "16px",
                   padding: "40px 32px",
                   transition: "border-color 0.3s",
                   height: "100%",
                 }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}
                 >
                   <div style={{ fontSize: "28px", marginBottom: "20px" }}>{item.icon}</div>
                   <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.gold, marginBottom: "12px" }}>{item.title}</h3>
@@ -449,7 +449,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §5 — HOW TO TASTE RUM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="tasting" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="tasting" style={{ padding: "120px 56px", background: T.editorialGrey }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -469,7 +469,7 @@ export default function HouseOfRumPage() {
                   gridTemplateColumns: "100px 1fr",
                   gap: "32px",
                   padding: "48px 0",
-                  borderBottom: i < TASTING_STEPS.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                  borderBottom: i < TASTING_STEPS.length - 1 ? "1px solid rgba(255,255,255,0.1)" : "none",
                   alignItems: "start",
                 }}>
                   <div style={{ textAlign: "center" }}>
@@ -504,7 +504,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §6 — RUM BY STYLE
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="styles" style={{ padding: "120px 56px", background: "rgba(255,255,255,0.02)" }}>
+      <section id="styles" style={{ padding: "120px 56px", background: T.editorialGrey }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -521,7 +521,7 @@ export default function HouseOfRumPage() {
               <Reveal key={rum.style} delay={i * 0.08}>
                 <div style={{
                   background: rum.color,
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: "16px",
                   overflow: "hidden",
                   height: "100%",
@@ -530,7 +530,7 @@ export default function HouseOfRumPage() {
                   transition: "border-color 0.3s",
                 }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"}
                 >
                   <div style={{ padding: "32px 24px", flexGrow: 1 }}>
                     <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.paper, marginBottom: "12px" }}>{rum.style}</h3>
@@ -543,7 +543,7 @@ export default function HouseOfRumPage() {
                     <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.6)" }}>{rum.use}</p>
                   </div>
 
-                  <div style={{ background: `${T.gold}15`, padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div style={{ background: "rgba(194,163,85,0.12)", padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
                     <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.gold, marginBottom: "2px" }}>Vinaio Pick</p>
                     <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600 }}>{rum.featured}</p>
                   </div>
@@ -557,7 +557,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §7 — COCKTAIL STUDIO
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="cocktails" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="cocktails" style={{ padding: "120px 56px", background: T.editorialGrey }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -578,8 +578,8 @@ export default function HouseOfRumPage() {
                   gap: "0",
                   borderRadius: "20px",
                   overflow: "hidden",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  background: "rgba(255,255,255,0.02)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(255,255,255,0.05)",
                 }}>
                   <div style={{ order: i % 2 === 0 ? 0 : 1, height: "320px", overflow: "hidden" }}>
                     <img src={cocktail.img} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
@@ -592,7 +592,7 @@ export default function HouseOfRumPage() {
 
                     <div style={{ marginBottom: "20px" }}>
                       {cocktail.ingredients.map(ing => (
-                        <p key={ing} style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                        <p key={ing} style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
                           {ing}
                         </p>
                       ))}
@@ -612,7 +612,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §8 — DISTILLERY STORIES
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="distillers" style={{ padding: "120px 56px", background: "rgba(255,255,255,0.02)" }}>
+      <section id="distillers" style={{ padding: "120px 56px", background: T.editorialGrey }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -628,8 +628,8 @@ export default function HouseOfRumPage() {
             {DISTILLERY_STORIES.map((dist, i) => (
               <Reveal key={dist.name} delay={i * 0.1}>
                 <div style={{
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: "20px",
                   padding: "48px",
                   transition: "border-color 0.3s",
@@ -644,10 +644,10 @@ export default function HouseOfRumPage() {
                   <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: "20px" }}>
                     {dist.location}
                   </p>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: "24px" }}>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "24px" }}>
                     {dist.heritage}
                   </p>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "20px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px" }}>
                     <div>
                       <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>Signature Expression</p>
                       <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.gold, fontWeight: 600 }}>{dist.signature}</p>
@@ -669,7 +669,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §9 — FINAL CTA
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "140px 56px", textAlign: "center", background: T.ink }}>
+      <section style={{ padding: "140px 56px", textAlign: "center", background: T.editorialGrey }}>
         <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
           <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.paper, marginBottom: "20px" }}>Continue Exploring</h2>

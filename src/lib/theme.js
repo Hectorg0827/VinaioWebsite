@@ -12,6 +12,7 @@ export const T = {
   deep:        "#4A443C",
   ink:         "#1A1815",
   charcoal:    "#58544F", // Explicit dark grey for subpage heroes
+  editorialGrey: "#9EA1A1", // Neutral grey for immersive hub blocks
   metal:       "linear-gradient(135deg, #7A7570 0%, #484440 50%, #5C5853 100%)", // Metallic grey gradient
   wine:        "#722F37",
   wineDeep:    "#4E1A20",
