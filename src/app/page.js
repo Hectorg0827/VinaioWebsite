@@ -599,13 +599,13 @@ export default function HomePage() {
                 title: "World of Wines", 
                 href: "/experiences/wine", 
                 img: "/images/experiences/wine_experience.png",
-                desc: "A curated journey through the world's most iconic regions, grapes, and producers."
+                desc: "Explore regions, grapes, food pairings, and the producers behind every bottle in our global wine collection."
               },
               { 
                 title: "Vinaio House of Rum", 
                 href: "/experiences/rum", 
                 img: "/images/experiences/rum_experience.png",
-                desc: "An exploration of heritage, aging traditions, and the soul of the Caribbean spirit."
+                desc: "Discover barrel aging, cocktail craft, Caribbean heritage, and the distilleries shaping the spirit's future."
               }
             ].map((exp, i) => (
               <Reveal key={exp.href} delay={i * 0.2}>
