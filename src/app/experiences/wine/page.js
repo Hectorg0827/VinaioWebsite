@@ -60,6 +60,17 @@ const WINE_REGIONS = [
     mapColor: "#2E7D32"
   },
   {
+    name: "France",
+    iso: "fr",
+    terroir: "Legendary terroir and centuries of technique. From organic Bordeaux blends to the sun-warmed rosés of Provence.",
+    climate: "Oceanic & Continental",
+    grapes: ["Merlot", "Cabernet Franc", "Grenache", "Syrah"],
+    pairings: "Duck confit, coq au vin, brie, ratatouille",
+    featured: ["Château des Deux Rives"],
+    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#283593"
+  },
+  {
     name: "South Africa",
     iso: "za",
     terroir: "Stellenbosch's granite-rich soils and the cool-climate vineyards of the Western Cape produce wines of intensity and elegance.",
@@ -71,26 +82,48 @@ const WINE_REGIONS = [
     mapColor: "#E65100"
   },
   {
-    name: "South America",
+    name: "Argentina",
     iso: "ar",
-    terroir: "High-altitude Malbecs from Mendoza, robust Chilean Cabernets from the Maipo Valley — the New World's boldest expressions.",
-    climate: "Andean Continental",
-    grapes: ["Malbec", "Cabernet Sauvignon", "Carménère", "Tannat"],
-    pairings: "Asado, empanadas, chimichurri steak, provoleta",
-    featured: ["Viña Maipo", "Barrica 29"],
+    terroir: "High-altitude Malbecs from Mendoza and the Uco Valley, where the intense sun and thin air create wines of extraordinary concentration.",
+    climate: "High-Altitude Arid",
+    grapes: ["Malbec", "Cabernet Sauvignon", "Bonarda"],
+    pairings: "Asado, chimichurri steak, empanadas, provoleta",
+    featured: ["Barrica 29"],
     img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=800",
     mapColor: "#1565C0"
   },
   {
-    name: "France",
-    iso: "fr",
-    terroir: "Legendary terroir and centuries of technique. From organic Bordeaux blends to the sun-warmed rosés of Provence.",
-    climate: "Oceanic & Continental",
-    grapes: ["Merlot", "Cabernet Franc", "Grenache", "Syrah"],
-    pairings: "Duck confit, coq au vin, brie, ratatouille",
-    featured: ["Château des Deux Rives"],
-    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
-    mapColor: "#283593"
+    name: "Chile",
+    iso: "cl",
+    terroir: "Volcanic soils and cooling Pacific breezes. Chile's diverse microclimates produce world-class Cabernets and the signature Carménère.",
+    climate: "Mediterranean / Maritime",
+    grapes: ["Carménère", "Cabernet Sauvignon", "Sauvignon Blanc"],
+    pairings: "Grilled lamb, spicy stews, seafood gratin",
+    featured: ["Viña Maipo"],
+    img: "https://images.unsplash.com/photo-1559633006-25453f97221b?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#C62828"
+  },
+  {
+    name: "Peru & Colombia",
+    iso: "pe",
+    terroir: "Emerging Andean terroirs. From the desert sands of Ica to the tropical highlands, these regions offer rare and unique expressions.",
+    climate: "Desert to Tropical",
+    grapes: ["Muscat", "Tannat", "Criolla"],
+    pairings: "Ceviche, ají de gallina, grilled fish",
+    featured: ["Vinaio Selection"],
+    img: "https://images.unsplash.com/photo-1528493366411-9687d40c704f?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#F9A825"
+  },
+  {
+    name: "Dominican Republic",
+    iso: "do",
+    terroir: "Tropical highlands and traditional island craft. Home to world-class artisanal vermouths and historic fruit-based ferments.",
+    climate: "Tropical / Maritime",
+    grapes: ["Anise", "Tropical Fruits", "Aromatic Herbs"],
+    pairings: "Mofongo, Caribbean seafood, goat stew, tropical sweets",
+    featured: ["La Fuerza", "Vino Piña"],
+    img: "https://images.unsplash.com/photo-1544979592-7472097e20ec?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#0D47A1"
   }
 ];
 

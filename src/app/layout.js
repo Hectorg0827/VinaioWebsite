@@ -1,16 +1,26 @@
 import { T } from "@/lib/theme";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import Analytics from "@/components/Analytics";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import PageTransition from "@/components/PageTransition";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Vinaio Imports | Premium Spirits, Wines & Beers Distributor",
   description:
     "New York's premier beverage alcohol importer and distributor. Specializing in authentic Dominican rums, craft spirits, and exclusive international wine portfolios.",
+  metadataBase: new URL("https://www.vinaioimports.com"),
   keywords: [
     "wine importer", "spirits distributor", "beverage alcohol", "white label wine",
     "Dominican Republic rum", "Spanish wine importer", "TTB licensed", "compliance solutions",
     "logistics partner", "New York wine distributor", "New Jersey spirits",
   ],
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Vinaio Imports",
     description: "Full-service beverage alcohol importer & distributor.",
@@ -57,8 +67,14 @@ export default function RootLayout({ children }) {
         `}</style>
       </head>
       <body>
+        <Suspense fallback={null}>
+          <Analytics />
+          <PageTransition />
+        </Suspense>
         <Nav />
-        <div style={{ minHeight: "calc(100vh - 80px)" }}>{children}</div>
+        <ErrorBoundary>
+          <div style={{ minHeight: "calc(100vh - 80px)" }}>{children}</div>
+        </ErrorBoundary>
         <Footer />
       </body>
     </html>

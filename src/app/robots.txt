@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /portal/history
+Disallow: /portal/licenses
+Disallow: /portal/invoices
+Disallow: /portal/reorder
 
 Sitemap: https://www.vinaioimports.com/sitemap.xml

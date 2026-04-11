@@ -5,6 +5,7 @@ import { T, ff } from "@/lib/theme";
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminMediaManager from "@/components/AdminMediaManager";
 import AdminTeamManager from "@/components/AdminTeamManager";
+import AdminCustomerManager from "@/components/AdminCustomerManager";
 import AdminCatalogManager from "@/components/AdminCatalogManager";
 import AdminAnalytics from "@/components/AdminAnalytics";
 import Hr from "@/components/Hr";
@@ -501,6 +502,7 @@ export default function AdminDashboard({ initialProducts }) {
 
         {activeTab === "products" && renderProducts()}
         {activeTab === "media" && <AdminMediaManager />}
+        {activeTab === "customers" && <AdminCustomerManager />}
         {activeTab === "team" && <AdminTeamManager />}
         {activeTab === "catalogs" && <AdminCatalogManager />}
         {activeTab === "analytics" && <AdminAnalytics />}

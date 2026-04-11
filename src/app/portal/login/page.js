@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import { createClient } from "@/lib/supabase/client";
@@ -106,7 +107,7 @@ export default function PortalLoginPage() {
 
         <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.warm, textAlign: "center", marginTop: "24px" }}>
           Not a customer?{" "}
-          <a href="/contact" style={{ color: T.gold }}>Get in touch →</a>
+          <Link href="/portal/register" style={{ color: T.gold }}>Apply for access →</Link>
         </p>
       </div>
     </section>

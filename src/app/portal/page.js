@@ -24,6 +24,21 @@ export default async function PortalPage() {
       supabase.from("site_catalogs").select("*").order("created_at", { ascending: false }),
     ]);
 
+    // Handle Pending Status
+    if (c.data && c.data.status !== "active") {
+      return (
+        <div style={{ padding: "120px 48px", textAlign: "center", background: "white", borderRadius: "12px", border: "1px solid #eee" }}>
+          <div style={{ fontSize: "48px", marginBottom: "20px" }}>⏳</div>
+          <h2 style={{ fontSize: "24px", fontWeight: 700, marginBottom: "16px" }}>Account Pending Approval</h2>
+          <p style={{ maxWidth: "500px", margin: "0 auto", lineHeight: 1.6, color: "#666" }}>
+            Your account request for <strong>{c.data.company}</strong> is currently under review 
+            by our compliance team. We manually verify all wholesale accounts to ensure 
+            pricing integrity. You will be notified via email once your portal access is active.
+          </p>
+        </div>
+      );
+    }
+
     // Normalize customer to DashboardClient shape
     if (c.data) {
       customer = {

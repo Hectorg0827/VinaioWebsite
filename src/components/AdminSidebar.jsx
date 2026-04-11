@@ -5,6 +5,7 @@ import { T, ff } from "@/lib/theme";
 const NAV_ITEMS = [
   { id: "products",  label: "Product Catalog",   icon: "🍷" },
   { id: "media",     label: "Media & Branding",  icon: "🖼️" },
+  { id: "customers", label: "Trade Partners",    icon: "🤝" },
   { id: "team",      label: "Team Members",      icon: "👥" },
   { id: "catalogs",  label: "Customer Catalogs", icon: "📁" },
   { id: "analytics", label: "Portal Analytics",  icon: "📊" },

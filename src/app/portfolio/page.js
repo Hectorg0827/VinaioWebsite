@@ -147,6 +147,15 @@ export default function PortfolioPage() {
   const uniqueSizes = ["All Sizes", ...Array.from(new Set(products.map(p => p.unit || p.format).filter(Boolean))).sort()];
   const uniqueTypes = ["All Types", ...Array.from(new Set(products.map(p => p.type).filter(Boolean))).sort()];
 
+  const SkeletonCard = () => (
+    <div style={{ height: "480px", background: T.paper, borderRadius: "12px", border: `1px solid ${T.cream}`, padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div style={{ height: "60px", background: T.bg, borderRadius: "8px", animation: "pulse 1.5s infinite" }} />
+      <div style={{ flexGrow: 1, background: T.bg, borderRadius: "8px", animation: "pulse 1.5s infinite" }} />
+      <div style={{ height: "40px", width: "60%", margin: "0 auto", background: T.bg, borderRadius: "8px", animation: "pulse 1.5s infinite" }} />
+      <style>{`@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }`}</style>
+    </div>
+  );
+
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -394,11 +403,15 @@ export default function PortfolioPage() {
             </Reveal>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
-              {filtered.map((p, i) => (
-                <Reveal key={p.id || p.slug} delay={i * 0.05}>
-                  <ProductCard product={{ ...p, onImageClick: setSelectedImage }} />
-                </Reveal>
-              ))}
+              {syncStatus === "syncing" ? (
+                [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
+              ) : (
+                filtered.map((p, i) => (
+                  <Reveal key={p.id || p.slug} delay={i * 0.05}>
+                    <ProductCard product={{ ...p, onImageClick: setSelectedImage }} />
+                  </Reveal>
+                ))
+              )}
             </div>
             {filtered.length === 0 && (
               <div style={{ textAlign: "center", padding: "120px 0", fontFamily: ff.b, fontSize: "15px", color: T.muted }}>
