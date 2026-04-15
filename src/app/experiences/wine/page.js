@@ -89,7 +89,7 @@ const WINE_REGIONS = [
     grapes: ["Malbec", "Cabernet Sauvignon", "Bonarda"],
     pairings: "Asado, chimichurri steak, empanadas, provoleta",
     featured: ["Barrica 29"],
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800",
     mapColor: "#1565C0"
   },
   {
@@ -100,7 +100,7 @@ const WINE_REGIONS = [
     grapes: ["Carménère", "Cabernet Sauvignon", "Sauvignon Blanc"],
     pairings: "Grilled lamb, spicy stews, seafood gratin",
     featured: ["Viña Maipo"],
-    img: "https://images.unsplash.com/photo-1559633006-25453f97221b?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?auto=format&fit=crop&q=80&w=800",
     mapColor: "#C62828"
   },
   {
@@ -111,7 +111,7 @@ const WINE_REGIONS = [
     grapes: ["Muscat", "Tannat", "Criolla"],
     pairings: "Ceviche, ají de gallina, grilled fish",
     featured: ["Vinaio Selection"],
-    img: "https://images.unsplash.com/photo-1528493366411-9687d40c704f?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
     mapColor: "#F9A825"
   },
   {
@@ -122,7 +122,7 @@ const WINE_REGIONS = [
     grapes: ["Anise", "Tropical Fruits", "Aromatic Herbs"],
     pairings: "Mofongo, Caribbean seafood, goat stew, tropical sweets",
     featured: ["La Fuerza", "Vino Piña"],
-    img: "https://images.unsplash.com/photo-1544979592-7472097e20ec?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800",
     mapColor: "#0D47A1"
   }
 ];
@@ -172,7 +172,7 @@ const PRODUCER_STORIES = [
     region: "Rías Baixas, Spain",
     quote: "The Atlantic wind and the granite soil give Albariño its tension, its salinity, its sense of place.",
     signature: "Altos de Torona Albariño",
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800"
   },
 ];
 
@@ -447,36 +447,36 @@ export default function WorldOfWinesPage() {
                       <img
                         src={`https://flagcdn.com/w80/${selectedRegion.iso}.png`}
                         alt={selectedRegion.name}
-                        style={{ width: "32px", height: "32px", objectFit: "cover", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.1)" }}
+                        style={{ width: "32px", height: "32px", objectFit: "cover", borderRadius: "50%", border: "2px solid rgba(0,0,0,0.1)" }}
                       />
-                      <h3 style={{ fontFamily: ff.h, fontSize: "30px", color: T.paper }}>{selectedRegion.name}</h3>
+                      <h3 style={{ fontFamily: ff.h, fontSize: "30px", color: T.ink }}>{selectedRegion.name}</h3>
                     </div>
                     <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
                       {selectedRegion.climate}
                     </p>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "24px" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.8, marginBottom: "24px" }}>
                       {selectedRegion.terroir}
                     </p>
 
                     {/* Key Grapes */}
                     <div style={{ marginBottom: "20px" }}>
-                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "8px" }}>Key Grapes</p>
+                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Key Grapes</p>
                       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                         {selectedRegion.grapes.map(g => (
-                          <span key={g} style={{ padding: "5px 12px", background: "rgba(255,255,255,0.1)", borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", color: T.paper }}>{g}</span>
+                          <span key={g} style={{ padding: "5px 12px", background: "rgba(0,0,0,0.05)", borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", color: T.ink }}>{g}</span>
                         ))}
                       </div>
                     </div>
 
                     {/* Food Pairings */}
                     <div style={{ marginBottom: "24px" }}>
-                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "6px" }}>Classic Pairings</p>
-                      <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.7)", fontStyle: "italic" }}>{selectedRegion.pairings}</p>
+                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "6px" }}>Classic Pairings</p>
+                      <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink, fontStyle: "italic" }}>{selectedRegion.pairings}</p>
                     </div>
 
                     {/* Featured Producers */}
-                    <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px", marginBottom: "24px" }}>
-                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "8px" }}>Vinaio Producers</p>
+                    <div style={{ borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "20px", marginBottom: "24px" }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Vinaio Producers</p>
                       <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                         {selectedRegion.featured.map(f => (
                           <span key={f} style={{ padding: "6px 14px", background: "rgba(194,163,85,0.15)", color: T.gold, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600 }}>{f}</span>
@@ -548,7 +548,7 @@ export default function WorldOfWinesPage() {
                         src={`https://flagcdn.com/w80/${region.iso}.png`}
                         alt={region.name}
                       />
-                      <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper }}>{region.name}</h3>
+                      <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink }}>{region.name}</h3>
                     </div>
                     <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
                       {region.climate}

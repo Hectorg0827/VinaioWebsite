@@ -137,17 +137,17 @@ export default function ServicesPage() {
             fontFamily: ff.h,
             fontSize: "clamp(48px, 7vw, 88px)",
             fontWeight: 400,
-            color: T.paper,
+            color: T.ink,
             lineHeight: 1,
             marginBottom: "32px"
           }}>
             Full-Service Import<br />
-            <em style={{ color: T.gold }}>& Distribution</em>
+            <em style={{ color: T.wine }}>& Distribution</em>
           </h1>
           <p style={{
             fontFamily: ff.b,
             fontSize: "18px",
-            color: "rgba(255,255,255,0.5)",
+            color: T.muted,
             maxWidth: "600px",
             margin: "0 auto",
             lineHeight: 1.75
@@ -264,7 +264,7 @@ export default function ServicesPage() {
       <section style={{
         background: T.metal,
         padding: "120px 48px",
-        color: T.paper,
+        color: T.ink,
         position: "relative",
         overflow: "hidden"
       }}>
@@ -281,11 +281,11 @@ export default function ServicesPage() {
                 <div style={{
                   padding: "32px",
                   borderRadius: "8px",
-                  background: m.active ? T.wine : "rgba(255,255,255,0.03)",
-                  border: m.active ? "none" : "1px solid rgba(255,255,255,0.08)",
+                  background: m.active ? T.wine : "rgba(0,0,0,0.03)",
+                  border: m.active ? "none" : "1px solid rgba(0,0,0,0.08)",
                   textAlign: "center"
                 }}>
-                  <p style={{ fontFamily: ff.h, fontSize: "22px", marginBottom: "8px" }}>{m.market}</p>
+                  <p style={{ fontFamily: ff.h, fontSize: "22px", marginBottom: "8px", color: m.active ? T.paper : T.ink }}>{m.market}</p>
                   <p style={{ 
                     fontFamily: ff.b, 
                     fontSize: "10px", 

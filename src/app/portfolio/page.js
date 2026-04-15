@@ -182,11 +182,11 @@ export default function PortfolioPage() {
           <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
             Our Portfolio
           </p>
-          <h1 style={{ fontFamily: ff.h, fontSize: "clamp(48px, 7vw, 88px)", color: T.paper, lineHeight: 0.92, marginBottom: "24px" }}>
+          <h1 style={{ fontFamily: ff.h, fontSize: "clamp(48px, 7vw, 88px)", color: T.ink, lineHeight: 0.92, marginBottom: "24px" }}>
             Curated from<br />
             <em>the world&apos;s finest</em>
           </h1>
-          <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "480px", lineHeight: 1.8 }}>
+          <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "480px", lineHeight: 1.8 }}>
             From aged Dominican rums to old-vine Spanish Garnacha — wines, spirits, and beers
             selected for quality, character, and market performance.
           </p>
@@ -515,17 +515,17 @@ export default function PortfolioPage() {
         <div style={{ position: "relative", zIndex: 1 }}>
           <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
-          <h2 style={{ fontFamily: ff.h, fontSize: "clamp(28px, 4vw, 44px)", color: T.paper, marginBottom: "20px" }}>
+          <h2 style={{ fontFamily: ff.h, fontSize: "clamp(28px, 4vw, 44px)", color: T.ink, marginBottom: "20px" }}>
             Interested in our portfolio?
           </h2>
-          <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.5)", marginBottom: "36px", maxWidth: "480px", margin: "0 auto 36px", lineHeight: 1.8 }}>
+          <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, marginBottom: "36px", maxWidth: "480px", margin: "0 auto 36px", lineHeight: 1.8 }}>
             Trade buyers and licensed importers can access wholesale pricing and place orders directly in the Customer Portal.
           </p>
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/contact" style={{ fontFamily: ff.b, fontSize: "10.5px", letterSpacing: "3px", textTransform: "uppercase", fontWeight: 600, color: T.paper, background: T.wine, border: `1px solid ${T.wine}`, padding: "14px 32px" }}>
               Become a Partner
             </Link>
-            <Link href="/portal" style={{ fontFamily: ff.b, fontSize: "10.5px", letterSpacing: "3px", textTransform: "uppercase", fontWeight: 500, color: T.gold, background: "transparent", border: `1px solid ${T.gold}40`, padding: "14px 32px" }}>
+            <Link href="/portal" style={{ fontFamily: ff.b, fontSize: "10.5px", letterSpacing: "3px", textTransform: "uppercase", fontWeight: 500, color: T.ink, background: "transparent", border: `1px solid ${T.ink}40`, padding: "14px 32px" }}>
               Customer Portal →
             </Link>
           </div>

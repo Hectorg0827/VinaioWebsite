@@ -99,18 +99,18 @@ export default function AboutPage() {
             fontFamily: ff.h,
             fontSize: "clamp(48px, 8vw, 88px)",
             fontWeight: 400,
-            color: T.paper,
+            color: T.ink,
             lineHeight: 1,
             maxWidth: "900px",
             margin: "0 auto 32px"
           }}>
             Bridging Continents<br />
-            <em style={{ color: T.gold }}>Through Craft & Culture</em>
+            <em style={{ color: T.wine }}>Through Craft & Culture</em>
           </h1>
           <p style={{
             fontFamily: ff.b,
             fontSize: "20px",
-            color: "rgba(255,255,255,0.6)",
+            color: T.muted,
             maxWidth: "680px",
             margin: "0 auto",
             lineHeight: 1.7
@@ -194,7 +194,7 @@ export default function AboutPage() {
       <section style={{
         background: T.metal,
         padding: "120px 48px",
-        color: T.paper,
+        color: T.ink,
         position: "relative",
         overflow: "hidden"
       }}>
@@ -208,17 +208,17 @@ export default function AboutPage() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "40px" }}>
              <Reveal>
-              <div style={{ background: "rgba(255,255,255,0.03)", padding: "48px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.06)", height: "100%" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>United States</p>
+              <div style={{ background: "rgba(0,0,0,0.03)", padding: "48px", borderRadius: "8px", border: "1px solid rgba(0,0,0,0.06)", height: "100%" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wine, marginBottom: "16px", textTransform: "uppercase" }}>United States</p>
                 <h3 style={{ fontFamily: ff.h, fontSize: "32px", marginBottom: "24px" }}>Full-Service Distribution</h3>
-                <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Direct markets in NY, NJ, and FL with a national network spanning all major US metropolitan areas.</p>
+                <p style={{ fontSize: "14px", color: T.muted, lineHeight: 1.6 }}>Direct markets in NY, NJ, and FL with a national network spanning all major US metropolitan areas.</p>
               </div>
             </Reveal>
             <Reveal delay={0.2}>
-              <div style={{ background: "rgba(122, 24, 54, 0.1)", padding: "48px", borderRadius: "8px", border: `1px solid ${T.wine}30`, height: "100%" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wineGlow, marginBottom: "16px", textTransform: "uppercase" }}>Spain & Europe</p>
+              <div style={{ background: "rgba(122, 24, 54, 0.05)", padding: "48px", borderRadius: "8px", border: `1px solid ${T.wine}30`, height: "100%" }}>
+                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", color: T.wine, marginBottom: "16px", textTransform: "uppercase" }}>Spain & Europe</p>
                 <h3 style={{ fontFamily: ff.h, fontSize: "32px", marginBottom: "24px" }}>Origin-Side Operations</h3>
-                <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>Vinaio Spain SL manages sourcing and export logistics directly from Europe, ensuring unmatched quality control.</p>
+                <p style={{ fontSize: "14px", color: T.muted, lineHeight: 1.6 }}>Vinaio Spain SL manages sourcing and export logistics directly from Europe, ensuring unmatched quality control.</p>
               </div>
             </Reveal>
           </div>
@@ -310,9 +310,9 @@ export default function AboutPage() {
               overflow: "hidden"
             }}>
               <div style={{ position: "relative", zIndex: 1 }}>
-                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
-              <h2 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "12px" }}>Our Sales Team</h2>
-              <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.4)", maxWidth: "520px", margin: "0 auto 48px", lineHeight: 1.7 }}>
+                <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.wine, marginBottom: "16px", textTransform: "uppercase" }}>On the Ground</p>
+              <h2 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink, marginBottom: "12px" }}>Our Sales Team</h2>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "520px", margin: "0 auto 48px", lineHeight: 1.7 }}>
                 The backbone of Vinaio — our reps bring deep market knowledge and personal relationships to every territory.
               </p>
               
@@ -326,8 +326,8 @@ export default function AboutPage() {
                   return (
                     <div key={name} style={{
                       padding: "8px 24px 8px 8px",
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      background: "rgba(0,0,0,0.04)",
+                      border: "1px solid rgba(0,0,0,0.08)",
                       borderRadius: "40px",
                       display: "flex", alignItems: "center", gap: "12px",
                       transition: "all 0.3s"
@@ -341,7 +341,7 @@ export default function AboutPage() {
                       }}>
                         {!photo && getInitials(name)}
                       </div>
-                      <span style={{ fontFamily: ff.h, fontSize: "13px", color: T.paper, letterSpacing: "0.5px" }}>{name}</span>
+                      <span style={{ fontFamily: ff.h, fontSize: "13px", color: T.ink, letterSpacing: "0.5px" }}>{name}</span>
                     </div>
                   );
                 })}
@@ -400,10 +400,10 @@ export default function AboutPage() {
       }}>
         <div style={{ position: "relative", zIndex: 1 }}>
           <Reveal>
-            <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.paper, marginBottom: "20px" }}>
+            <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 48px)", color: T.ink, marginBottom: "20px" }}>
             Ready to Build Your Brand?
           </h2>
-          <p style={{ fontFamily: ff.b, fontSize: "17px", color: "rgba(255,255,255,0.5)", maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.7 }}>
+          <p style={{ fontFamily: ff.b, fontSize: "17px", color: T.muted, maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.7 }}>
             Whether you&apos;re a producer seeking US market entry or a buyer looking for exceptional products, we&apos;d love to hear from you.
           </p>
           <Link href="/contact" style={{

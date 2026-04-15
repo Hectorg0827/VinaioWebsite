@@ -68,10 +68,10 @@ export default function ContactPage() {
         <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 50% 70% at 60% 50%, ${T.wineDeep}40 0%, transparent 55%)` }} />
         <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
           <Hr w="32px" c={T.gold} style={{ marginBottom: "24px" }} />
-          <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
+          <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.wine, marginBottom: "16px" }}>
             Contact
           </p>
-          <h1 style={{ fontFamily: ff.h, fontSize: "clamp(44px, 6vw, 76px)", color: T.paper, lineHeight: 0.92 }}>
+          <h1 style={{ fontFamily: ff.h, fontSize: "clamp(44px, 6vw, 76px)", color: T.ink, lineHeight: 0.92 }}>
             Let&apos;s start<br /><em>a conversation</em>
           </h1>
         </div>

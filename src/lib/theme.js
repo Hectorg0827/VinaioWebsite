@@ -11,9 +11,9 @@ export const T = {
   muted:       "#7A7369",
   deep:        "#4A443C",
   ink:         "#1A1815",
-  charcoal:    "#58544F", // Explicit dark grey for subpage heroes
+  charcoal:    "#E2E0DD", // Lighter silver/grey
   editorialGrey: "#9EA1A1", // Neutral grey for immersive hub blocks
-  metal:       "linear-gradient(135deg, #7A7570 0%, #484440 50%, #5C5853 100%)", // Metallic grey gradient
+  metal:       "linear-gradient(135deg, #EBE9E5 0%, #D6D4D0 50%, #E2E0DC 100%)", // Silver metallic gradient
   wine:        "#722F37",
   wineDeep:    "#4E1A20",
   wineMetal:   "linear-gradient(180deg, #5D1F27 0%, #4E1A20 100%)", // Subdued luxury burgundy metal
