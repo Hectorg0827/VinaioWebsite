@@ -50,6 +50,22 @@ export default function AdminDashboard({ initialProducts }) {
   const [bulkData, setBulkData]   = useState("");
   const [msg, setMsg]             = useState(null);
   const [search, setSearch]       = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [missingOnly, setMissingOnly] = useState(false);
+  const itemsPerPage = 20;
+
+  const filteredProducts = products.filter(p => {
+    const matchSearch =
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      (p.brand || "").toLowerCase().includes(search.toLowerCase()) ||
+      (p.sku || p.product_code || "").toLowerCase().includes(search.toLowerCase());
+    const matchMissing = !missingOnly || (!p.image_url && !p.imageUrl);
+    return matchSearch && matchMissing;
+  });
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const [deleting, setDeleting]   = useState(null);
   const supabase = createClient();
 
@@ -438,19 +454,22 @@ export default function AdminDashboard({ initialProducts }) {
 
       {/* Product List View */}
       <div style={{ background: T.paper, borderRadius: "12px", border: `1px solid ${T.cream}`, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
-        <div style={{ padding: "20px", borderBottom: `1px solid ${T.cream}`, background: T.bg }}>
+        <div style={{ padding: "20px", borderBottom: `1px solid ${T.cream}`, background: T.bg, display: "flex", gap: "12px", alignItems: "center" }}>
           <input 
             value={search} 
-            onChange={e => setSearch(e.target.value)} 
+            onChange={e => { setSearch(e.target.value); setCurrentPage(1); }} 
             placeholder="Search by brand, product name, or SKU..." 
-            style={{ width: "100%", padding: "12px 16px", border: `1px solid ${T.cream}`, borderRadius: "8px", outline: "none", fontSize: "14px" }}
+            style={{ flex: 1, padding: "12px 16px", border: `1px solid ${T.cream}`, borderRadius: "8px", outline: "none", fontSize: "14px" }}
           />
+          <button
+            onClick={() => { setMissingOnly(v => !v); setCurrentPage(1); }}
+            style={{ padding: "10px 16px", borderRadius: "8px", border: `1px solid ${missingOnly ? T.wine : T.cream}`, background: missingOnly ? `${T.wine}15` : "white", color: missingOnly ? T.wine : T.muted, fontSize: "11px", fontWeight: 700, letterSpacing: "1px", cursor: "pointer", whiteSpace: "nowrap" }}
+          >
+            {missingOnly ? "⚠ Missing Only" : "Show All"}
+          </button>
+          <span style={{ fontSize: "11px", color: T.muted, whiteSpace: "nowrap" }}>{filteredProducts.length} items</span>
         </div>
-        {products.filter(p => 
-          p.name.toLowerCase().includes(search.toLowerCase()) || 
-          (p.brand || "").toLowerCase().includes(search.toLowerCase()) || 
-          (p.sku || p.product_code || "").toLowerCase().includes(search.toLowerCase())
-        ).map((p, i) => (
+        {paginatedProducts.map((p, i) => (
           <div key={p.id} style={{ display: "grid", gridTemplateColumns: "80px 3.5fr 1fr 1.5fr 100px", padding: "16px 20px", borderBottom: `1px solid ${T.cream}`, alignItems: "center", transition: "background 0.2s" }}>
             <div style={{ width: "56px", height: "56px", background: T.bg, borderRadius: "6px", overflow: "hidden", border: `1px solid ${T.cream}` }}>
               {p.image_url || p.imageUrl ? <img src={p.image_url || p.imageUrl} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : null}
@@ -474,6 +493,29 @@ export default function AdminDashboard({ initialProducts }) {
           </div>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "20px", marginTop: "32px", padding: "16px", background: T.paper, borderRadius: "12px", border: `1px solid ${T.cream}` }}>
+          <button 
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(c => Math.max(1, c - 1))}
+            style={{ padding: "8px 16px", background: currentPage === 1 ? T.bg : T.wine, color: currentPage === 1 ? T.muted : "white", border: "none", borderRadius: "6px", cursor: currentPage === 1 ? "default" : "pointer", fontSize: "11px", fontWeight: 700 }}
+          >
+            PREVIOUS
+          </button>
+          <span style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink, fontWeight: 600 }}>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button 
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(c => Math.min(totalPages, c + 1))}
+            style={{ padding: "8px 16px", background: currentPage === totalPages ? T.bg : T.wine, color: currentPage === totalPages ? T.muted : "white", border: "none", borderRadius: "6px", cursor: currentPage === totalPages ? "default" : "pointer", fontSize: "11px", fontWeight: 700 }}
+          >
+            NEXT
+          </button>
+        </div>
+      )}
     </div>
   );
 

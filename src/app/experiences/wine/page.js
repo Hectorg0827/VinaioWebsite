@@ -183,9 +183,9 @@ function StickySubnav({ sections, activeSection }) {
       position: "sticky",
       top: 0,
       zIndex: 800,
-      background: "rgba(120,120,120,0.95)",
+      background: "rgba(255,255,255,0.95)",
       backdropFilter: "blur(16px)",
-      borderBottom: "1px solid rgba(255,255,255,0.1)",
+      borderBottom: `1px solid ${T.cream}`,
       padding: "0 56px",
     }}>
       <div style={{
@@ -211,8 +211,8 @@ function StickySubnav({ sections, activeSection }) {
               letterSpacing: "2px",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: activeSection === s.id ? "#FFFFFF" : "rgba(255,255,255,0.5)",
-              borderBottom: activeSection === s.id ? "2px solid #FFFFFF" : "2px solid transparent",
+              color: activeSection === s.id ? T.wine : T.muted,
+              borderBottom: activeSection === s.id ? `2px solid ${T.wine}` : "2px solid transparent",
               whiteSpace: "nowrap",
               transition: "all 0.3s",
               fontWeight: activeSection === s.id ? 700 : 400,
@@ -248,7 +248,7 @@ export default function WorldOfWinesPage() {
   }, []);
 
   return (
-    <main style={{ background: T.editorialGrey, minHeight: "100vh" }}>
+    <main style={{ background: T.bg, minHeight: "100vh" }}>
 
       {/* ══════════════════════════════════════════════════════════════════
           §1 — HERO
@@ -314,14 +314,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §3 — CHOOSE YOUR JOURNEY
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="journey" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="journey" style={{ padding: "120px 56px", background: T.paper }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ margin: "0 auto 28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ margin: "0 auto 28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               Choose Your Journey
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "560px", margin: "0 auto 64px", lineHeight: 1.8 }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "560px", margin: "0 auto 64px", lineHeight: 1.8 }}>
               There is no single way to explore wine. Start from where your curiosity leads — every path connects back to the Vinaio portfolio.
             </p>
           </Reveal>
@@ -334,27 +334,24 @@ export default function WorldOfWinesPage() {
               { icon: <IconCalendar />, label: "By Occasion", desc: "Summer, dinner party, date night, beginner picks", anchor: "collections" },
             ].map((path, i) => (
               <Reveal key={path.label} delay={i * 0.1}>
-                    <a
-                      href={`#${path.anchor}`}
-                      onClick={(e) => { e.preventDefault(); document.getElementById(path.anchor)?.scrollIntoView({ behavior: "smooth" }); }}
-                      style={{
+                       <div style={{
                         display: "block",
                         padding: "40px 24px",
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        background: T.bg,
+                        border: `1px solid ${T.cream}`,
                         borderRadius: "16px",
                         textDecoration: "none",
                         textAlign: "center",
                         transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
                         cursor: "pointer",
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = T.paper; e.currentTarget.style.transform = "translateY(-6px)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = T.wine; e.currentTarget.style.transform = "translateY(-6px)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = T.cream; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
                       <div style={{ marginBottom: "20px" }}>{path.icon}</div>
-                      <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.paper, marginBottom: "12px" }}>{path.label}</h3>
-                      <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>{path.desc}</p>
-                    </a>
+                      <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.ink, marginBottom: "12px" }}>{path.label}</h3>
+                      <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6 }}>{path.desc}</p>
+                    </div>
               </Reveal>
             ))}
           </div>
@@ -364,14 +361,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §3.5 — INTERACTIVE WINE MAP
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="winemap" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="winemap" style={{ padding: "120px 56px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               Explore the Vinaio Wine World
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               Click a region to discover its terroir, signature grapes, food pairings, and the Vinaio producers who call it home.
             </p>
           </Reveal>
@@ -428,9 +425,9 @@ export default function WorldOfWinesPage() {
             {selectedRegion && (
               <Reveal>
                 <div style={{
-                  background: "rgba(255,255,255,0.05)",
+                  background: T.paper,
                   borderRadius: "20px",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: `1px solid ${T.cream}`,
                   overflow: "hidden",
                   position: "sticky",
                   top: "100px",
@@ -517,14 +514,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §4 — WINE REGIONS WE CHAMPION
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="regions" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="regions" style={{ padding: "120px 56px", background: T.paper }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               Wine Regions We Champion
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               Vinaio does not simply source from famous regions. We partner with specific producers who define the character of their land.
             </p>
           </Reveal>
@@ -537,10 +534,10 @@ export default function WorldOfWinesPage() {
                   gridTemplateColumns: i % 2 === 0 ? "1.2fr 1fr" : "1fr 1.2fr",
                   gap: "48px",
                   alignItems: "center",
-                  background: "rgba(255,255,255,0.05)",
+                  background: T.bg,
                   borderRadius: "20px",
                   overflow: "hidden",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: `1px solid ${T.cream}`,
                 }}>
                   <div style={{ order: i % 2 === 0 ? 0 : 1, height: "360px", overflow: "hidden" }}>
                     <img src={region.img} alt={region.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -550,23 +547,22 @@ export default function WorldOfWinesPage() {
                       <img
                         src={`https://flagcdn.com/w80/${region.iso}.png`}
                         alt={region.name}
-                        style={{ width: "36px", height: "36px", objectFit: "cover", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.1)" }}
                       />
                       <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper }}>{region.name}</h3>
                     </div>
                     <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
                       {region.climate}
                     </p>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "24px" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.8, marginBottom: "24px" }}>
                       {region.terroir}
                     </p>
-                    <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px" }}>
-                      <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "8px" }}>
+                    <div style={{ borderTop: `1px solid ${T.cream}`, paddingTop: "20px" }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>
                         Featured Vinaio Producers
                       </p>
                       <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                         {region.featured.map(f => (
-                          <span key={f} style={{ padding: "6px 14px", background: "rgba(194,163,85,0.15)", color: T.gold, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600 }}>
+                          <span key={f} style={{ padding: "6px 14px", background: `${T.wine}10`, color: T.wine, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600 }}>
                             {f}
                           </span>
                         ))}
@@ -583,14 +579,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §5 — GRAPE LIBRARY
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="grapes" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="grapes" style={{ padding: "120px 56px", background: T.bg }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               The Grape Library
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               Every varietal tells a different story on the palate. Learn the character of the grapes behind our portfolio — and find your next favorite bottle.
             </p>
           </Reveal>
@@ -599,25 +595,25 @@ export default function WorldOfWinesPage() {
             {GRAPE_LIBRARY.map((grape, i) => (
               <Reveal key={grape.name} delay={i * 0.06}>
                 <div style={{
-                  background: "rgba(255,255,255,0.05)",
+                  background: T.paper,
+                  border: `1px solid ${T.cream}`,
                   borderRadius: "16px",
-                  border: "1px solid rgba(255,255,255,0.1)",
                   overflow: "hidden",
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
                   transition: "border-color 0.3s",
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}
+                onMouseEnter={e => e.currentTarget.style.borderColor = T.wine}
+                onMouseLeave={e => e.currentTarget.style.borderColor = T.cream}
                 >
                   <div style={{ padding: "32px 32px 24px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
-                      <IconWineGlass />
-                      <h3 style={{ fontFamily: ff.h, fontSize: "26px", color: T.paper }}>{grape.name}</h3>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.wine} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="M6 2l.93 6.97c.29 2.19 2.12 3.83 4.33 3.83h1.48c2.21 0 4.04-1.64 4.33-3.83L18 2"/></svg>
+                      <h3 style={{ fontFamily: ff.h, fontSize: "26px", color: T.ink }}>{grape.name}</h3>
                     </div>
 
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.8)", lineHeight: 1.6, marginBottom: "20px", fontStyle: "italic" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, lineHeight: 1.6, marginBottom: "20px", fontStyle: "italic" }}>
                       {grape.profile}
                     </p>
 
@@ -656,14 +652,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §6 — PAIRING STUDIO
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="pairings" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="pairings" style={{ padding: "120px 56px", background: T.paper }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               The Pairing Studio
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               What are you eating tonight? Let us match it with the perfect bottle from our portfolio.
             </p>
           </Reveal>
@@ -672,28 +668,28 @@ export default function WorldOfWinesPage() {
             {PAIRING_GUIDE.map((pair, i) => (
               <Reveal key={pair.food} delay={i * 0.06}>
                 <div style={{
-                  background: "rgba(255,255,255,0.05)",
+                  background: T.bg,
                   borderRadius: "16px",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: `1px solid ${T.cream}`,
                   padding: "36px",
                   transition: "all 0.4s",
                   height: "100%",
                 }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = T.gold; e.currentTarget.style.transform = "translateY(-4px)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = T.wine; e.currentTarget.style.transform = "translateY(-4px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = T.cream; e.currentTarget.style.transform = "translateY(0)"; }}
                 >
                   <div style={{ fontSize: "36px", marginBottom: "20px" }}>{pair.emoji}</div>
-                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "16px" }}>{pair.food}</h3>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "16px" }}>{pair.food}</h3>
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "20px" }}>
                     {pair.wines.map(w => (
-                      <span key={w} style={{ padding: "4px 12px", background: "rgba(255,255,255,0.1)", borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", color: "rgba(255,255,255,0.7)" }}>
+                      <span key={w} style={{ padding: "4px 12px", background: `${T.wine}10`, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", color: T.wine }}>
                         {w}
                       </span>
                     ))}
                   </div>
-                  <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.gold, marginBottom: "4px" }}>Vinaio Pick</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper, fontWeight: 600 }}>{pair.pick}</p>
+                  <div style={{ borderTop: `1px solid ${T.cream}`, paddingTop: "16px" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.wine, marginBottom: "4px" }}>Vinaio Pick</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, fontWeight: 600 }}>{pair.pick}</p>
                   </div>
                 </div>
               </Reveal>
@@ -705,14 +701,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §7 — CURATED COLLECTIONS
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="collections" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="collections" style={{ padding: "120px 56px", background: T.bg }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               Curated Collections
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               Not sure where to start? We have assembled collections for every mood, moment, and craving.
             </p>
           </Reveal>
@@ -721,25 +717,25 @@ export default function WorldOfWinesPage() {
             {CURATED_COLLECTIONS.map((col, i) => (
               <Reveal key={col.name} delay={i * 0.08}>
                 <div style={{
-                  background: "rgba(255,255,255,0.05)",
+                  background: T.paper,
                   borderRadius: "16px",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: `1px solid ${T.cream}`,
                   overflow: "hidden",
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
                   transition: "border-color 0.3s",
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}
+                onMouseEnter={e => e.currentTarget.style.borderColor = T.wine}
+                onMouseLeave={e => e.currentTarget.style.borderColor = T.cream}
                 >
                   <div style={{ padding: "36px 28px", flexGrow: 1 }}>
-                    <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "12px" }}>{col.name}</h3>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.7)", lineHeight: 1.6, marginBottom: "24px" }}>{col.desc}</p>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "12px" }}>{col.name}</h3>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, lineHeight: 1.6, marginBottom: "24px" }}>{col.desc}</p>
                     <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                       {col.bottles.map(b => (
-                        <li key={b} style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.9)", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ color: T.gold, fontSize: "8px" }}>●</span> {b}
+                        <li key={b} style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink, padding: "8px 0", borderBottom: `1px solid ${T.cream}`, display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span style={{ color: T.wine, fontSize: "8px" }}>●</span> {b}
                         </li>
                       ))}
                     </ul>
@@ -769,14 +765,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §8 — PRODUCER STORIES
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="producers" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="producers" style={{ padding: "120px 56px", background: T.paper }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.paper} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               From the Cellar: Producer Stories
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.8)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               Behind every bottle is a person, a place, and a philosophy. Meet the winemakers who trust Vinaio to bring their vision to the American market.
             </p>
           </Reveal>
@@ -790,19 +786,19 @@ export default function WorldOfWinesPage() {
                   gap: "0",
                   borderRadius: "20px",
                   overflow: "hidden",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  background: "rgba(255,255,255,0.05)",
+                  border: `1px solid ${T.cream}`,
+                  background: T.bg,
                 }}>
                   <div style={{ order: i % 2 === 0 ? 0 : 1, height: "400px", overflow: "hidden" }}>
                     <img src={producer.img} alt={producer.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
                   <div style={{ order: i % 2 === 0 ? 1 : 0, padding: "56px 48px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>{producer.region}</p>
-                    <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.paper, marginBottom: "24px" }}>{producer.name}</h3>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.wine, marginBottom: "16px" }}>{producer.region}</p>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink, marginBottom: "24px" }}>{producer.name}</h3>
                     <blockquote style={{
                       fontFamily: ff.h,
                       fontSize: "18px",
-                      color: "rgba(255,255,255,0.9)",
+                      color: T.ink,
                       lineHeight: 1.7,
                       fontStyle: "italic",
                       borderLeft: `3px solid ${T.gold}`,
@@ -812,10 +808,10 @@ export default function WorldOfWinesPage() {
                     }}>
                       &ldquo;{producer.quote}&rdquo;
                     </blockquote>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "24px" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `1px solid ${T.cream}`, paddingTop: "24px" }}>
                       <div>
-                        <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)" }}>Signature Bottle</p>
-                        <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.paper, fontWeight: 600 }}>{producer.signature}</p>
+                        <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.muted }}>Signature Bottle</p>
+                        <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, fontWeight: 600 }}>{producer.signature}</p>
                       </div>
                       <Link href="/portfolio" style={{
                         fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase",
@@ -835,18 +831,18 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §9 — FINAL CTA
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "140px 56px", textAlign: "center", background: T.editorialGrey }}>
+      <section style={{ padding: "140px 56px", textAlign: "center", background: T.bg }}>
         <Reveal>
-          <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
-          <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.paper, marginBottom: "20px" }}>Continue Exploring</h2>
-          <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.6)", maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.8 }}>
+          <Hr w="32px" c={T.wine} style={{ margin: "0 auto 24px" }} />
+          <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.ink, marginBottom: "20px" }}>Continue Exploring</h2>
+          <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.8 }}>
             Ready to see the full collection? Browse over 100 wines from our global portfolio.
           </p>
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/portfolio" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.ink, background: T.paper, padding: "18px 40px", borderRadius: "4px", textDecoration: "none", fontWeight: 600 }}>
+            <Link href="/portfolio" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.paper, background: T.wine, padding: "18px 40px", borderRadius: "4px", textDecoration: "none", fontWeight: 600 }}>
               Explore Full Portfolio
             </Link>
-            <Link href="/experiences/rum" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.paper, background: "transparent", border: "1px solid rgba(255,255,255,0.3)", padding: "18px 40px", borderRadius: "4px", textDecoration: "none" }}>
+            <Link href="/experiences/rum" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.ink, background: "transparent", border: `1px solid ${T.cream}`, padding: "18px 40px", borderRadius: "4px", textDecoration: "none" }}>
               Enter House of Rum →
             </Link>
           </div>

@@ -1,4 +1,5 @@
 "use client";
+// NOTE: SEO metadata is handled by src/app/portfolio/[id]/layout.js (server component)
 
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
@@ -123,8 +124,26 @@ export default function ProductDetailPage({ params }) {
             <p style={{ fontFamily: ff.b, fontSize: "20px", color: T.wine, fontStyle: "italic", fontWeight: 500, marginBottom: "16px" }}>
               {product.name} {product.type ? `· ${product.type}` : ""}
             </p>
+            
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginBottom: "24px" }}>
+              <span style={{ 
+                padding: "4px 12px", borderRadius: "20px", fontSize: "10px", fontFamily: ff.b, fontWeight: 700, letterSpacing: "1px",
+                background: product.inStock ? "#E6F4EA" : "#FCE8E6", color: product.inStock ? "#1E8E3E" : "#D93025", border: "1px solid currentColor"
+              }}>
+                {product.inStock ? "IN STOCK" : "OUT OF STOCK"}
+              </span>
+              {product.featured && (
+                <span style={{ 
+                  padding: "4px 12px", borderRadius: "20px", fontSize: "10px", fontFamily: ff.b, fontWeight: 700, letterSpacing: "1px",
+                  background: "#FEF7E0", color: "#B05E27", border: "1px solid currentColor"
+                }}>
+                  FEATURED SELECTION
+                </span>
+              )}
+            </div>
+
             {product.summary && (
-              <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.6)", maxWidth: "800px", margin: "0 auto", lineHeight: 1.6 }}>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.7)", maxWidth: "800px", margin: "0 auto", lineHeight: 1.6, fontWeight: 300 }}>
                 {product.summary}
               </p>
             )}

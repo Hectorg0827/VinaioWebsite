@@ -180,7 +180,7 @@ function StickySubnav({ sections, activeSection }) {
       position: "sticky",
       top: 0,
       zIndex: 800,
-      background: "rgba(120,120,120,0.95)",
+      background: "rgba(10,10,10,0.95)",
       backdropFilter: "blur(16px)",
       borderBottom: "1px solid rgba(255,255,255,0.1)",
       padding: "0 56px",
@@ -244,7 +244,7 @@ export default function HouseOfRumPage() {
   }, []);
 
   return (
-    <main style={{ background: T.editorialGrey, minHeight: "100vh", color: T.paper }}>
+    <main style={{ background: T.ink, minHeight: "100vh", color: T.paper }}>
 
       {/* ══════════════════════════════════════════════════════════════════
           §1 — HERO
@@ -262,7 +262,7 @@ export default function HouseOfRumPage() {
           alt="Vinaio House of Rum"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
         />
-        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 0%, ${T.editorialGrey} 100%)` }} />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 0%, ${T.ink} 100%)` }} />
 
         <div style={{ position: "relative", textAlign: "center", padding: "0 20px", zIndex: 10 }}>
           <Reveal>
@@ -324,7 +324,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §3 — THE ORIGINS OF RUM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="origins" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="origins" style={{ padding: "120px 56px", background: T.ink }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -405,7 +405,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §4 — THE BARREL ROOM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="barrel" style={{ padding: "120px 56px", background: T.editorialGrey, position: "relative", overflow: "hidden" }}>
+      <section id="barrel" style={{ padding: "120px 56px", background: T.ink, position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(194,163,85,0.12) 0%, transparent 60%)" }} />
         <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative" }}>
           <Reveal>
@@ -449,7 +449,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §5 — HOW TO TASTE RUM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="tasting" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="tasting" style={{ padding: "120px 56px", background: T.ink }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -504,7 +504,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §6 — RUM BY STYLE
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="styles" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="styles" style={{ padding: "120px 56px", background: T.ink }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -557,7 +557,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §7 — COCKTAIL STUDIO
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="cocktails" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="cocktails" style={{ padding: "120px 56px", background: T.ink }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -612,7 +612,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §8 — DISTILLERY STORIES
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="distillers" style={{ padding: "120px 56px", background: T.editorialGrey }}>
+      <section id="distillers" style={{ padding: "120px 56px", background: T.ink }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -669,7 +669,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §9 — FINAL CTA
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "140px 56px", textAlign: "center", background: T.editorialGrey }}>
+      <section style={{ padding: "140px 56px", textAlign: "center", background: T.ink }}>
         <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
           <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.paper, marginBottom: "20px" }}>Continue Exploring</h2>

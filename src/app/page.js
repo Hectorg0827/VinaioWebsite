@@ -645,7 +645,7 @@ export default function HomePage() {
       </div>
       <section
         style={{
-          background: T.metal,
+          background: T.editorialGrey,
           padding: "100px 56px",
           position: "relative",
           overflow: "hidden",
@@ -655,7 +655,7 @@ export default function HomePage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(ellipse 60% 60% at 80% 50%, ${T.wineDeep}40 0%, transparent 60%)`,
+            background: `radial-gradient(ellipse 60% 60% at 80% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
           }}
         />
         <div
@@ -663,35 +663,35 @@ export default function HomePage() {
         >
           <div style={{ maxWidth: "600px" }}>
             <Reveal>
-              <Hr w="32px" c={T.gold} style={{ marginBottom: "24px" }} />
+              <Hr w="32px" c={T.wine} style={{ marginBottom: "24px" }} />
               <p
                 style={{
                   fontFamily: ff.b,
                   fontSize: "10px",
                   letterSpacing: "4px",
                   textTransform: "uppercase",
-                  color: T.gold,
+                  color: T.wine,
                   marginBottom: "20px",
                 }}
               >
                 Vinaio Spain &amp; Europe
               </p>
-              <h2
+                <h2
                 style={{
                   fontFamily: ff.h,
                   fontSize: "clamp(36px, 5vw, 60px)",
-                  color: T.paper,
+                  color: T.ink,
                   lineHeight: 1.1,
                   marginBottom: "24px",
                 }}
               >
                 Your gateway to the US market
               </h2>
-              <p
+                <p
                 style={{
                   fontFamily: ff.b,
                   fontSize: "15px",
-                  color: "rgba(255,255,255,0.55)",
+                  color: "rgba(0,0,0,0.7)",
                   lineHeight: 1.8,
                   marginBottom: "40px",
                 }}
@@ -701,7 +701,7 @@ export default function HomePage() {
                 warehousing, and 26-state distribution so you can focus on what
                 you do best.
               </p>
-              <Link
+                <Link
                 href="/spain"
                 style={{
                   display: "inline-block",
@@ -709,9 +709,9 @@ export default function HomePage() {
                   fontSize: "10.5px",
                   letterSpacing: "3px",
                   textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: T.gold,
-                  border: `1px solid ${T.gold}40`,
+                  fontWeight: 600,
+                  color: T.wine,
+                  border: `1px solid ${T.wine}40`,
                   padding: "14px 32px",
                 }}
               >
