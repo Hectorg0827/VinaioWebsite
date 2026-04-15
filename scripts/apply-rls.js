@@ -10,7 +10,13 @@ const supabase = createClient(
 async function applyMigration() {
   const sql = fs.readFileSync('supabase/migrations/20260415_products_rls.sql', 'utf8');
   console.log('Applying products RLS migration...');
-  const { error } = await supabase.rpc('exec_sql', { sql }).catch(() => ({ error: null }));
+  let rpcError;
+  try {
+    const res = await supabase.rpc('exec_sql', { sql });
+    rpcError = res.error;
+  } catch (err) {
+    rpcError = err;
+  }
   
   // Try direct REST call if rpc not available
   const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
