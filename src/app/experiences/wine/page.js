@@ -45,7 +45,7 @@ const WINE_REGIONS = [
     grapes: ["Tempranillo", "Garnacha", "Verdejo", "Albariño"],
     pairings: "Jamón ibérico, grilled lamb, paella, manchego",
     featured: ["Cepa 21", "Campos Reales", "Castillo de Sajazarra"],
-    img: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800",
+    img: "/images/experiences/spain_wine.png",
     mapColor: "#8B2332"
   },
   {
@@ -56,7 +56,7 @@ const WINE_REGIONS = [
     grapes: ["Primitivo", "Corvina", "Negroamaro", "Glera"],
     pairings: "Osso buco, truffle pasta, aged Parmigiano, bruschetta",
     featured: ["Italo Cescon", "Cantine Leuci", "Monte Tondo"],
-    img: "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&q=80&w=800",
+    img: "/images/experiences/italy_wine.png",
     mapColor: "#2E7D32"
   },
   {
@@ -122,7 +122,7 @@ const WINE_REGIONS = [
     grapes: ["Anise", "Tropical Fruits", "Aromatic Herbs"],
     pairings: "Mofongo, Caribbean seafood, goat stew, tropical sweets",
     featured: ["La Fuerza", "Vino Piña"],
-    img: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800",
+    img: "/images/experiences/dr_beach_wine.png",
     mapColor: "#0D47A1"
   }
 ];
