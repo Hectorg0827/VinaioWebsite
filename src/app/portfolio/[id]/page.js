@@ -98,34 +98,37 @@ export default function ProductDetailPage({ params }) {
     <main style={{ background: T.paper, minHeight: "100vh", paddingBottom: "100px" }}>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section style={{ 
-        background: T.ink, 
+        background: T.metal, 
         padding: "160px 48px 100px", 
         textAlign: "center",
         position: "relative",
         overflow: "hidden"
       }}>
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at 50% 50%, ${T.wineDeep}30 0%, transparent 70%)` }} />
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 70%)` }} />
+        {logoUrl && (
+          <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${logoUrl}')`, backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "contain", opacity: 0.05, transform: "scale(1.2)", pointerEvents: "none" }} />
+        )}
         
         <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Reveal>
             {/* 1. PRODUCT LOGO */}
-            <div style={{ height: "120px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "32px" }}>
+            <div style={{ height: "120px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "32px", position: "relative", zIndex: 1 }}>
               {logoUrl ? (
-                <img src={logoUrl} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "300px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                <img src={logoUrl} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "300px", objectFit: "contain" }} />
               ) : (
-                <div style={{ padding: "10px 20px", border: `1px solid ${T.gold}40`, color: T.gold, fontFamily: ff.h, letterSpacing: "4px", fontSize: "14px", textTransform: "uppercase" }}>{product.brand}</div>
+                <div style={{ padding: "10px 20px", border: `1px solid ${T.wine}40`, color: T.wine, fontFamily: ff.h, letterSpacing: "4px", fontSize: "14px", textTransform: "uppercase" }}>{product.brand}</div>
               )}
             </div>
 
             {/* 2. BRAND NAME & TYPE */}
-            <h1 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 64px)", color: T.paper, lineHeight: 1.1, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "2px" }}>
+            <h1 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 64px)", color: T.ink, lineHeight: 1.1, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "2px", position: "relative", zIndex: 1 }}>
               {product.brand}
             </h1>
-            <p style={{ fontFamily: ff.b, fontSize: "20px", color: T.wine, fontStyle: "italic", fontWeight: 500, marginBottom: "16px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "20px", color: T.wine, fontStyle: "italic", fontWeight: 500, marginBottom: "16px", position: "relative", zIndex: 1 }}>
               {product.name} {product.type ? `· ${product.type}` : ""}
             </p>
             
-            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginBottom: "24px" }}>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginBottom: "24px", position: "relative", zIndex: 1 }}>
               <span style={{ 
                 padding: "4px 12px", borderRadius: "20px", fontSize: "10px", fontFamily: ff.b, fontWeight: 700, letterSpacing: "1px",
                 background: product.inStock ? "#E6F4EA" : "#FCE8E6", color: product.inStock ? "#1E8E3E" : "#D93025", border: "1px solid currentColor"
@@ -143,7 +146,7 @@ export default function ProductDetailPage({ params }) {
             </div>
 
             {product.summary && (
-              <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.7)", maxWidth: "800px", margin: "0 auto", lineHeight: 1.6, fontWeight: 300 }}>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "800px", margin: "0 auto", lineHeight: 1.6, fontWeight: 400, position: "relative", zIndex: 1 }}>
                 {product.summary}
               </p>
             )}
