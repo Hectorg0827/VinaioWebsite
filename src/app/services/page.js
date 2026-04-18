@@ -163,8 +163,7 @@ export default function ServicesPage() {
         padding: "60px 48px 0",
         borderBottom: `1px solid ${T.cream}`,
         textAlign: "center",
-        position: "sticky",
-        top: "80px",
+        position: "relative",
         zIndex: 10
       }}>
         <div style={{

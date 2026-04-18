@@ -157,7 +157,7 @@ export default function HomePage() {
                    alignItems: "center",
                    justifyContent: "center",
                      opacity: 0,
-                     filter: `drop-shadow(1.5px 0 0 ${T.gold}) drop-shadow(-1.5px 0 0 ${T.gold}) drop-shadow(0 1.5px 0 ${T.gold}) drop-shadow(0 -1.5px 0 ${T.gold}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
+                     filter: `drop-shadow(1.5px 0 0 ${T.wine}) drop-shadow(-1.5px 0 0 ${T.wine}) drop-shadow(0 1.5px 0 ${T.wine}) drop-shadow(0 -1.5px 0 ${T.wine}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
                      animation: introFading ? "none" : `explodeLogo 1.6s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
                      animationDelay: `${i * 1.1}s`
                  }}
@@ -197,7 +197,7 @@ export default function HomePage() {
                  maskRepeat: "no-repeat",
                  maskPosition: "center",
                  opacity: 0,
-                  filter: `drop-shadow(2px 0 0 ${T.gold}) drop-shadow(-2px 0 0 ${T.gold}) drop-shadow(0 2px 0 ${T.gold}) drop-shadow(0 -2px 0 ${T.gold}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
+                  filter: `drop-shadow(2px 0 0 ${T.wine}) drop-shadow(-2px 0 0 ${T.wine}) drop-shadow(0 2px 0 ${T.wine}) drop-shadow(0 -2px 0 ${T.wine}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
                   animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.6s both cubic-bezier(0.2, 0.8, 0.2, 1)",
                   animationDelay: introFading ? "0s" : "4.4s"
                }} 
@@ -299,22 +299,29 @@ export default function HomePage() {
               gap: "20px",
             }}
           >
-            <Hr w="40px" c={T.gold} />
-            <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.gold }}>
+            <Hr w="40px" c={T.wine} />
+            <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.wine }}>
               Importers &amp; Distributors
             </span>
-            <Hr w="40px" c={T.gold} />
+            <Hr w="40px" c={T.wine} />
           </div>
 
-          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "20px" }}>
-            <img 
-              src={logoUrl} 
-              alt="Vinaio" 
-              style={{ 
-                height: "80px", 
-                width: "auto", 
-                filter: "brightness(0) invert(1)",
-                marginBottom: "20px"
+          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "40px" }}>
+            <div
+              style={{
+                height: "80px",
+                width: "300px",
+                background: T.wine,
+                WebkitMaskImage: `url('${logoUrl}')`,
+                WebkitMaskSize: "contain",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskImage: `url('${logoUrl}')`,
+                maskSize: "contain",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
+                margin: "0 auto",
+                filter: `drop-shadow(0 4px 10px rgba(0,0,0,0.5))`
               }} 
             />
           </div>
@@ -574,12 +581,12 @@ export default function HomePage() {
       </section>
 
       {/* ── Experience Hubs ──────────────────────────────────────────────── */}
-      <section style={{ background: T.editorialGrey, padding: "100px 56px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+      <section style={{ background: T.editorialGrey, padding: "60px 56px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <div style={{ textAlign: "center", marginBottom: "64px" }}>
-              <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
-              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, marginBottom: "16px" }}>
+            <div style={{ textAlign: "center", marginBottom: "40px" }}>
+              <Hr w="32px" c={T.wine} style={{ margin: "0 auto 24px" }} />
+              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase", color: T.wine, marginBottom: "16px" }}>
                 Curating Authority
               </p>
               <h2 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 4.5vw, 56px)", color: T.paper, marginBottom: "20px" }}>
@@ -641,7 +648,7 @@ export default function HomePage() {
 
       {/* ── Spain & Europe Callout ───────────────────────────────────────── */}
       <div style={{ background: T.editorialGrey, padding: "40px 0" }}>
-        <ScrollLine height="100px" color={T.gold} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.editorialGrey} />
+        <ScrollLine height="100px" color={T.wine} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.editorialGrey} />
       </div>
       <section
         style={{
@@ -834,7 +841,7 @@ export default function HomePage() {
       <section style={{ background: T.paper, padding: "100px 56px" }}>
         <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
           <Reveal>
-            <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
+            <Hr w="32px" c={T.wine} style={{ margin: "0 auto 24px" }} />
             <h2
               style={{
                 fontFamily: ff.h,
