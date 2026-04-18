@@ -321,7 +321,7 @@ export default function HomePage() {
                 maskRepeat: "no-repeat",
                 maskPosition: "center",
                 margin: "0 auto",
-                filter: `drop-shadow(0 4px 10px rgba(0,0,0,0.5))`
+                filter: `drop-shadow(1px 1px 0 rgba(255,255,255,0.8)) drop-shadow(-1px -1px 0 rgba(255,255,255,0.8)) drop-shadow(1px -1px 0 rgba(255,255,255,0.8)) drop-shadow(-1px 1px 0 rgba(255,255,255,0.8)) drop-shadow(0 4px 10px rgba(0,0,0,0.5))`
               }} 
             />
           </div>
