@@ -13,7 +13,8 @@ const FlavorIcon = ({ type, color = T.wine }) => {
 
 export default function GrapeCard({ grape, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
-  const profile = grape.profile || {};
+  const raw = grape.profile;
+  const profile = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
 
   return (
     <div 
@@ -46,7 +47,7 @@ export default function GrapeCard({ grape, onClick }) {
 
       <div style={{ flexGrow: 1 }}>
         <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, lineHeight: 1.6, marginBottom: "16px", fontStyle: "italic" }}>
-          {grape.profile_short || grape.description?.substring(0, 80) + '...'}
+          {grape.description ? grape.description.substring(0, 80) + '…' : ''}
         </p>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>

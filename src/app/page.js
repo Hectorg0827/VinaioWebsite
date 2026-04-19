@@ -7,6 +7,7 @@ import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
 import ScrollLine from "@/components/ScrollLine";
 import { createClient } from "@/lib/supabase/client";
+import SmartLink from "@/components/SmartLink";
 
 // Fallback branding logos if DB is empty
 const FALLBACK_LOGOS = [
