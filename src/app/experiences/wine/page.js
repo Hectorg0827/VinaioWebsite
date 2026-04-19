@@ -595,17 +595,6 @@ export default function WorldOfWinesPage() {
           <GrapeLibrary />
         </div>
       </section>
-                      <span style={{ fontFamily: ff.b, fontSize: "10px", color: T.gold, textDecoration: "none", letterSpacing: "1px", cursor: "pointer" }}>
-                        View →
-                      </span>
-                    </SmartLink>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ══════════════════════════════════════════════════════════════════
           §6 — PAIRING STUDIO
