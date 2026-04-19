@@ -6,6 +6,7 @@ import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
 import SmartLink from "@/components/SmartLink";
+import GrapeLibrary from "@/components/GrapeLibrary/GrapeLibrary";
 
 /* ── SVG Icons (replacing emojis with premium line art) ─────────────────── */
 const IconGlobe = () => (
@@ -128,14 +129,7 @@ const WINE_REGIONS = [
   }
 ];
 
-const GRAPE_LIBRARY = [
-  { name: "Tempranillo", body: "Medium–Full", acidity: "Medium", profile: "Cherry, leather, vanilla, tobacco", food: "Grilled lamb, aged cheeses, charcuterie", vinaioWine: "Cepa 21 · Ribera del Duero" },
-  { name: "Albariño", body: "Light–Medium", acidity: "High", profile: "Peach, citrus, saline minerality", food: "Oysters, ceviche, grilled fish", vinaioWine: "Altos de Torona · Rías Baixas" },
-  { name: "Cabernet Sauvignon", body: "Full", acidity: "Medium–High", profile: "Blackcurrant, cedar, graphite", food: "Ribeye steak, short ribs, dark chocolate", vinaioWine: "Babylonstoren · Stellenbosch" },
-  { name: "Garnacha", body: "Medium–Full", acidity: "Medium", profile: "Raspberry, white pepper, garrigue", food: "Roasted vegetables, paella, grilled sausage", vinaioWine: "Campos Reales · La Mancha" },
-  { name: "Verdejo", body: "Light–Medium", acidity: "High", profile: "Lime, fennel, white flowers", food: "Tapas, goat cheese, asparagus", vinaioWine: "Copaboca Gorgorito · Rueda" },
-  { name: "Chenin Blanc", body: "Medium", acidity: "High", profile: "Quince, honey, wet stone", food: "Thai curry, roasted pork, apple tart", vinaioWine: "Babylonstoren · Western Cape" },
-];
+// Grapes are now managed in Supabase via the GrapeLibrary component.
 
 const PAIRING_GUIDE = [
   { food: "Grilled Steak", emoji: "🥩", wines: ["Cabernet Sauvignon", "Tempranillo", "Malbec"], pick: "Cepa 21 Hito Red" },
@@ -598,56 +592,9 @@ export default function WorldOfWinesPage() {
             </p>
           </Reveal>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" }}>
-            {GRAPE_LIBRARY.map((grape, i) => (
-              <Reveal key={grape.name} delay={i * 0.06}>
-                <div style={{
-                  background: T.paper,
-                  border: `1px solid ${T.cream}`,
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition: "border-color 0.3s",
-                }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = T.wine}
-                onMouseLeave={e => e.currentTarget.style.borderColor = T.cream}
-                >
-                  <div style={{ padding: "32px 32px 24px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.wine} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="M6 2l.93 6.97c.29 2.19 2.12 3.83 4.33 3.83h1.48c2.21 0 4.04-1.64 4.33-3.83L18 2"/></svg>
-                      <h3 style={{ fontFamily: ff.h, fontSize: "26px", color: T.ink }}>{grape.name}</h3>
-                    </div>
-
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted, lineHeight: 1.6, marginBottom: "20px", fontStyle: "italic" }}>
-                      {grape.profile}
-                    </p>
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
-                      <div>
-                        <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "4px" }}>Body</p>
-                        <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600 }}>{grape.body}</p>
-                      </div>
-                      <div>
-                        <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "4px" }}>Acidity</p>
-                        <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600 }}>{grape.acidity}</p>
-                      </div>
-                    </div>
-
-                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>
-                      <strong style={{ color: "rgba(255,255,255,0.8)" }}>Pairs with:</strong> {grape.food}
-                    </p>
-                  </div>
-
-                  <div style={{ marginTop: "auto", background: "rgba(0,0,0,0.2)", padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div>
-                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "2px" }}>Try from Vinaio</p>
-                        <SmartLink text={grape.vinaioWine}>
-                          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600, cursor: "pointer" }}>{grape.vinaioWine}</p>
-                        </SmartLink>
-                    </div>
-                    <SmartLink text={grape.vinaioWine}>
+          <GrapeLibrary />
+        </div>
+      </section>
                       <span style={{ fontFamily: ff.b, fontSize: "10px", color: T.gold, textDecoration: "none", letterSpacing: "1px", cursor: "pointer" }}>
                         View →
                       </span>
