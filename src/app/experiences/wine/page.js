@@ -5,6 +5,7 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
+import SmartLink from "@/components/SmartLink";
 
 /* ── SVG Icons (replacing emojis with premium line art) ─────────────────── */
 const IconGlobe = () => (
@@ -479,7 +480,11 @@ export default function WorldOfWinesPage() {
                       <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Vinaio Producers</p>
                       <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                         {selectedRegion.featured.map(f => (
-                          <span key={f} style={{ padding: "6px 14px", background: "rgba(194,163,85,0.15)", color: T.gold, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600 }}>{f}</span>
+                          <SmartLink key={f} text={f}>
+                            <span style={{ padding: "6px 14px", background: "rgba(194,163,85,0.15)", color: T.gold, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>
+                              {f}
+                            </span>
+                          </SmartLink>
                         ))}
                       </div>
                     </div>
@@ -562,9 +567,11 @@ export default function WorldOfWinesPage() {
                       </p>
                       <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                         {region.featured.map(f => (
-                          <span key={f} style={{ padding: "6px 14px", background: `${T.wine}10`, color: T.wine, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600 }}>
-                            {f}
-                          </span>
+                          <SmartLink key={f} text={f}>
+                            <span style={{ padding: "6px 14px", background: `${T.wine}10`, color: T.wine, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>
+                              {f}
+                            </span>
+                          </SmartLink>
                         ))}
                       </div>
                     </div>
@@ -636,11 +643,15 @@ export default function WorldOfWinesPage() {
                   <div style={{ marginTop: "auto", background: "rgba(0,0,0,0.2)", padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div>
                       <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "2px" }}>Try from Vinaio</p>
-                      <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600 }}>{grape.vinaioWine}</p>
+                        <SmartLink text={grape.vinaioWine}>
+                          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600, cursor: "pointer" }}>{grape.vinaioWine}</p>
+                        </SmartLink>
                     </div>
-                    <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "10px", color: T.gold, textDecoration: "none", letterSpacing: "1px" }}>
-                      View →
-                    </Link>
+                    <SmartLink text={grape.vinaioWine}>
+                      <span style={{ fontFamily: ff.b, fontSize: "10px", color: T.gold, textDecoration: "none", letterSpacing: "1px", cursor: "pointer" }}>
+                        View →
+                      </span>
+                    </SmartLink>
                   </div>
                 </div>
               </Reveal>
@@ -689,7 +700,9 @@ export default function WorldOfWinesPage() {
                   </div>
                   <div style={{ borderTop: `1px solid ${T.cream}`, paddingTop: "16px" }}>
                     <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.wine, marginBottom: "4px" }}>Vinaio Pick</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, fontWeight: 600 }}>{pair.pick}</p>
+                    <SmartLink text={pair.pick}>
+                      <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, fontWeight: 600, cursor: "pointer" }}>{pair.pick}</p>
+                    </SmartLink>
                   </div>
                 </div>
               </Reveal>
@@ -735,7 +748,8 @@ export default function WorldOfWinesPage() {
                     <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                       {col.bottles.map(b => (
                         <li key={b} style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink, padding: "8px 0", borderBottom: `1px solid ${T.cream}`, display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ color: T.wine, fontSize: "8px" }}>●</span> {b}
+                          <span style={{ color: T.wine, fontSize: "8px" }}>●</span> 
+                          <SmartLink text={b} style={{ borderBottom: "none" }}>{b}</SmartLink>
                         </li>
                       ))}
                     </ul>
@@ -811,14 +825,18 @@ export default function WorldOfWinesPage() {
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `1px solid ${T.cream}`, paddingTop: "24px" }}>
                       <div>
                         <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.muted }}>Signature Bottle</p>
-                        <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, fontWeight: 600 }}>{producer.signature}</p>
+                        <SmartLink text={producer.signature}>
+                          <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.ink, fontWeight: 600, cursor: "pointer" }}>{producer.signature}</p>
+                        </SmartLink>
                       </div>
-                      <Link href="/portfolio" style={{
-                        fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase",
-                        color: T.paper, background: T.wine, padding: "12px 24px", borderRadius: "4px", textDecoration: "none", fontWeight: 600
-                      }}>
-                        Explore →
-                      </Link>
+                      <SmartLink text={producer.signature}>
+                        <span style={{
+                          fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase",
+                          color: T.paper, background: T.wine, padding: "12px 24px", borderRadius: "4px", textDecoration: "none", fontWeight: 600, cursor: "pointer"
+                        }}>
+                          Explore →
+                        </span>
+                      </SmartLink>
                     </div>
                   </div>
                 </div>

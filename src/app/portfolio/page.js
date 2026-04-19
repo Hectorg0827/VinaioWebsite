@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
@@ -8,11 +9,15 @@ import Reveal from "@/components/Reveal";
 import Badge from "@/components/Badge";
 import { PRODUCTS, ACTIVE_CATEGORIES, ORIGINS } from "@/data/products";
 import { createClient } from "@/lib/supabase/client";
+import SmartLink from "@/components/SmartLink";
 
-export default function PortfolioPage() {
+function PortfolioContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [products, setProducts] = useState(PRODUCTS);
   const [syncStatus, setSyncStatus] = useState("syncing"); // "syncing" | "live" | "static"
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const [category, setCategory] = useState("All");
   const [viewMode, setViewMode] = useState("selection"); // "selection" | "grid"
   const [currentPortfolio, setCurrentPortfolio] = useState("all");
@@ -55,6 +60,14 @@ export default function PortfolioPage() {
         }
       });
   }, []);
+
+  // Synchronize search state with URL parameter changes
+  useEffect(() => {
+    const s = searchParams.get("search") || "";
+    if (s !== search) {
+      setSearch(s);
+    }
+  }, [searchParams]);
 
   const [debugLog, setDebugLog] = useState("Debug: Ready");
   const [clickCount, setClickCount] = useState(0);
@@ -319,7 +332,36 @@ export default function PortfolioPage() {
 
                       <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 5 }}>
                         <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
-                        <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.6, maxWidth: "60%" }}>{card.desc}</p>
+                        <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.6, maxWidth: "60%", marginBottom: "16px" }}>{card.desc}</p>
+                        
+                        {/* Interactive Brand Tags */}
+                        {card.brands && card.brands.length > 0 && (
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            {card.brands.map(b => (
+                              <SmartLink key={b} text={b} style={{ borderBottom: "none" }}>
+                                <span style={{ 
+                                  fontSize: "9px", 
+                                  fontFamily: ff.b, 
+                                  fontWeight: 700,
+                                  letterSpacing: "1px",
+                                  textTransform: "uppercase",
+                                  color: T.paper, 
+                                  background: "rgba(255,255,255,0.15)", 
+                                  padding: "6px 12px", 
+                                  borderRadius: "4px",
+                                  backdropFilter: "blur(4px)",
+                                  cursor: "pointer",
+                                  transition: "all 0.3s"
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.background = T.wine; e.currentTarget.style.transform = "scale(1.05)"; }}
+                                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; e.currentTarget.style.transform = "scale(1)"; }}
+                                >
+                                  {b}
+                                </span>
+                              </SmartLink>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Reveal>
@@ -619,3 +661,11 @@ function ProductCard({ product }) {
   );
 }
 
+
+export default function PortfolioPage() {
+  return (
+    <Suspense fallback={<div>Loading Portfolio...</div>}>
+      <PortfolioContent />
+    </Suspense>
+  );
+}

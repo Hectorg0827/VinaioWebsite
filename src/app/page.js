@@ -99,9 +99,12 @@ export default function HomePage() {
         .order("order", { ascending: true });
       
       if (partnersData && partnersData.length > 0) {
-        setPartners(partnersData.map(p => p.logo_url));
+        setPartners(partnersData.map(p => ({ url: p.logo_url, name: p.name || p.brand })));
       } else {
-        setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+        setPartners(FALLBACK_LOGOS.map(l => ({ 
+          url: `/logos/${l}`, 
+          name: l.split('.')[0].replace('brand-', 'Brand ') 
+        })));
       }
 
       const { data: configData } = await supabase
@@ -114,8 +117,10 @@ export default function HomePage() {
         setLogoUrl(configData.value.logo_url);
       }
     } catch (err) {
-      console.warn("Using default hero configuration.");
-      setPartners(FALLBACK_LOGOS.map(l => `/logos/${l}`));
+      setPartners(FALLBACK_LOGOS.map(l => ({ 
+        url: `/logos/${l}`, 
+        name: l.split('.')[0].replace('brand-', 'Brand ') 
+      })));
     }
   };
 
@@ -445,26 +450,28 @@ export default function HomePage() {
           {/* Duplicate set for seamless looping */}
           {[...Array(2)].map((_, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "80px" }}>
-              {partners.map((url, idx) => (
-                <img 
-                  key={`${url}-${idx}`}
-                  src={url}
-                  alt="Partner Brand" 
-                  style={{ 
-                    height: "45px", 
-                    width: "auto", 
-                    filter: "grayscale(1) opacity(0.5)",
-                    transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.filter = "grayscale(0) opacity(1)";
-                    e.currentTarget.style.transform = "scale(1.1)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.filter = "grayscale(1) opacity(0.5)";
-                    e.currentTarget.style.transform = "scale(1)";
-                  }}
-                />
+              {partners.map((p, idx) => (
+                <SmartLink key={`${p.url}-${idx}`} text={p.name} style={{ borderBottom: "none" }}>
+                  <img 
+                    src={p.url}
+                    alt={p.name} 
+                    style={{ 
+                      height: "45px", 
+                      width: "auto", 
+                      filter: "grayscale(1) opacity(0.5)",
+                      transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                      cursor: "pointer"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.filter = "grayscale(0) opacity(1)";
+                      e.currentTarget.style.transform = "scale(1.1)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.filter = "grayscale(1) opacity(0.5)";
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                  />
+                </SmartLink>
               ))}
             </div>
           ))}
