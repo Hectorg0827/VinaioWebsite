@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
+import * as analytics from "@/lib/analytics";
 
 export default function AdminMediaManager() {
   const [hero, setHero] = useState({ 
@@ -117,7 +118,8 @@ export default function AdminMediaManager() {
         body: JSON.stringify(dataToSave),
       });
       if (res.ok) {
-        setMsg({ type: "success", text: "Hero configuration synchronized!" });
+        analytics.event({ action: "hero_update", category: "admin" });
+        setMsg({ type: "success", text: "Hero configuration synchronized with production site!" });
       } else {
         throw new Error("Save failed");
       }
@@ -136,7 +138,8 @@ export default function AdminMediaManager() {
         body: JSON.stringify({ key: "branding", value: branding }),
       });
       if (res.ok) {
-        setMsg({ type: "success", text: "Master branding updated!" });
+        analytics.event({ action: "branding_update", category: "admin" });
+        setMsg({ type: "success", text: "Global identity branding successfully updated." });
       } else {
         throw new Error("Save failed");
       }

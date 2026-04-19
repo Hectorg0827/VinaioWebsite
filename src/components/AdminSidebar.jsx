@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { id: "analytics", label: "Portal Analytics",  icon: "📊" },
 ];
 
-export default function AdminSidebar({ activeTab, onTabChange }) {
+export default function AdminSidebar({ activeTab, onTabChange, isLive }) {
   return (
     <div 
       style={{ 
@@ -78,6 +78,27 @@ export default function AdminSidebar({ activeTab, onTabChange }) {
       </div>
 
       <div style={{ marginTop: "auto", padding: "0 32px" }}>
+        {/* Status indicator */}
+        <div style={{ 
+          marginBottom: "20px", 
+          padding: "12px", 
+          borderRadius: "8px", 
+          background: isLive ? `${T.green}15` : "rgba(255,255,255,0.05)",
+          border: `1px solid ${isLive ? `${T.green}30` : "rgba(255,255,255,0.1)"}`,
+          display: "flex",
+          alignItems: "center",
+          gap: "10px"
+        }}>
+          <div style={{ 
+            width: "8px", height: "8px", borderRadius: "50%", 
+            background: isLive ? T.green : T.gold,
+            boxShadow: isLive ? `0 0 10px ${T.green}80` : `0 0 10px ${T.gold}80`
+          }} />
+          <span style={{ fontFamily: ff.b, fontSize: "10px", color: T.paper, letterSpacing: "1px", fontWeight: 600 }}>
+            {isLive ? "LIVE SYSTEM" : "SIMULATION"}
+          </span>
+        </div>
+
         <a 
           href="/" 
           target="_blank"

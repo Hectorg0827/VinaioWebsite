@@ -6,5 +6,7 @@
   { "id": "PT", "name": "Portugal", "d": "M440,205 L450,207 L445,225 L435,223 Z" },
   { "id": "ZA", "name": "South Africa", "d": "M550,420 Q570,410 590,420 T610,450 L550,450 Z" },
   { "id": "AR", "name": "Argentina", "d": "M280,400 L310,410 L290,520 L270,510 Z" },
-  { "id": "CL", "name": "Chile", "d": "M265,400 L275,405 L260,520 L250,515 Z" }
+  { "id": "CL", "name": "Chile", "d": "M265,400 L275,405 L260,520 L250,515 Z" },
+  { "id": "pe", "name": "Peru & Colombia", "d": "M240,310 L280,300 L290,340 L275,370 L245,360 Z" },
+  { "id": "do", "name": "Dominican Republic", "d": "M285,245 L320,240 L325,260 L290,265 Z" }
 ]

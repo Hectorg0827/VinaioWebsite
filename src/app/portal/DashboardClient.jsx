@@ -5,6 +5,7 @@ import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Badge from "@/components/Badge";
 import { createClient } from "@/lib/supabase/client";
+import * as analytics from "@/lib/analytics";
 
 export default function DashboardClient({ customer, invoices, orders, licenses, catalogs, user }) {
   const supabase = createClient();
@@ -27,6 +28,11 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
     typeof n === "number" ? `$${n.toLocaleString("en-US", { minimumFractionDigits: 2 })}` : n;
 
   const logCatalogDownload = async (catalog) => {
+    analytics.event({ 
+      action: "catalog_download", 
+      category: "portal", 
+      label: catalog.name 
+    });
     await supabase.from("portal_logs").insert([{
       customer_id: user.id,
       action: "download",

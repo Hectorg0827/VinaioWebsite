@@ -7,6 +7,7 @@ import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
 import SmartLink from "@/components/SmartLink";
 import GrapeLibrary from "@/components/GrapeLibrary/GrapeLibrary";
+import WineWorldMap from "@/components/GrapeLibrary/WineWorldMap";
 
 /* ── SVG Icons (replacing emojis with premium line art) ─────────────────── */
 const IconGlobe = () => (
@@ -369,51 +370,20 @@ export default function WorldOfWinesPage() {
           </Reveal>
 
           <div style={{ display: "grid", gridTemplateColumns: selectedRegion ? "1fr 1.1fr" : "1fr", gap: "40px", transition: "all 0.4s" }}>
-            {/* Map Grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", alignContent: "start" }}>
-              {WINE_REGIONS.map((region) => {
-                const isSelected = selectedRegion?.name === region.name;
-                return (
-                  <div
-                    key={region.name}
-                    onClick={() => setSelectedRegion(isSelected ? null : region)}
-                    style={{
-                      position: "relative",
-                      height: "180px",
-                      borderRadius: "16px",
-                      overflow: "hidden",
-                      cursor: "pointer",
-                      border: isSelected ? `3px solid ${T.wine}` : `1px solid ${T.cream}`,
-                      transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
-                      transform: isSelected ? "scale(1.02)" : "scale(1)",
-                      boxShadow: isSelected ? `0 12px 40px ${T.wine}20` : "none",
-                    }}
-                    onMouseEnter={e => { if (!isSelected) e.currentTarget.style.transform = "scale(1.03)"; }}
-                    onMouseLeave={e => { if (!isSelected) e.currentTarget.style.transform = "scale(1)"; }}
-                  >
-                    <img src={region.img} alt={region.name} style={{ width: "100%", height: "100%", objectFit: "cover", filter: isSelected ? "brightness(0.5)" : "brightness(0.7)" }} />
-                    <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to top, ${region.mapColor}CC 0%, transparent 70%)` }} />
-                    <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", zIndex: 2 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <img
-                          src={`https://flagcdn.com/w80/${region.iso}.png`}
-                          alt={region.name}
-                          style={{ width: "24px", height: "24px", objectFit: "cover", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.5)" }}
-                        />
-                        <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.paper, textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>{region.name}</h3>
-                      </div>
-                      <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginTop: "4px" }}>
-                        {region.featured.length} producer{region.featured.length > 1 ? "s" : ""} · {region.grapes.length} grapes
-                      </p>
-                    </div>
-                    {isSelected && (
-                      <div style={{ position: "absolute", top: "12px", right: "12px", background: T.wine, color: T.paper, padding: "4px 12px", borderRadius: "20px", fontFamily: ff.b, fontSize: "9px", letterSpacing: "1px", textTransform: "uppercase" }}>
-                        Selected
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            {/* Map Grid - Replaced with Interactive SVG Map */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <WineWorldMap 
+                theme="light"
+                selectedRegion={selectedRegion?.name}
+                onRegionSelect={(name) => {
+                  const region = WINE_REGIONS.find(r => r.name === name);
+                  setSelectedRegion(region || null);
+                  // Optional: Auto-scroll to details if it's a mobile layout
+                  if (region && window.innerWidth < 768) {
+                    document.getElementById("regions")?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              />
             </div>
 
             {/* Detail Panel */}

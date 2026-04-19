@@ -6,6 +6,7 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import { createClient } from "@/lib/supabase/client";
+import * as analytics from "@/lib/analytics";
 
 export default function PortalLoginPage() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function PortalLoginPage() {
     if (err) {
       setError(err.message);
     } else {
+      analytics.event({ action: "portal_login", category: "portal" });
       router.push("/portal");
       router.refresh();
     }

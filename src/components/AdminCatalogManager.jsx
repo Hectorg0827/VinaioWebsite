@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
+import * as analytics from "@/lib/analytics";
 
 export default function AdminCatalogManager() {
   const [catalogs, setCatalogs] = useState([]);
@@ -35,6 +36,7 @@ export default function AdminCatalogManager() {
         body: JSON.stringify(form)
       });
       if (res.ok) {
+        analytics.event({ action: "catalog_created", category: "admin", label: form.name });
         setMsg({ type: "success", text: "Catalog added!" });
         setForm({ name: "", file_url: "", category_filter: "" });
         fetchCatalogs();

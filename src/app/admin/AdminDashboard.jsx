@@ -39,7 +39,7 @@ const EMPTY_FORM = {
   logoUrl: "",
 };
 
-export default function AdminDashboard({ initialProducts }) {
+export default function AdminDashboard({ initialProducts, isLive }) {
   const [activeTab, setActiveTab] = useState("products");
   const [products, setProducts]   = useState(initialProducts);
   const [form, setForm]           = useState(EMPTY_FORM);
@@ -519,24 +519,24 @@ export default function AdminDashboard({ initialProducts }) {
     </div>
   );
 
-  const [configError, setConfigError] = useState(!initialProducts || initialProducts.length <= 3 && initialProducts[0]?.id === "bermudez");
+  const hasData = initialProducts && initialProducts.length > 0;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: T.bg }}>
-      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} isLive={isLive} />
       
       <main style={{ marginLeft: "280px", width: "calc(100% - 280px)", padding: "80px 60px" }}>
-        {configError && (
+        {!isLive && (
           <div style={{ 
             background: `${T.red}10`, border: `1px solid ${T.red}30`, borderRadius: "10px", 
             padding: "24px", marginBottom: "40px", display: "flex", alignItems: "center", gap: "20px" 
           }}>
             <span style={{ fontSize: "24px" }}>⚠️</span>
             <div>
-              <h3 style={{ color: T.red, fontFamily: ff.h, fontSize: "16px", margin: "0 0 4px" }}>Database Disconnected (Missing Credentials)</h3>
+              <h3 style={{ color: T.red, fontFamily: ff.h, fontSize: "16px", margin: "0 0 4px" }}>Database Synchronization Mode</h3>
               <p style={{ fontSize: "12px", color: T.muted, margin: 0 }}>
-                The Admin Panel is showing <strong>mock backup data</strong> because your Supabase environment variables are missing on Vercel. 
-                Please set <code style={{ color: T.red, fontWeight: 700 }}>SUPABASE_SERVICE_ROLE_KEY</code> in your Vercel Project Settings.
+                The Admin Panel is currently running in <strong>Simulation Mode</strong> using local seed data. 
+                To synchronize with the live production database, ensure <code style={{ color: T.red, fontWeight: 700 }}>SUPABASE_SERVICE_ROLE_KEY</code> is correctly set in your environment.
               </p>
             </div>
           </div>

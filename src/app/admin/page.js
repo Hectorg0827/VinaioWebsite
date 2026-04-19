@@ -15,23 +15,28 @@ export default async function AdminPage() {
     categories: p.categories ?? [p.category],
   }));
 
+  let isLive = false;
   try {
     const supabase = await createAdminClient();
-    const { data } = await supabase
-      .from("products")
-      .select("*")
-      .order("name", { ascending: true });
-    if (data?.length) {
-      products = data.map((p) => ({
-        ...p,
-        inStock: p.in_stock,
-        imageUrl: p.image_url,
-        categories: p.categories ?? (p.category ? [p.category] : []),
-      }));
+    if (supabase) {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("name", { ascending: true });
+      
+      if (data?.length && !error) {
+        products = data.map((p) => ({
+          ...p,
+          inStock: p.in_stock,
+          imageUrl: p.image_url,
+          categories: p.categories ?? (p.category ? [p.category] : []),
+        }));
+        isLive = true;
+      }
     }
-  } catch {
-    // Supabase not configured — use seed data
+  } catch (err) {
+    console.error("Admin products fetch error:", err);
   }
 
-  return <AdminDashboard initialProducts={products} />;
+  return <AdminDashboard initialProducts={products} isLive={isLive} />;
 }

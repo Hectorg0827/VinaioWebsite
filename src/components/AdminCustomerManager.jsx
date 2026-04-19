@@ -62,52 +62,61 @@ export default function AdminCustomerManager() {
 
       <div style={{ background: "white", borderRadius: "12px", border: `1px solid ${T.cream}`, overflow: "hidden" }}>
         <div style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr 1.5fr", padding: "16px 24px", background: T.bg, borderBottom: `1px solid ${T.cream}`, fontFamily: ff.b, fontSize: "10px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700, color: T.muted }}>
-          <span>Company / Contact</span>
-          <span>Details</span>
+          <span>Trade Entity / Contact</span>
+          <span>Credential Details</span>
           <span>Status</span>
-          <span>Joined</span>
-          <span style={{ textAlign: "right" }}>Actions</span>
+          <span>Registered</span>
+          <span style={{ textAlign: "right" }}>Management</span>
         </div>
 
         {loading ? (
-          <div style={{ padding: "40px", textAlign: "center", color: T.muted }}>Loading partners...</div>
+          <div style={{ padding: "40px", textAlign: "center", color: T.muted }}>Loading trade database...</div>
         ) : customers.length === 0 ? (
           <div style={{ padding: "40px", textAlign: "center", color: T.muted }}>No trade partners found.</div>
         ) : (
           customers.map((c) => (
-            <div key={c.id} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr 1.5fr", padding: "20px 24px", borderBottom: `1px solid ${T.cream}`, alignItems: "center" }}>
+            <div key={c.id} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr 1.5fr", padding: "20px 24px", borderBottom: `1px solid ${T.cream}`, alignItems: "center", transition: "background 0.2s" }}>
               <div>
                 <span style={{ display: "block", fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink }}>{c.company || "Unnamed Company"}</span>
-                <span style={{ fontSize: "12px", color: T.muted }}>{c.rep_name || "No primary contact"}</span>
-              </div>
-              <div style={{ fontSize: "12px", color: T.muted }}>
-                <div>ID: {c.account_number || "—"}</div>
-                <div>Terms: {c.credit_terms}</div>
-              </div>
-              <div>
-                <span style={{ 
-                  padding: "4px 10px", borderRadius: "20px", fontSize: "10px", fontWeight: 700, textTransform: "uppercase",
-                  background: c.status === 'active' ? `${T.green}15` : c.status === 'pending' ? `${T.gold}15` : `${T.red}15`,
-                  color: c.status === 'active' ? T.green : c.status === 'pending' ? T.gold : T.red
-                }}>
-                  {c.status || "active"}
+                <span style={{ fontSize: "12px", color: T.muted, display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ fontSize: "10px" }}>👤</span> {c.rep_name || "No primary contact"}
                 </span>
               </div>
               <div style={{ fontSize: "12px", color: T.muted }}>
-                {new Date(c.created_at).toLocaleDateString()}
+                <div style={{ fontSize: "10px", fontWeight: 700, color: T.ink, marginBottom: "2px" }}>LICENSE: {c.license_number || "—"}</div>
+                <div style={{ opacity: 0.8 }}>ID: {c.account_number || "AC-PENDING"}</div>
+              </div>
+              <div>
+                <span style={{ 
+                  padding: "4px 10px", borderRadius: "4px", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px",
+                  background: c.status === 'active' ? `${T.green}15` : c.status === 'pending' ? `${T.gold}15` : `${T.red}15`,
+                  color: c.status === 'active' ? T.green : c.status === 'pending' ? T.gold : T.red,
+                  border: `1px solid ${c.status === 'active' ? T.green : c.status === 'pending' ? T.gold : T.red}30`
+                }}>
+                  {c.status || "pending"}
+                </span>
+              </div>
+              <div style={{ fontSize: "12px", color: T.muted }}>
+                {new Date(c.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
               </div>
               <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
                 {c.status === "pending" && (
                   <button 
                     onClick={() => updateStatus(c.id, "active")}
-                    style={{ padding: "8px 16px", background: T.wine, color: "white", border: "none", borderRadius: "6px", fontSize: "11px", cursor: "pointer", fontWeight: 600 }}
+                    style={{ padding: "8px 16px", background: T.wine, color: "white", border: "none", borderRadius: "6px", fontSize: "11px", cursor: "pointer", fontWeight: 600, boxShadow: `0 2px 4px ${T.wine}40` }}
                   >
                     Approve
                   </button>
                 )}
                 <button 
                   onClick={() => updateStatus(c.id, c.status === 'suspended' ? 'active' : 'suspended')}
-                  style={{ padding: "8px 16px", background: "transparent", color: T.ink, border: `1px solid ${T.cream}`, borderRadius: "6px", fontSize: "11px", cursor: "pointer" }}
+                  style={{ 
+                    padding: "8px 16px", background: "transparent", 
+                    color: c.status === 'suspended' ? T.green : T.ink, 
+                    border: `1px solid ${c.status === 'suspended' ? T.green : T.cream}`, 
+                    borderRadius: "6px", fontSize: "11px", cursor: "pointer",
+                    fontWeight: c.status === 'suspended' ? 600 : 400
+                  }}
                 >
                   {c.status === 'suspended' ? 'Reactivate' : 'Suspend'}
                 </button>

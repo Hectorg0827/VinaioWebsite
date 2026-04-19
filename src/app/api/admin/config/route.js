@@ -8,13 +8,13 @@ async function unauthorized() {
 }
 
 // GET /api/admin/config — Fetch global settings (or specific by key)
-export async function GET(req) {
-  const cookieStore = await cookies();
-  if (!(await isAdminAuthenticated(cookieStore))) return unauthorized();
-
   try {
     const { searchParams } = new URL(req.url);
     const key = searchParams.get("key") || "branding";
+    const isPublic = key === "branding";
+
+    const cookieStore = await cookies();
+    if (!isPublic && !(await isAdminAuthenticated(cookieStore))) return unauthorized();
     const supabase = await createAdminClient();
 
     const { data, error } = await supabase
