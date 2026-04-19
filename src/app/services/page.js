@@ -5,6 +5,7 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Reveal from "@/components/Reveal";
 import Hr from "@/components/Hr";
+import DistributionMap from "@/components/DistributionMap";
 
 const SUPPLIER_SERVICES = [
   {
@@ -262,40 +263,72 @@ export default function ServicesPage() {
       {/* ── Distribution Map Segment ────────────────────────────────────── */}
       <section style={{
         background: T.metal,
-        padding: "120px 48px",
+        padding: "100px 48px 120px",
         color: T.ink,
         position: "relative",
         overflow: "hidden"
       }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 1 }}>
           <Reveal>
-            <div style={{ textAlign: "center", marginBottom: "64px" }}>
+            <div style={{ textAlign: "center", marginBottom: "40px" }}>
               <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "5px", color: T.gold, marginBottom: "16px", textTransform: "uppercase" }}>Network</p>
-              <h2 style={{ fontFamily: ff.h, fontSize: "36px" }}>Our Market Footprint</h2>
+              <h2 style={{ fontFamily: ff.h, fontSize: "40px" }}>Our Market Footprint</h2>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "600px", margin: "16px auto 0" }}>
+                Hover over the map to view our distribution networks across the United States. 
+              </p>
+            </div>
+            
+            {/* Split layout: US Map on left, European origins on right */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "40px", alignItems: "center" }}>
+              
+              <div style={{ flex: "1 1 600px" }}>
+                <DistributionMap />
+              </div>
+
+              <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: "24px" }}>
+                <div style={{ background: T.paper, padding: "40px", borderRadius: "10px", boxShadow: "0 10px 30px rgba(0,0,0,0.03)", border: `1px solid ${T.cream}` }}>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "20px" }}>Direct Distribution</h3>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, lineHeight: 1.6, marginBottom: "16px" }}>
+                    We operate with our own sales forces and logistics infrastructure directly in the key markets.
+                  </p>
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                    <span style={{ background: T.wine, color: T.paper, padding: "6px 12px", borderRadius: "4px", fontSize: "12px", fontFamily: ff.b, fontWeight: "bold" }}>New York</span>
+                    <span style={{ background: T.wine, color: T.paper, padding: "6px 12px", borderRadius: "4px", fontSize: "12px", fontFamily: ff.b, fontWeight: "bold" }}>New Jersey</span>
+                    <span style={{ background: T.wine, color: T.paper, padding: "6px 12px", borderRadius: "4px", fontSize: "12px", fontFamily: ff.b, fontWeight: "bold" }}>Florida</span>
+                  </div>
+                </div>
+
+                <div style={{ background: T.paper, padding: "40px", borderRadius: "10px", boxShadow: "0 10px 30px rgba(0,0,0,0.03)", border: `1px solid ${T.cream}` }}>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "20px" }}>Partner Network</h3>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, lineHeight: 1.6, marginBottom: "16px" }}>
+                    We distribute nationally to key partners spanning the entire US, from California to Massachusetts, ensuring wide accessibility and coverage.
+                  </p>
+                  <div style={{ display: "inline-block", paddingBottom: "2px", borderBottom: `2px solid ${T.gold}` }}>
+                    <span style={{ color: T.gold, fontFamily: ff.b, fontSize: "13px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px" }}>26+ States Covered</span>
+                  </div>
+                </div>
+
+                <div style={{ background: T.deep, padding: "40px", borderRadius: "10px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)", position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", top: -20, right: -20, fontSize: "120px", opacity: 0.05, pointerEvents: "none" }}>🇪🇺</div>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "20px" }}>European Origins</h3>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.cream, lineHeight: 1.6, marginBottom: "20px" }}>
+                    Our sourcing teams and quality control operate exactly where our products are born.
+                  </p>
+                  <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", padding: "8px 16px", borderRadius: "6px" }}>
+                      <span style={{ fontSize: "18px" }}>🇪🇸</span>
+                      <span style={{ color: T.paper, fontFamily: ff.b, fontSize: "14px", fontWeight: "bold" }}>Spain</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", padding: "8px 16px", borderRadius: "6px" }}>
+                      <span style={{ fontSize: "18px" }}>🇮🇹</span>
+                      <span style={{ color: T.paper, fontFamily: ff.b, fontSize: "14px", fontWeight: "bold" }}>Italy</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-            {MARKETS.map((m) => (
-              <Reveal key={m.market}>
-                <div style={{
-                  padding: "32px",
-                  borderRadius: "8px",
-                  background: m.active ? T.wine : "rgba(0,0,0,0.03)",
-                  border: m.active ? "none" : "1px solid rgba(0,0,0,0.08)",
-                  textAlign: "center"
-                }}>
-                  <p style={{ fontFamily: ff.h, fontSize: "22px", marginBottom: "8px", color: m.active ? T.paper : T.ink }}>{m.market}</p>
-                  <p style={{ 
-                    fontFamily: ff.b, 
-                    fontSize: "10px", 
-                    letterSpacing: "2px", 
-                    textTransform: "uppercase", 
-                    color: m.active ? "rgba(255,255,255,0.7)" : T.muted 
-                  }}>{m.type}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
