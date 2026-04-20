@@ -517,25 +517,46 @@ export default function WorldOfWinesPage() {
                       </div>
                     )}
 
-                    <Link
-                      href="/portfolio"
-                      style={{
-                        display: "block",
-                        textAlign: "center",
-                        padding: "14px",
-                        background: T.wine,
-                        color: T.paper,
-                        borderRadius: "8px",
-                        fontFamily: ff.b,
-                        fontSize: "10px",
-                        letterSpacing: "2px",
-                        textTransform: "uppercase",
-                        textDecoration: "none",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Explore Wines from {selectedRegion.name} →
-                    </Link>
+                    <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
+                      <Link
+                        href="/portfolio"
+                        style={{
+                          flex: 2,
+                          textAlign: "center",
+                          padding: "14px",
+                          background: T.wine,
+                          color: T.paper,
+                          borderRadius: "8px",
+                          fontFamily: ff.b,
+                          fontSize: "10px",
+                          letterSpacing: "2px",
+                          textTransform: "uppercase",
+                          textDecoration: "none",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {selectedRegion.isEducational ? "Explore Portfolio" : `Wines from ${selectedRegion.name} →`}
+                      </Link>
+                      <button
+                        onClick={() => document.getElementById("grapes")?.scrollIntoView({ behavior: "smooth" })}
+                        style={{
+                          flex: 1,
+                          padding: "14px",
+                          background: "transparent",
+                          border: `1px solid ${T.wine}`,
+                          color: T.wine,
+                          borderRadius: "8px",
+                          fontFamily: ff.b,
+                          fontSize: "10px",
+                          letterSpacing: "1px",
+                          textTransform: "uppercase",
+                          fontWeight: 600,
+                          cursor: "pointer"
+                        }}
+                      >
+                        Varietals
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Reveal>
@@ -626,7 +647,7 @@ export default function WorldOfWinesPage() {
             </p>
           </Reveal>
 
-          <GrapeLibrary />
+          <GrapeLibrary selectedRegionName={selectedRegion?.name} />
         </div>
       </section>
 

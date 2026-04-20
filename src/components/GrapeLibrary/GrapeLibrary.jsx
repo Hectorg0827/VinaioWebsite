@@ -2,15 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { T, ff } from "@/lib/theme";
-import WineWorldMap from "./WineWorldMap";
 import GrapeCard from "./GrapeCard";
 import GrapeDetailDrawer from "./GrapeDetailDrawer";
 import Reveal from "@/components/Reveal";
 import { createClient } from "@/lib/supabase/client";
 
 /* ── Fallback Seed Data ────────────────────────────────────────────────────
-   Used when the Supabase `grapes` table doesn't exist or is unreachable.
-   Mirrors the schema so the rest of the component works identically. */
+   Used when the Supabase `grapes` table doesn't exist or is unreachable. */
 const SEED_GRAPES = [
   { id: "tempranillo", name: "Tempranillo", color: "Red", body: "Medium–Full", acidity: "Medium", profile: { fruit: "Cherry", earth: "Leather", oak: "Vanilla", other: "Tobacco" }, description: "Spain's noble grape, known for longevity and structure.", food_pairings: ["Grilled lamb", "Aged cheeses", "Charcuterie"], tech_sheet: { soil: "Chalky-clay", climate: "Continental" }, is_featured: true, regions: ["Ribera del Duero", "Rioja"] },
   { id: "albarino", name: "Albariño", color: "White", body: "Light–Medium", acidity: "High", profile: { fruit: "Peach", earth: "Saline", oak: "None", other: "Citrus" }, description: "Crisp, aromatic white from the Atlantic coast.", food_pairings: ["Oysters", "Ceviche", "Grilled fish"], tech_sheet: { soil: "Granite", climate: "Maritime" }, is_featured: true, regions: ["Rías Baixas"] },
@@ -20,41 +18,48 @@ const SEED_GRAPES = [
   { id: "chenin-blanc", name: "Chenin Blanc", color: "White", body: "Medium", acidity: "High", profile: { fruit: "Quince", earth: "Wet stone", oak: "Honey", other: "Yellow apple" }, description: "Highly versatile grape known for range from bone-dry to sweet.", food_pairings: ["Thai curry", "Roasted pork", "Apple tart"], tech_sheet: { soil: "Shale", climate: "Moderate" }, is_featured: true, regions: ["Western Cape", "Loire Valley"] },
   { id: "sangiovese", name: "Sangiovese", color: "Red", body: "Medium–Full", acidity: "High", profile: { fruit: "Sour cherry", earth: "Dried herbs", oak: "Spice", other: "Tomato leaf" }, description: "The soul of Tuscany, vibrant with acidity and earthy charm.", food_pairings: ["Pasta al ragù", "Pizza", "Hard cheeses"], tech_sheet: { soil: "Clay-limestone", climate: "Mediterranean" }, is_featured: true, regions: ["Tuscany", "Umbria"] },
   { id: "malbec", name: "Malbec", color: "Red", body: "Full", acidity: "Medium", profile: { fruit: "Plum", earth: "Cocoa", oak: "Mocha", other: "Violet" }, description: "Argentina's signature grape, rich and velvety at altitude.", food_pairings: ["Grilled beef", "Empanadas", "Blue cheese"], tech_sheet: { soil: "Alluvial", climate: "High-altitude continental" }, is_featured: true, regions: ["Mendoza", "Cahors"] },
+  { id: "tannat", name: "Tannat", color: "Red", body: "Full", acidity: "Medium–High", profile: { fruit: "Blackberry", earth: "Graphite", oak: "Smoke", other: "Dried plum" }, description: "Originally from France, Tannat has become the national grape of Uruguay. Known for its intense tannins and high antioxidant content.", food_pairings: ["Barbecued meats", "Strong cheeses", "Cassoulet"], tech_sheet: { soil: "Clay-loam", climate: "Maritime" }, is_featured: true, regions: ["Uruguay", "Canelones", "Madiran"] },
+  { id: "koshu", name: "Koshu", color: "White", body: "Light", acidity: "High", profile: { fruit: "Yuzu", earth: "Saline", oak: "None", other: "White pepper" }, description: "Japan's primary indigenous wine grape. Produces delicate, elegant wines that reflect the volcanic terroir of Yamanashi.", food_pairings: ["Sushi", "Sashimi", "Tempura"], tech_sheet: { soil: "Volcanic", climate: "Humid monsoon" }, is_featured: true, regions: ["Yamanashi", "Japan"] },
+  { id: "saperavi", name: "Saperavi", color: "Red", body: "Full", acidity: "High", profile: { fruit: "Pomegranate", earth: "Beetroot", oak: "Spice", other: "Leather" }, description: "A 'teinturier' grape from Georgia (the birthplace of wine), meaning both skin and flesh are red. Produces deep, ink-colored wines with massive longevity.", food_pairings: ["Khinkali", "Grilled kebabs", "Walnut dishes"], tech_sheet: { soil: "Alluvial", climate: "Moderate continental" }, is_featured: true, regions: ["Kakheti", "Georgia"] },
+  { id: "riesling", name: "Riesling", color: "White", body: "Light–Medium", acidity: "Very High", profile: { fruit: "Lime", earth: "Petrol", oak: "None", other: "Honeysuckle" }, description: "The aromatic king of cool climates. Expresses terroir more precisely than almost any other grape.", food_pairings: ["Spicy Thai food", "Saucisson", "Goat cheese"], tech_sheet: { soil: "Slate", climate: "Cool continental" }, is_featured: true, regions: ["Mosel", "Alsace", "Rheingau", "Eden Valley", "Finger Lakes"] },
 ];
 
-/* ── Map country names to the regions in the seed data ─────────────────── */
+/* ── Static Mapping (Fallback) ───────────────────────────────────────────── */
 const COUNTRY_REGION_MAP = {
-  "Spain": ["Ribera del Duero", "Rioja", "La Mancha", "Priorat", "Rueda", "Rías Baixas"],
-  "Italy": ["Tuscany", "Umbria", "Piedmont", "Veneto"],
-  "France": ["Loire Valley", "Bordeaux", "Burgundy", "Cahors"],
-  "USA": ["Napa Valley", "Sonoma", "Willamette Valley"],
-  "Argentina": ["Mendoza"],
-  "Chile": ["Maipo Valley", "Colchagua"],
-  "South Africa": ["Stellenbosch", "Western Cape"],
-  "Portugal": ["Douro", "Alentejo"],
+  "Spain": ["Ribera del Duero", "Rioja", "La Mancha", "Priorat", "Rueda", "Rías Baixas", "Jerez"],
+  "Italy": ["Tuscany", "Umbria", "Piedmont", "Veneto", "Sicily", "Puglia"],
+  "France": ["Loire Valley", "Bordeaux", "Burgundy", "Cahors", "Champagne", "Rhône"],
+  "USA": ["Napa Valley", "Sonoma", "Willamette Valley", "Finger Lakes"],
+  "Argentina": ["Mendoza", "Salta", "Patagonia"],
+  "Chile": ["Maipo Valley", "Colchagua", "Atacama", "Casablanca"],
+  "South Africa": ["Stellenbosch", "Western Cape", "Swartland"],
+  "Portugal": ["Douro", "Alentejo", "Vinho Verde", "Dão"],
 };
 
-export default function GrapeLibrary() {
+export default function GrapeLibrary({ selectedRegionName = null }) {
   const [grapes, setGrapes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [localRegion, setLocalRegion] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeColor, setActiveColor] = useState("All");
   const [selectedGrape, setSelectedGrape] = useState(null);
+
+  // Sync internal state with external prop (the map selection)
+  useEffect(() => {
+    if (selectedRegionName) {
+      setLocalRegion(selectedRegionName);
+    }
+  }, [selectedRegionName]);
 
   useEffect(() => {
     const fetchGrapes = async () => {
       setLoading(true);
       try {
         const supabase = createClient();
-        const { data, error } = await supabase
-          .from("grapes")
-          .select("*");
-
+        const { data, error } = await supabase.from("grapes").select("*");
         if (!error && data && data.length > 0) {
           setGrapes(data);
         } else {
-          // Fallback to seed data when table doesn't exist or is empty
           setGrapes(SEED_GRAPES);
         }
       } catch {
@@ -62,7 +67,6 @@ export default function GrapeLibrary() {
       }
       setLoading(false);
     };
-
     fetchGrapes();
   }, []);
 
@@ -70,10 +74,11 @@ export default function GrapeLibrary() {
     const matchesSearch = g.name.toLowerCase().includes(searchQuery.toLowerCase());
     
     let matchesRegion = true;
-    if (selectedRegion) {
-      const regionNames = COUNTRY_REGION_MAP[selectedRegion] || [];
+    if (localRegion) {
+      const mappedRegions = COUNTRY_REGION_MAP[localRegion] || [localRegion];
       const grapeRegions = g.regions || [];
-      matchesRegion = grapeRegions.some(r => regionNames.includes(r));
+      // Pass if grape lists this country or one of its known sub-regions
+      matchesRegion = grapeRegions.some(r => mappedRegions.includes(r) || r === localRegion);
     }
     
     const matchesColor = activeColor === "All" || g.color === activeColor;
@@ -82,15 +87,7 @@ export default function GrapeLibrary() {
 
   return (
     <div style={{ position: "relative" }}>
-      {/* 1. Interactive Regional Map */}
-      <div style={{ marginBottom: "80px" }}>
-        <WineWorldMap 
-          onRegionSelect={(region) => setSelectedRegion(region === selectedRegion ? null : region)} 
-          selectedRegion={selectedRegion} 
-        />
-      </div>
-
-      {/* 2. Filters & Search */}
+      {/* 1. Filters & Search */}
       <div style={{ 
         display: "flex", 
         justifyContent: "space-between", 
@@ -147,16 +144,33 @@ export default function GrapeLibrary() {
         </div>
       </div>
 
-      {/* Region Status Bar */}
-      {selectedRegion && (
+      {/* Region Status Bar (Integrated Filter Feedback) */}
+      {localRegion && (
         <div style={{ marginBottom: "32px", display: "flex", alignItems: "center", gap: "12px" }}>
-          <span style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted }}>Filtering by Region:</span>
-          <span style={{ padding: "6px 16px", background: T.gold, color: T.paper, borderRadius: "20px", fontFamily: ff.b, fontSize: "12px", fontWeight: 700 }}>{selectedRegion}</span>
-          <button onClick={() => setSelectedRegion(null)} style={{ background: "none", border: "none", color: T.wine, fontSize: "12px", cursor: "pointer", padding: 0 }}>✕ Clear</button>
+          <span style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted }}>
+            Origin:
+          </span>
+          <span style={{ 
+            padding: "6px 16px", 
+            background: T.wine, 
+            color: "white", 
+            borderRadius: "20px", 
+            fontFamily: ff.b, 
+            fontSize: "12px", 
+            fontWeight: 700 
+          }}>
+            {localRegion}
+          </span>
+          <button 
+            onClick={() => setLocalRegion(null)} 
+            style={{ background: "none", border: "none", color: T.wine, fontSize: "12px", cursor: "pointer", padding: 0 }}
+          >
+            ✕ Reset Filter
+          </button>
         </div>
       )}
 
-      {/* 3. Card Grid */}
+      {/* 2. Card Grid */}
       {loading ? (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "24px" }}>
           {[...Array(6)].map((_, i) => (
@@ -175,11 +189,18 @@ export default function GrapeLibrary() {
 
       {!loading && filteredGrapes.length === 0 && (
         <div style={{ textAlign: "center", padding: "80px 0", color: T.muted, fontFamily: ff.b }}>
-          No varieties found matching your filters.
+          No varieties found for {localRegion || "your selection"}.
+          <br/>
+          <button 
+            onClick={() => { setLocalRegion(null); setActiveColor("All"); setSearchQuery(""); }}
+            style={{ marginTop: "16px", background: "none", border: `1px solid ${T.wine}`, color: T.wine, padding: "8px 16px", borderRadius: "4px", cursor: "pointer" }}
+          >
+            Show All Varieties
+          </button>
         </div>
       )}
 
-      {/* 4. Side Panel (Drawer) */}
+      {/* 3. Side Panel (Drawer) */}
       {selectedGrape && (
         <>
           <div 
