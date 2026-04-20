@@ -8,6 +8,7 @@ async function unauthorized() {
 }
 
 // GET /api/admin/config — Fetch global settings (or specific by key)
+export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const key = searchParams.get("key") || "branding";

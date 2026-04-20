@@ -152,9 +152,3 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
     </div>
   );
 }
->
-        </div>
-      )}
-    </div>
-  );
-}

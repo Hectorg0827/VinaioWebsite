@@ -1,0 +1,7 @@
+.git
+node_modules
+.next
+assets
+public/images/source
+*.log
+.DS_Store
