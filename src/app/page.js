@@ -312,7 +312,23 @@ export default function HomePage() {
             <Hr w="40px" c={T.wine} />
           </div>
 
-          <div style={{ opacity: loaded ? 1 : 0, transition: "all 1s ease 0.3s", marginBottom: "40px" }}>
+          <div 
+            style={{ 
+              opacity: loaded ? 1 : 0, 
+              transition: "all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s", 
+              marginBottom: "40px",
+              background: "rgba(255, 255, 255, 0.07)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              padding: "24px 60px",
+              borderRadius: "100px",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
             <div
               style={{
                 height: "80px",
@@ -327,7 +343,7 @@ export default function HomePage() {
                 maskRepeat: "no-repeat",
                 maskPosition: "center",
                 margin: "0 auto",
-                filter: `drop-shadow(1px 1px 0 rgba(255,255,255,0.8)) drop-shadow(-1px -1px 0 rgba(255,255,255,0.8)) drop-shadow(1px -1px 0 rgba(255,255,255,0.8)) drop-shadow(-1px 1px 0 rgba(255,255,255,0.8)) drop-shadow(0 4px 10px rgba(0,0,0,0.5))`
+                filter: `drop-shadow(0 4px 12px rgba(0,0,0,0.2))`
               }} 
             />
           </div>
