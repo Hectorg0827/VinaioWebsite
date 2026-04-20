@@ -282,20 +282,6 @@ export default function HomePage() {
           }}
         />
 
-        {/* Global Frost Overlay */}
-        <div 
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(255, 255, 255, 0.03)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            zIndex: 5,
-            opacity: loaded ? 1 : 0,
-            transition: "opacity 2s ease"
-          }}
-        />
-
         <div
           style={{
             position: "relative",
@@ -333,9 +319,23 @@ export default function HomePage() {
               marginBottom: "40px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              position: "relative"
             }}
           >
+            {/* The Ethereal Glow Backlight */}
+            <div 
+              style={{
+                position: "absolute",
+                width: "600px",
+                height: "300px",
+                background: "radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 40%, transparent 70%)",
+                filter: "blur(20px)",
+                zIndex: -1,
+                opacity: 0.8
+              }}
+            />
+            
             <div
               style={{
                 height: "80px",
@@ -350,7 +350,7 @@ export default function HomePage() {
                 maskRepeat: "no-repeat",
                 maskPosition: "center",
                 margin: "0 auto",
-                filter: `drop-shadow(0 4px 12px rgba(0,0,0,0.15))`
+                filter: `drop-shadow(0 4px 15px rgba(0,0,0,0.2))`
               }} 
             />
           </div>
