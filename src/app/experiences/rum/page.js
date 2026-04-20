@@ -245,6 +245,34 @@ export default function HouseOfRumPage() {
 
   return (
     <main style={{ background: T.ink, minHeight: "100vh", color: T.paper }}>
+      <style>{`
+        .rum-section { padding: 120px 56px; }
+        .timeline-grid { display: grid; grid-template-columns: 1fr 200px; gap: 32px; align-items: start; }
+        .cocktail-grid {
+          display: grid;
+          gap: 0;
+          border-radius: 20px;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.1);
+          background: rgba(255,255,255,0.05);
+        }
+        .cocktail-grid-even { grid-template-columns: 300px 1fr; }
+        .cocktail-grid-odd { grid-template-columns: 1fr 300px; }
+
+        @media (max-width: 1024px) {
+          .rum-section { padding: 80px 24px !important; }
+        }
+
+        @media (max-width: 768px) {
+          .rum-section { padding: 60px 20px !important; }
+          .timeline-grid { grid-template-columns: 1fr; }
+          .timeline-brand-box { padding: 16px !important; }
+          .cocktail-grid { grid-template-columns: 1fr !important; }
+          .cocktail-img-box { height: 260px !important; order: 0 !important; }
+          .cocktail-content-box { order: 1 !important; padding: 24px !important; }
+          .distillery-card { padding: 24px !important; }
+        }
+      `}</style>
 
       {/* ══════════════════════════════════════════════════════════════════
           §1 — HERO
@@ -324,7 +352,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §3 — THE ORIGINS OF RUM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="origins" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="origins" className="rum-section" style={{ background: T.ink }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -354,7 +382,7 @@ export default function HouseOfRumPage() {
                     boxShadow: `0 0 20px ${T.gold}40`,
                   }} />
                   
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 200px", gap: "32px", alignItems: "start" }}>
+                  <div className="timeline-grid">
                     <div>
                       <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.gold, marginBottom: "8px", fontWeight: 700 }}>
                         {item.year}
@@ -373,7 +401,7 @@ export default function HouseOfRumPage() {
                     )}
                   </div>
 
-                  <div style={{ 
+                  <div className="timeline-brand-box" style={{ 
                     padding: "24px", 
                     background: "rgba(255,255,255,0.06)", 
                     borderRadius: "12px", 
@@ -405,7 +433,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §4 — THE BARREL ROOM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="barrel" style={{ padding: "120px 56px", background: T.ink, position: "relative", overflow: "hidden" }}>
+      <section id="barrel" className="rum-section" style={{ background: T.ink, position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(194,163,85,0.12) 0%, transparent 60%)" }} />
         <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative" }}>
           <Reveal>
@@ -449,7 +477,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §5 — HOW TO TASTE RUM
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="tasting" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="tasting" className="rum-section" style={{ background: T.ink }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -504,7 +532,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §6 — RUM BY STYLE
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="styles" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="styles" className="rum-section" style={{ background: T.ink }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -557,7 +585,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §7 — COCKTAIL STUDIO
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="cocktails" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="cocktails" className="rum-section" style={{ background: T.ink }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -572,19 +600,11 @@ export default function HouseOfRumPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
             {COCKTAIL_RECIPES.map((cocktail, i) => (
               <Reveal key={cocktail.name} delay={i * 0.08}>
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: i % 2 === 0 ? "300px 1fr" : "1fr 300px",
-                  gap: "0",
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  background: "rgba(255,255,255,0.05)",
-                }}>
-                  <div style={{ order: i % 2 === 0 ? 0 : 1, height: "320px", overflow: "hidden" }}>
+                <div className={`cocktail-grid ${i % 2 === 0 ? "cocktail-grid-even" : "cocktail-grid-odd"}`}>
+                  <div className="cocktail-img-box" style={{ order: i % 2 === 0 ? 0 : 1, height: "320px", overflow: "hidden" }}>
                     <img src={cocktail.img} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
                   </div>
-                  <div style={{ order: i % 2 === 0 ? 1 : 0, padding: "40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <div className="cocktail-content-box" style={{ order: i % 2 === 0 ? 1 : 0, padding: "40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "12px" }}>
                       {cocktail.spirit} · {cocktail.brand}
                     </p>
@@ -612,7 +632,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §8 — DISTILLERY STORIES
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="distillers" style={{ padding: "120px 56px", background: T.ink }}>
+      <section id="distillers" className="rum-section" style={{ background: T.ink }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
@@ -627,7 +647,7 @@ export default function HouseOfRumPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
             {DISTILLERY_STORIES.map((dist, i) => (
               <Reveal key={dist.name} delay={i * 0.1}>
-                <div style={{
+                <div className="distillery-card" style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: "20px",
@@ -669,7 +689,7 @@ export default function HouseOfRumPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §9 — FINAL CTA
       ══════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "140px 56px", textAlign: "center", background: T.ink }}>
+      <section className="rum-section" style={{ textAlign: "center", background: T.ink }}>
         <Reveal>
           <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
           <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.paper, marginBottom: "20px" }}>Continue Exploring</h2>

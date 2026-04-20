@@ -358,7 +358,31 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §3.5 — INTERACTIVE WINE MAP
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="winemap" style={{ padding: "120px 56px" }}>
+      <section id="winemap" className="winemap-section">
+        <style>{`
+          .winemap-section { padding: 120px 56px; }
+          .winemap-grid { 
+            display: grid; 
+            grid-template-columns: ${selectedRegion ? "1fr 1.1fr" : "1fr"}; 
+            gap: 40px; 
+            transition: all 0.4s; 
+          }
+
+          @media (max-width: 1024px) {
+            .winemap-section { padding: 80px 24px; }
+            .winemap-grid { 
+              grid-template-columns: 1fr; 
+              gap: 24px;
+            }
+            .winemap-detail-panel {
+              position: relative !important;
+              top: 0 !important;
+            }
+          }
+          @media (max-width: 768px) {
+            .winemap-section { padding: 60px 20px; }
+          }
+        `}</style>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
@@ -370,7 +394,7 @@ export default function WorldOfWinesPage() {
             </p>
           </Reveal>
 
-          <div style={{ display: "grid", gridTemplateColumns: selectedRegion ? "1fr 1.1fr" : "1fr", gap: "40px", transition: "all 0.4s" }}>
+          <div className="winemap-grid">
             {/* Map Grid - Replaced with Interactive SVG Map */}
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <WineWorldMap 
@@ -419,7 +443,7 @@ export default function WorldOfWinesPage() {
             {/* Detail Panel */}
             {selectedRegion && (
               <Reveal>
-                <div style={{
+                <div className="winemap-detail-panel" style={{
                   background: T.paper,
                   borderRadius: "20px",
                   border: `1px solid ${T.cream}`,

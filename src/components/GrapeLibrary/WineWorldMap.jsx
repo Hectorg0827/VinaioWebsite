@@ -12,8 +12,13 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
   const [isDragging, setIsDragging] = useState(false);
   const [lastMouse, setLastMouse] = useState({ x: 0, y: 0 });
 
+  const [isTouch, setIsTouch] = useState(false);
   const svgRef = useRef(null);
   const isLight = theme === "light";
+
+  useEffect(() => {
+    setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
 
   // Vinaio sourcing regions (ISO ALPHA-2 or matching names)
   const sourcingRegions = [
@@ -108,7 +113,7 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
   const viewBox = `${-offset.x / zoom} ${-offset.y / zoom} ${900 / zoom} ${600 / zoom}`;
 
   return (
-    <div style={{ 
+    <div className="wine-world-map-container" style={{ 
       position: "relative", width: "100%", 
       background: isLight ? T.paper : T.ink, 
       borderRadius: "24px", 
@@ -117,8 +122,63 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
       border: `1px solid ${isLight ? T.cream : "rgba(255,255,255,0.08)"}`,
       userSelect: "none"
     }}>
+      <style>{`
+        .wine-world-map-container {
+          min-height: 400px;
+        }
+        .map-canvas-wrapper {
+          width: 100%;
+          height: 600px;
+        }
+        .map-title-box {
+          position: absolute; top: 30px; left: 30px; z-index: 10;
+        }
+        .map-controls {
+          position: absolute; bottom: 30px; right: 30px; z-index: 20;
+          display: flex; flexDirection: column; gap: 10px;
+        }
+        .map-legend {
+          position: absolute; bottom: 30px; left: 30px; z-index: 20;
+          display: flex; gap: 20px; background: ${isLight ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.4)"};
+          padding: 10px 18px; borderRadius: 30px; backdropFilter: blur(8px);
+          border: 1px solid ${isLight ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.1)"};
+        }
+
+        @media (max-width: 1024px) {
+          .map-canvas-wrapper { height: 500px; }
+          .map-title-box h3 { font-size: 24px !important; }
+        }
+
+        @media (max-width: 768px) {
+          .map-canvas-wrapper { height: 400px; }
+          .map-title-box { top: 20px; left: 20px; }
+          .map-title-box h3 { font-size: 20px !important; }
+          .map-title-box p { font-size: 10px !important; max-width: 240px !important; }
+          .map-controls { bottom: 20px; right: 20px; }
+          .map-legend { 
+            bottom: 20px; left: 20px; 
+            padding: 8px 12px;
+            gap: 12px;
+          }
+          .map-legend span { font-size: 9px !important; }
+        }
+
+        @media (max-width: 480px) {
+          .map-canvas-wrapper { height: 350px; }
+          .map-title-box { width: calc(100% - 40px); }
+          .map-legend { display: none; }
+        }
+
+        /* Landscape specific fix */
+        @media (max-height: 500px) and (orientation: landscape) {
+          .map-canvas-wrapper { height: calc(100vh - 100px); }
+          .map-title-box { top: 15px; left: 15px; }
+          .map-controls { bottom: 15px; right: 15px; }
+          .map-legend { display: none; }
+        }
+      `}</style>
       {/* Title & Stats */}
-      <div style={{ position: "absolute", top: 30, left: 30, zIndex: 10 }}>
+      <div className="map-title-box">
         <p style={{ 
           fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", 
           color: isLight ? T.wine : T.gold, marginBottom: "6px" 
@@ -140,22 +200,14 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
       </div>
 
       {/* Navigation Controls */}
-      <div style={{ 
-        position: "absolute", bottom: 30, right: 30, zIndex: 20,
-        display: "flex", flexDirection: "column", gap: "10px"
-      }}>
+      <div className="map-controls">
         <button onClick={zoomIn} style={controlStyle(isLight)} title="Zoom In">+</button>
         <button onClick={zoomOut} style={controlStyle(isLight)} title="Zoom Out">−</button>
         <button onClick={resetMap} style={{ ...controlStyle(isLight), fontSize: "9px" }}>RESET</button>
       </div>
 
       {/* Legend */}
-      <div style={{ 
-        position: "absolute", bottom: 30, left: 30, zIndex: 20,
-        display: "flex", gap: "20px", background: isLight ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.4)",
-        padding: "10px 18px", borderRadius: "30px", backdropFilter: "blur(8px)",
-        border: `1px solid ${isLight ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.1)"}`
-      }}>
+      <div className="map-legend">
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: T.wine, border: `1px solid ${T.gold}` }} />
           <span style={{ fontFamily: ff.b, fontSize: "10px", color: isLight ? T.ink : T.paper }}>Vinaio Sourced</span>
@@ -168,8 +220,9 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
 
       {/* Map Canvas */}
       <div 
+        className="map-canvas-wrapper"
         style={{ 
-          width: "100%", height: "600px", cursor: isDragging ? "grabbing" : "grab",
+          cursor: isDragging ? "grabbing" : "grab",
           touchAction: "none"
         }}
         onMouseMove={handleMouseMove}
@@ -233,7 +286,7 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
       </div>
 
       {/* Floating Knowledge Card */}
-      {hovered && (
+      {hovered && !isTouch && (
         <div style={{
           position: "fixed",
           top: mousePos.y + 20,

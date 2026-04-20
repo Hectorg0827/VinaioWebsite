@@ -248,6 +248,19 @@ export default function HomePage() {
         .hero-slide.active img {
           animation: kenburns 15s forwards ease-out;
         }
+
+        /* Responsive Homepage Styles */
+        @media (max-width: 1024px) {
+          .hero-content { padding: 0 5vw !important; }
+          .hero-logo-wrapper { height: 60px !important; width: 240px !important; }
+          .homepage-section { padding: 80px 24px !important; }
+        }
+        @media (max-width: 768px) {
+          .homepage-section { padding: 60px 20px !important; }
+          .hero-logo-wrapper { height: 50px !important; width: 200px !important; }
+          .experience-grid { grid-template-columns: 1fr !important; }
+          .experience-card { height: 380px !important; }
+        }
       `}</style>
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -283,6 +296,7 @@ export default function HomePage() {
         />
 
         <div
+          className="hero-content"
           style={{
             position: "relative",
             height: "100%",
@@ -323,6 +337,7 @@ export default function HomePage() {
             }}
           >
             <div
+              className="hero-logo-wrapper"
               style={{
                 height: "80px",
                 width: "300px",
@@ -495,7 +510,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Services Strip ───────────────────────────────────────────────── */}
-      <section style={{ background: T.paper, padding: "80px 56px" }}>
+      <section className="homepage-section" style={{ background: T.paper, padding: "80px 56px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "56px" }}>
@@ -604,7 +619,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Experience Hubs ──────────────────────────────────────────────── */}
-      <section style={{ background: T.editorialGrey, padding: "60px 56px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+      <section className="homepage-section" style={{ background: T.editorialGrey, padding: "60px 56px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: "40px" }}>
@@ -621,7 +636,7 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "32px" }}>
+          <div className="experience-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: "32px" }}>
             {[
               { 
                 title: "World of Wines", 
@@ -637,7 +652,7 @@ export default function HomePage() {
               }
             ].map((exp, i) => (
               <Reveal key={exp.href} delay={i * 0.2}>
-                <Link href={exp.href} style={{ textDecoration: "none", display: "block", position: "relative", overflow: "hidden", borderRadius: "16px", height: "480px" }}>
+                <Link href={exp.href} className="experience-card" style={{ textDecoration: "none", display: "block", position: "relative", overflow: "hidden", borderRadius: "16px", height: "480px" }}>
                   <div style={{ position: "absolute", inset: 0, transition: "transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1)" }} onMouseEnter={e => e.currentTarget.style.transform = "scale(1.08)"} onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
                     <img src={exp.img} alt={exp.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%)" }} />
@@ -674,6 +689,7 @@ export default function HomePage() {
         <ScrollLine height="100px" color={T.wine} bgColor={"rgba(255,255,255,0.05)"} nodeBg={T.editorialGrey} />
       </div>
       <section
+        className="homepage-section"
         style={{
           background: T.editorialGrey,
           padding: "100px 56px",
@@ -753,7 +769,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Territory ────────────────────────────────────────────────────── */}
-      <section style={{ background: T.cream, padding: "80px 56px" }}>
+      <section className="homepage-section" style={{ background: T.cream, padding: "80px 56px" }}>
         <div
           style={{
             maxWidth: "1200px",
