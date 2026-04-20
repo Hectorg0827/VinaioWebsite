@@ -8,7 +8,7 @@ const supabase = createClient("https://yzcmfepqjdybavpsjbwm.supabase.co", env.SU
 
 const STORAGE_ZONE = "bottleimages1";
 const STORAGE_PASSWORD = "e3cca9fc-08ac-4876-9e09c6c5f1c6-f32c-437e";
-const BOTTLE_CDN = "https://vinaioimports.b-cdn.net";
+const BOTTLE_CDN = "https://vinaio-bottles-cdn.b-cdn.net";
 
 async function fetchRecursive(path = "") {
   console.log(`Scanning: ${path || "/"}`);
@@ -58,9 +58,10 @@ async function reconcile() {
   for (const p of products) {
     // Force re-matching for all that don't have a working link or were missing
     const isPlaceholder = !p.image_url || p.image_url.includes("placeholder");
-    const isBrokenHost = p.image_url && p.image_url.includes("vinaio-bottles.b-cdn.net");
+    const isOldBrokenHost = p.image_url && p.image_url.includes("vinaio-bottles.b-cdn.net");
+    const isWrongAccountHost = p.image_url && p.image_url.includes("vinaioimports.b-cdn.net");
     
-    if (!isPlaceholder && !isBrokenHost) continue;
+    if (!isPlaceholder && !isOldBrokenHost && !isWrongAccountHost) continue;
 
     const normBrand = normalize(p.brand);
     const normName = normalize(p.name);
