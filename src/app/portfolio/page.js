@@ -625,10 +625,15 @@ function FeaturedCard({ product }) {
 // ─── Product card (Consistent styling) ───
 function ProductCard({ product }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  
   const logo = product.logoUrl || product.logo_url;
   const bottle = product.imageUrl || product.image_url;
   const description = product.description_en || product.description || "";
   const teaser = product.summary || (description.length > 120 ? description.substring(0, 117) + "..." : description);
+
+  // Fallback if no URL or if image fails to load
+  const displayBottle = (!bottle || imgError) ? "/images/placeholders/bottle_placeholder.png" : bottle;
 
   return (
     <div
@@ -642,15 +647,34 @@ function ProductCard({ product }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div style={{ height: "100px", padding: "20px", display: "flex", alignItems: "center", justifyContent: "center", background: "white", borderBottom: `1px solid ${T.bg}` }}>
-        {logo ? <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} /> : <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", textTransform: "uppercase" }}>{product.brand}</span>}
+        {logo ? (
+          <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", textTransform: "uppercase" }}>{product.brand}</span>
+        )}
       </div>
       <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
         <div style={{ textAlign: "center" }}>
           <h3 style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 700, color: T.ink, marginBottom: "4px", textTransform: "uppercase" }}>{product.brand}</h3>
           <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
         </div>
-        <div style={{ height: "240px", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }} onClick={() => product.onImageClick?.(bottle)}>
-          {bottle ? <img src={bottle} alt={product.name} style={{ height: "100%", maxWidth: "100%", objectFit: "contain", transition: "all 0.5s" }} /> : <div style={{ width: "100%", height: "100%", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>No Image</div>}
+        <div 
+          style={{ height: "240px", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }} 
+          onClick={() => product.onImageClick?.(displayBottle)}
+        >
+          <img 
+            src={displayBottle} 
+            alt={product.name} 
+            onError={() => setImgError(true)}
+            style={{ 
+              height: "100%", 
+              maxWidth: "100%", 
+              objectFit: "contain", 
+              transition: "all 0.5s",
+              opacity: (imgError || !bottle) ? 0.3 : 1,
+              filter: (imgError || !bottle) ? "grayscale(1) contrast(1.2)" : "none"
+            }} 
+          />
         </div>
         <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>{teaser}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>

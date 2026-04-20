@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import SmartLink from "@/components/SmartLink";
 import GrapeLibrary from "@/components/GrapeLibrary/GrapeLibrary";
 import WineWorldMap from "@/components/GrapeLibrary/WineWorldMap";
+import wineKnowledge from "@/data/global-wine-knowledge.json";
 
 /* ── SVG Icons (replacing emojis with premium line art) ─────────────────── */
 const IconGlobe = () => (
@@ -376,11 +377,40 @@ export default function WorldOfWinesPage() {
                 theme="light"
                 selectedRegion={selectedRegion?.name}
                 onRegionSelect={(name) => {
-                  const region = WINE_REGIONS.find(r => r.name === name);
+                  // 1. Check if it's a Vinaio sourcing region
+                  let region = WINE_REGIONS.find(r => 
+                    r.name.toLowerCase() === name.toLowerCase() ||
+                    (r.name === "Peru & Colombia" && (name === "Peru" || name === "Colombia")) ||
+                    (r.name === "Dominican Republic" && name === "Dominican Rep.")
+                  );
+                  
+                  // 2. If not Vinaio, check global knowledge for educational view
+                  if (!region) {
+                    const knowledge = Object.entries(wineKnowledge).find(([iso, k]) => 
+                      k.name.toLowerCase() === name.toLowerCase() ||
+                      (name === "United States of America" && k.name === "USA") ||
+                      (name === "Dominican Rep." && k.name === "Dominican Republic")
+                    );
+
+                    if (knowledge) {
+                      const [iso, k] = knowledge;
+                      region = {
+                        name: k.name,
+                        iso: iso.toLowerCase(),
+                        terroir: k.terroir_vibe,
+                        climate: "Regional Terroir",
+                        grapes: k.grapes,
+                        pairings: "Regional Cuisine",
+                        featured: [],
+                        img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800",
+                        isEducational: true
+                      };
+                    }
+                  }
+
                   setSelectedRegion(region || null);
-                  // Optional: Auto-scroll to details if it's a mobile layout
-                  if (region && window.innerWidth < 768) {
-                    document.getElementById("regions")?.scrollIntoView({ behavior: "smooth" });
+                  if (region && window.innerWidth < 1024) {
+                    document.getElementById("winemap")?.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
               />
@@ -439,19 +469,29 @@ export default function WorldOfWinesPage() {
                       <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.ink, fontStyle: "italic" }}>{selectedRegion.pairings}</p>
                     </div>
 
-                    {/* Featured Producers */}
-                    <div style={{ borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "20px", marginBottom: "24px" }}>
-                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Vinaio Producers</p>
-                      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                        {selectedRegion.featured.map(f => (
-                          <SmartLink key={f} text={f}>
-                            <span style={{ padding: "6px 14px", background: "rgba(194,163,85,0.15)", color: T.gold, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>
-                              {f}
-                            </span>
-                          </SmartLink>
-                        ))}
+                    {/* Featured Producers (Only for Sourcing Regions) */}
+                    {selectedRegion.featured.length > 0 && (
+                      <div style={{ borderTop: "1px solid rgba(0,0,0,0.1)", paddingTop: "20px", marginBottom: "24px" }}>
+                        <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Vinaio Producers</p>
+                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                          {selectedRegion.featured.map(f => (
+                            <SmartLink key={f} text={f}>
+                              <span style={{ padding: "6px 14px", background: "rgba(194,163,85,0.15)", color: T.gold, borderRadius: "20px", fontFamily: ff.b, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>
+                                {f}
+                              </span>
+                            </SmartLink>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {selectedRegion.isEducational && (
+                      <div style={{ padding: "16px", background: "rgba(0,0,0,0.02)", borderRadius: "12px", border: "1px dashed rgba(0,0,0,0.1)" }}>
+                         <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.muted, margin: 0 }}>
+                           Vinaio does not currently source from this region, but we celebrate its contribution to the global terroir heritage.
+                         </p>
+                      </div>
+                    )}
 
                     <Link
                       href="/portfolio"
