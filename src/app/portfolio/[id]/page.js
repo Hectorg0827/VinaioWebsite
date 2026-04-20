@@ -274,9 +274,34 @@ function SuggestionCard({ product }) {
   
   return (
     <Link href={`/portfolio/${product.id || product.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
-      <div style={{ background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "12px", padding: "24px", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", transition: "transform 0.3s" }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-5px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
-        <div style={{ height: "50px", marginBottom: "16px", opacity: 0.7 }}>
-           {logo ? <img src={logo} style={{ maxHeight: "100%", maxWidth: "120px", objectFit: "contain" }} /> : <span style={{ fontFamily: ff.h, fontSize: "14px", textTransform: "uppercase", color: T.taupe }}>{product.brand}</span>}
+      <div style={{ 
+        background: T.paper, 
+        border: `1px solid ${T.cream}`, 
+        borderRadius: "12px", 
+        padding: "24px", 
+        height: "100%", 
+        display: "flex", 
+        flexDirection: "column", 
+        alignItems: "center", 
+        textAlign: "center", 
+        transition: "transform 0.3s",
+        overflow: "hidden"
+      }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-5px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
+        <div style={{ 
+          height: "70px", 
+          width: "calc(100% + 48px)", 
+          margin: "-24px -24px 24px -24px", 
+          background: T.ink, 
+          display: "flex", 
+          alignItems: "center", 
+          justifyContent: "center",
+          borderBottom: "1px solid rgba(255,255,255,0.1)"
+        }}>
+           {logo ? (
+             <img src={logo} style={{ maxHeight: "70%", maxWidth: "120px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+           ) : (
+             <span style={{ fontFamily: ff.h, fontSize: "14px", textTransform: "uppercase", color: "white", letterSpacing: "1.5px" }}>{product.brand}</span>
+           )}
         </div>
         <div style={{ height: "180px", marginBottom: "20px" }}>
            {bottle && <img src={bottle} style={{ height: "100%", objectFit: "contain" }} />}

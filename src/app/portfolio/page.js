@@ -646,11 +646,25 @@ function ProductCard({ product }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={{ height: "100px", padding: "20px", display: "flex", alignItems: "center", justifyContent: "center", background: "white", borderBottom: `1px solid ${T.bg}` }}>
+      <div style={{ 
+        height: "100px", 
+        padding: "20px", 
+        display: "flex", 
+        alignItems: "center", 
+        justifyContent: "center", 
+        background: T.ink, 
+        borderBottom: `1px solid rgba(255,255,255,0.1)` 
+      }}>
         {logo ? (
-          <img src={logo} alt={`${product.brand} logo`} style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain" }} />
+          <img 
+            src={logo} 
+            alt={`${product.brand} logo`} 
+            style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "brightness(0) invert(1)" }} 
+          />
         ) : (
-          <span style={{ fontFamily: ff.h, color: T.taupe, fontSize: "18px", textTransform: "uppercase" }}>{product.brand}</span>
+          <span style={{ fontFamily: ff.h, color: "white", fontSize: "18px", textTransform: "uppercase", letterSpacing: "2px" }}>
+            {product.brand}
+          </span>
         )}
       </div>
       <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
