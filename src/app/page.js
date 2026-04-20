@@ -319,23 +319,9 @@ export default function HomePage() {
               marginBottom: "40px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              position: "relative"
+              justifyContent: "center"
             }}
           >
-            {/* The Ethereal Glow Backlight */}
-            <div 
-              style={{
-                position: "absolute",
-                width: "600px",
-                height: "300px",
-                background: "radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 40%, transparent 70%)",
-                filter: "blur(20px)",
-                zIndex: -1,
-                opacity: 0.8
-              }}
-            />
-            
             <div
               style={{
                 height: "80px",
@@ -351,10 +337,10 @@ export default function HomePage() {
                 maskPosition: "center",
                 margin: "0 auto",
                 filter: `
-                  drop-shadow(1.5px 0 0 white) 
-                  drop-shadow(-1.5px 0 0 white) 
-                  drop-shadow(0 1.5px 0 white) 
-                  drop-shadow(0 -1.5px 0 white) 
+                  drop-shadow(2px 0 0 white) 
+                  drop-shadow(-2px 0 0 white) 
+                  drop-shadow(0 2px 0 white) 
+                  drop-shadow(0 -2px 0 white) 
                   drop-shadow(0 10px 20px rgba(0,0,0,0.3))
                 `
               }} 
