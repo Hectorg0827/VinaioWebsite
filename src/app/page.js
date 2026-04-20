@@ -268,7 +268,7 @@ export default function HomePage() {
             <img 
               src={url} 
               alt="Hero Slide" 
-              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.55 }} 
+              style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.4 }} 
             />
           </div>
         ))}
