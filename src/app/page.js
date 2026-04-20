@@ -305,11 +305,11 @@ export default function HomePage() {
               gap: "20px",
             }}
           >
-            <Hr w="40px" c={T.wine} />
-            <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.wine }}>
+            <Hr w="40px" c={T.paper} style={{ opacity: 0.5 }} />
+            <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.paper }}>
               Importers &amp; Distributors
             </span>
-            <Hr w="40px" c={T.wine} />
+            <Hr w="40px" c={T.paper} style={{ opacity: 0.5 }} />
           </div>
 
           <div 
@@ -350,7 +350,13 @@ export default function HomePage() {
                 maskRepeat: "no-repeat",
                 maskPosition: "center",
                 margin: "0 auto",
-                filter: `drop-shadow(0 4px 15px rgba(0,0,0,0.2))`
+                filter: `
+                  drop-shadow(1.5px 0 0 white) 
+                  drop-shadow(-1.5px 0 0 white) 
+                  drop-shadow(0 1.5px 0 white) 
+                  drop-shadow(0 -1.5px 0 white) 
+                  drop-shadow(0 10px 20px rgba(0,0,0,0.3))
+                `
               }} 
             />
           </div>
