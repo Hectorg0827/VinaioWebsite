@@ -282,6 +282,20 @@ export default function HomePage() {
           }}
         />
 
+        {/* Global Frost Overlay */}
+        <div 
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(255, 255, 255, 0.03)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            zIndex: 5,
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 2s ease"
+          }}
+        />
+
         <div
           style={{
             position: "relative",
@@ -317,14 +331,6 @@ export default function HomePage() {
               opacity: loaded ? 1 : 0, 
               transition: "all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s", 
               marginBottom: "40px",
-              background: "rgba(255, 255, 255, 0.08)",
-              backdropFilter: "blur(14px)",
-              WebkitBackdropFilter: "blur(14px)",
-              padding: "32px 0",
-              width: "100%",
-              borderTop: "1px solid rgba(255, 255, 255, 0.12)",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center"
@@ -344,7 +350,7 @@ export default function HomePage() {
                 maskRepeat: "no-repeat",
                 maskPosition: "center",
                 margin: "0 auto",
-                filter: `drop-shadow(0 4px 12px rgba(0,0,0,0.2))`
+                filter: `drop-shadow(0 4px 12px rgba(0,0,0,0.15))`
               }} 
             />
           </div>
