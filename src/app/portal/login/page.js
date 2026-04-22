@@ -33,12 +33,23 @@ export default function PortalLoginPage() {
   };
 
   const resetPassword = async () => {
-    if (!email) { setError("Enter your email above first."); return; }
+    if (!email) {
+      setError("Please enter your email above to receive a reset link.");
+      return;
+    }
+    setLoading(true);
     const supabase = createClient();
-    await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/portal/login`,
+    const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/portal/reset-password`,
     });
-    setResetSent(true);
+    
+    if (err) {
+      setError(err.message);
+    } else {
+      setResetSent(true);
+      setError(""); // Clear any old errors
+    }
+    setLoading(false);
   };
 
   const inputStyle = {

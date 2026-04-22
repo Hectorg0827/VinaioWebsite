@@ -1,5 +1,23 @@
 -- Migration: Portal v5 Final Hardening & Transactional Schema
 
+-- 0. Core Customer Profiles (One-to-one with Auth User)
+CREATE TABLE IF NOT EXISTS customers (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    company TEXT NOT NULL,
+    rep_name TEXT,
+    license_number TEXT,
+    account_number TEXT UNIQUE, -- The QuickBooks ID
+    balance NUMERIC NOT NULL DEFAULT 0,
+    credit_limit NUMERIC NOT NULL DEFAULT 0,
+    status TEXT DEFAULT 'active', -- active, suspended, pending
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Customers can view their own profile" ON customers FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Admins full access to customers" ON customers FOR ALL TO service_role USING (true);
+
 -- 1. Portal Access Requests (Public submits, Admin reads)
 CREATE TABLE IF NOT EXISTS portal_requests (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -111,8 +129,8 @@ CREATE POLICY "Customers can only see their own payments"
     USING (auth.uid() = customer_id);
 
 -- Ensure service_role can do everything (for sync agent and admin panel)
-CREATE POLICY "Service role full access" ON invoices FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access" ON invoice_items FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access" ON portal_orders FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access" ON portal_order_items FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access" ON payment_history FOR ALL TO service_role USING (true);
+CREATE POLICY "Service role full access invoices" ON invoices FOR ALL TO service_role USING (true);
+CREATE POLICY "Service role full access invoice_items" ON invoice_items FOR ALL TO service_role USING (true);
+CREATE POLICY "Service role full access portal_orders" ON portal_orders FOR ALL TO service_role USING (true);
+CREATE POLICY "Service role full access portal_order_items" ON portal_order_items FOR ALL TO service_role USING (true);
+CREATE POLICY "Service role full access payment_history" ON payment_history FOR ALL TO service_role USING (true);
