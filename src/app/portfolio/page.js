@@ -376,6 +376,26 @@ function PortfolioContent() {
       {viewMode === "grid" && (
         <section style={{ background: T.bg, padding: "80px 56px" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            {currentPortfolio === "elite" && (
+              <Reveal>
+                <div style={{
+                  marginBottom: "28px",
+                  padding: "20px 24px",
+                  border: `1px solid ${T.gold}55`,
+                  borderRadius: "12px",
+                  background: "linear-gradient(120deg, rgba(26,24,21,0.96) 0%, rgba(57,42,36,0.9) 100%)",
+                  boxShadow: "0 12px 28px rgba(0,0,0,0.12)"
+                }}>
+                  <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, marginBottom: "8px" }}>
+                    Elite Selection
+                  </p>
+                  <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.82)", lineHeight: 1.7, maxWidth: "760px" }}>
+                    Discover limited allocations and cellar-worthy references, presented with expanded tasting notes and a refined visual profile tailored for premium buyers.
+                  </p>
+                </div>
+              </Reveal>
+            )}
+
             <Reveal>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "24px", marginBottom: "48px" }}>
                 <div>
@@ -450,7 +470,7 @@ function PortfolioContent() {
               ) : (
                 filtered.map((p, i) => (
                   <Reveal key={p.id || p.slug} delay={i * 0.05}>
-                    <ProductCard product={{ ...p, onImageClick: setSelectedImage }} />
+                    <ProductCard product={{ ...p, onImageClick: setSelectedImage }} isEliteView={currentPortfolio === "elite"} />
                   </Reveal>
                 ))
               )}
@@ -623,7 +643,7 @@ function FeaturedCard({ product }) {
 }
 
 // ─── Product card (Consistent styling) ───
-function ProductCard({ product }) {
+function ProductCard({ product, isEliteView = false }) {
   const [isHovered, setIsHovered] = useState(false);
   const [imgError, setImgError] = useState(false);
   
@@ -638,10 +658,14 @@ function ProductCard({ product }) {
   return (
     <div
       style={{ 
-        background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "12px", 
+        background: isEliteView ? "linear-gradient(160deg, #12100F 0%, #1E1A17 100%)" : T.paper,
+        border: isEliteView ? `1px solid ${T.gold}4A` : `1px solid ${T.cream}`,
+        borderRadius: isEliteView ? "14px" : "12px", 
         display: "flex", flexDirection: "column", overflow: "hidden", height: "100%",
         transition: "all 0.4s", transform: isHovered ? "translateY(-4px)" : "none",
-        boxShadow: isHovered ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 12px rgba(0,0,0,0.02)"
+        boxShadow: isEliteView
+          ? (isHovered ? "0 18px 40px rgba(0,0,0,0.32)" : "0 8px 20px rgba(0,0,0,0.16)")
+          : (isHovered ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 12px rgba(0,0,0,0.02)")
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -652,25 +676,55 @@ function ProductCard({ product }) {
         display: "flex", 
         alignItems: "center", 
         justifyContent: "center", 
-        background: T.ink, 
-        borderBottom: `1px solid rgba(255,255,255,0.1)` 
+        background: isEliteView
+          ? "linear-gradient(180deg, rgba(18,16,15,0.95) 0%, rgba(36,30,27,0.95) 100%)"
+          : T.ink,
+        borderBottom: isEliteView ? `1px solid ${T.gold}33` : `1px solid rgba(255,255,255,0.1)` 
       }}>
         {logo ? (
           <img 
             src={logo} 
             alt={`${product.brand} logo`} 
-            style={{ maxWidth: "80%", maxHeight: "80%", objectFit: "contain", filter: "brightness(0) invert(1)" }} 
+            style={{
+              maxWidth: "80%",
+              maxHeight: "80%",
+              objectFit: "contain",
+              filter: isEliteView ? "brightness(0) invert(1) sepia(0.3) saturate(1.5)" : "brightness(0) invert(1)"
+            }} 
           />
         ) : (
-          <span style={{ fontFamily: ff.h, color: "white", fontSize: "18px", textTransform: "uppercase", letterSpacing: "2px" }}>
+          <span style={{ fontFamily: ff.h, color: isEliteView ? T.gold : "white", fontSize: "18px", textTransform: "uppercase", letterSpacing: "2px" }}>
             {product.brand}
           </span>
         )}
       </div>
       <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
+        {isEliteView && (
+          <span style={{
+            alignSelf: "center",
+            fontFamily: ff.b,
+            fontSize: "9px",
+            letterSpacing: "2.6px",
+            textTransform: "uppercase",
+            color: T.gold,
+            border: `1px solid ${T.gold}66`,
+            borderRadius: "999px",
+            padding: "6px 14px"
+          }}>
+            Vinaio Elite
+          </span>
+        )}
         <div style={{ textAlign: "center" }}>
-          <h3 style={{ fontFamily: ff.b, fontSize: "16px", fontWeight: 700, color: T.ink, marginBottom: "4px", textTransform: "uppercase" }}>{product.brand}</h3>
-          <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
+          <h3 style={{
+            fontFamily: isEliteView ? ff.h : ff.b,
+            fontSize: isEliteView ? "18px" : "16px",
+            fontWeight: isEliteView ? 500 : 700,
+            color: isEliteView ? T.paper : T.ink,
+            marginBottom: "4px",
+            textTransform: "uppercase",
+            letterSpacing: isEliteView ? "0.6px" : "0"
+          }}>{product.brand}</h3>
+          <p style={{ fontFamily: ff.b, fontSize: "13px", color: isEliteView ? T.gold : T.wine, fontStyle: "italic" }}>{product.name} {product.type ? `· ${product.type}` : ""}</p>
         </div>
         <div 
           style={{ height: "240px", cursor: "zoom-in", margin: "0 auto", width: "100%", display: "flex", justifyContent: "center" }} 
@@ -690,9 +744,28 @@ function ProductCard({ product }) {
             }} 
           />
         </div>
-        <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, lineHeight: 1.6, textAlign: "center", flexGrow: 1 }}>{teaser}</p>
+        <p style={{
+          fontFamily: ff.b,
+          fontSize: "12px",
+          color: isEliteView ? "rgba(255,255,255,0.66)" : T.muted,
+          lineHeight: isEliteView ? 1.75 : 1.6,
+          textAlign: "center",
+          flexGrow: 1
+        }}>{teaser}</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Link href={`/portfolio/${product.id || product.slug}`} style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.paper, background: T.wine, padding: "10px 32px", borderRadius: "4px", textDecoration: "none", fontWeight: 600 }}>Details</Link>
+          <Link href={`/portfolio/${product.id || product.slug}`} style={{
+            fontFamily: ff.b,
+            fontSize: "10px",
+            letterSpacing: "2px",
+            textTransform: "uppercase",
+            color: isEliteView ? T.ink : T.paper,
+            background: isEliteView ? `linear-gradient(90deg, ${T.gold} 0%, #c7a56d 100%)` : T.wine,
+            border: isEliteView ? `1px solid ${T.gold}AA` : "none",
+            padding: "10px 32px",
+            borderRadius: "4px",
+            textDecoration: "none",
+            fontWeight: 600
+          }}>Details</Link>
         </div>
       </div>
     </div>
