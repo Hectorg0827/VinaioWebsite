@@ -121,7 +121,9 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
                 </span>
                 <span style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, marginLeft: "16px" }}>
                   {new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                  {o.order_items?.[0]?.count ? ` · ${o.order_items[0].count} items` : ""}
+                  {(o.order_items?.length ?? 0) > 0
+                    ? ` · ${o.order_items.reduce((sum, item) => sum + (item.qty ?? 0), 0)} items`
+                    : ""}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
