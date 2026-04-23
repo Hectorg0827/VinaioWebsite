@@ -33,7 +33,8 @@ const RUM_TIMELINE = [
     detail: "Caribbean colonists discover that molasses — a byproduct of sugar production — can be fermented and distilled. The result is raw, potent, and unlike anything produced in Europe.", 
     inGlass: "Unaged white rums still carry this original sugarcane purity.", 
     brand: "Macorix Silver",
-    img: "https://vinaio-bottles.b-cdn.net/Fotos%20de%20Botellas%20(6%20apr%202026)/bottles/vinicola-del-norte-ron-macorix-silver.png"
+    bgImg: "/images/experiences/bg_cabana.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/Macorix%20Silver%20Exportacio%CC%81n.png"
   },
   { 
     year: "1655", 
@@ -41,7 +42,8 @@ const RUM_TIMELINE = [
     detail: "The British Navy replaces beer rations with rum. The 'tot' becomes a daily ritual for sailors — cementing rum as the spirit of the sea and the tropics.", 
     inGlass: "Navy-strength dark rums preserve this bold, full-bodied tradition.", 
     brand: "Royal Jamaican Blackstrap",
-    img: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20Blackstrap%20Dark%20Rum.png"
+    bgImg: "/images/experiences/bg_pirate.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20Blackstrap%20Dark%20Rum.png"
   },
   { 
     year: "1852", 
@@ -49,7 +51,7 @@ const RUM_TIMELINE = [
     detail: "Don Erasmo Bermúdez establishes one of the Dominican Republic's first rum houses. His commitment to quality and barrel aging sets the standard for Dominican rum for the next 170 years.", 
     inGlass: "Bermúdez Añejo carries this founding DNA — rich, complex, and deeply Dominican.", 
     brand: "Bermúdez Ron Añejo",
-    img: "https://vinaio-bottles.b-cdn.net/Fotos%20de%20Botellas%20(6%20apr%202026)/Bermudez/bermudez-anejo-selecto.png"
+    img: "/images/experiences/bg_barrelroom.png"
   },
   { 
     year: "Early 1900s", 
@@ -57,7 +59,8 @@ const RUM_TIMELINE = [
     detail: "The Daiquiri, the Mojito, the Cuba Libre — bartenders in Havana and beyond discover that rum is the most versatile cocktail spirit. It pairs with citrus, sugar, herbs, and spice like nothing else.", 
     inGlass: "Light, clean rums made for mixing remain essential to every cocktail bar.", 
     brand: "Jamaican Lion Gold",
-    img: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20-%20Jamaican%20lion%20gold%20rum.png"
+    bgImg: "/images/experiences/bg_speakeasy.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20-%20Jamaican%20lion%20gold%20rum.png"
   },
   { 
     year: "1970s", 
@@ -65,7 +68,7 @@ const RUM_TIMELINE = [
     detail: "Master blenders apply wine-inspired aging techniques: extended barrel maturation, solera systems, and single-cask releases. Rum begins its journey from party spirit to sipping spirit.", 
     inGlass: "Aged expressions develop dried fruit, tobacco, and cocoa complexity from extra time in oak.", 
     brand: "Bermúdez Añejo",
-    img: "https://vinaio-bottles.b-cdn.net/Fotos%20de%20Botellas%20(6%20apr%202026)/Bermudez/bermudez-anejo-selecto.png"
+    img: "/images/experiences/bg_barrelroom.png"
   },
   { 
     year: "2000s", 
@@ -73,7 +76,8 @@ const RUM_TIMELINE = [
     detail: "Dominican, Jamaican, and Nepalese distillers begin exporting their finest expressions to discerning markets. Authenticity and provenance become the new luxury.", 
     inGlass: "Spiced and infused rums bring cultural botanicals — cinnamon, allspice, Himalayan herbs — to new audiences.", 
     brand: "Khukri Spiced Rum",
-    img: "https://vinaio-bottles-cdn.b-cdn.net/khukri%20rum%20hq.png"
+    bgImg: "/images/experiences/bg_himalayan.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/khukri%20rum%20hq.png"
   },
   { 
     year: "Today", 
@@ -81,7 +85,8 @@ const RUM_TIMELINE = [
     detail: "Through direct partnerships with family-owned distilleries, Vinaio imports authentic, unaltered spirits that tell the story of their origin. No additives, no shortcuts — just the barrel, the blender, and the land.", 
     inGlass: "Every bottle in the Vinaio rum portfolio is a direct line to its source — unfiltered and honest.", 
     brand: "Legado Caballo",
-    img: "https://vinaio-bottles.b-cdn.net/Fotos%20de%20Botellas%20(6%20apr%202026)/J%20%2526%20J%20Spirits/CAJA%20LEGADO%202.png"
+    bgImg: "/images/experiences/bg_speakeasy.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/Legado%20caballo.png"
   },
 ];
 
@@ -106,7 +111,8 @@ const COCKTAIL_RECIPES = [
     brand: "Macorix Silver",
     ingredients: ["2 oz white rum", "1 oz fresh lime juice", "¾ oz simple syrup"],
     method: "Shake vigorously with ice. Strain into a chilled coupe glass. Garnish with a lime wheel.",
-    img: "https://vinaio-bottles.b-cdn.net/Fotos%20de%20Botellas%20(6%20apr%202026)/bottles/vinicola-del-norte-ron-macorix-silver.png"
+    bgImg: "/images/experiences/bg_cabana.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/Macorix%20Silver%20Exportacio%CC%81n.png"
   },
   {
     name: "Rum Old Fashioned",
@@ -114,7 +120,7 @@ const COCKTAIL_RECIPES = [
     brand: "Bermúdez Ron Añejo",
     ingredients: ["2 oz aged rum", "1 sugar cube", "2 dashes Angostura bitters", "Orange peel"],
     method: "Muddle sugar and bitters. Add rum and a large ice cube. Stir gently for 30 seconds. Express orange peel over the glass.",
-    img: "https://vinaio-bottles.b-cdn.net/Fotos%20de%20Botellas%20(6%20apr%202026)/Bermudez/bermudez-anejo-selecto.png"
+    img: "/images/experiences/bg_barrelroom.png"
   },
   {
     name: "Cuba Libre",
@@ -122,7 +128,8 @@ const COCKTAIL_RECIPES = [
     brand: "Jamaican Lion Gold",
     ingredients: ["2 oz gold rum", "4 oz cola", "½ oz fresh lime juice", "Lime wedge"],
     method: "Build in a highball glass over ice. Squeeze lime into the glass; add rum, then cola. Stir gently.",
-    img: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20-%20Jamaican%20lion%20gold%20rum.png"
+    bgImg: "/images/experiences/bg_speakeasy.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20-%20Jamaican%20lion%20gold%20rum.png"
   },
   {
     name: "Tropical Punch",
@@ -130,15 +137,17 @@ const COCKTAIL_RECIPES = [
     brand: "Khukri Spiced Rum",
     ingredients: ["1½ oz spiced rum", "2 oz pineapple juice", "1 oz orange juice", "½ oz grenadine"],
     method: "Shake all ingredients with ice. Strain into a tall glass filled with crushed ice. Garnish with pineapple and nutmeg.",
-    img: "https://vinaio-bottles-cdn.b-cdn.net/khukri%20rum%20hq.png"
+    bgImg: "/images/experiences/bg_himalayan.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/khukri%20rum%20hq.png"
   },
   {
     name: "Premium Sipping Serve",
     spirit: "Aged Rum (12+ Years)",
-    brand: "Royal Jamaican 12 Year",
+    brand: "Puntacana Esplendido",
     ingredients: ["2 oz premium aged rum", "1 large clear ice sphere", "Optional: single dash of water"],
     method: "Pour into a crystal tumbler over the ice sphere. Let it sit 30 seconds before your first sip. No garnish needed — let the barrel speak.",
-    img: "https://vinaio-bottles-cdn.b-cdn.net/Royal%20Jamaican%20-%20Jamaican%20lion%20dark%20rum%20200ml.png"
+    bgImg: "/images/experiences/bg_speakeasy.png",
+    bottleImg: "https://vinaio-bottles-cdn.b-cdn.net/puntacana%20esplendido.png"
   },
 ];
 
@@ -394,11 +403,18 @@ export default function HouseOfRumPage() {
                         {item.detail}
                       </p>
                     </div>
-                    {item.img && (
+                    {item.bgImg && item.bottleImg ? (
+                      <div style={{ position: "relative", height: "180px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <img src={item.bgImg} alt="Background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, filter: "brightness(0.7)" }} />
+                        <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", alignItems: "center", justifyItems: "center", padding: "10px" }}>
+                             <img src={item.bottleImg} alt={item.event} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.8))" }} />
+                        </div>
+                      </div>
+                    ) : item.img ? (
                       <div style={{ height: "180px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)", background: item.img.includes('b-cdn.net') ? 'transparent' : 'rgba(255,255,255,0.02)', display: "flex", alignItems: "center", justifyContent: "center", padding: item.img.includes('b-cdn.net') ? '10px' : '0' }}>
                         <img src={item.img} alt={item.event} style={{ width: "100%", height: "100%", objectFit: item.img.includes('b-cdn.net') ? "contain" : "cover" }} />
                       </div>
-                    )}
+                    ) : null}
                   </div>
 
                   <div className="timeline-brand-box" style={{ 
@@ -601,8 +617,17 @@ export default function HouseOfRumPage() {
             {COCKTAIL_RECIPES.map((cocktail, i) => (
               <Reveal key={cocktail.name} delay={i * 0.08}>
                 <div className={`cocktail-grid ${i % 2 === 0 ? "cocktail-grid-even" : "cocktail-grid-odd"}`}>
-                  <div className="cocktail-img-box" style={{ order: i % 2 === 0 ? 0 : 1, height: "320px", display: "flex", alignItems: "center", justifyContent: "center", padding: "30px", background: "rgba(0,0,0,0.2)" }}>
-                    <img src={cocktail.img} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.5))" }} />
+                  <div className="cocktail-img-box" style={{ order: i % 2 === 0 ? 0 : 1, height: "320px", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.2)", position: "relative", overflow: "hidden" }}>
+                    {cocktail.bgImg ? (
+                      <>
+                        <img src={cocktail.bgImg} alt="Bar Setting" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, filter: "brightness(0.6)" }} />
+                        <div style={{ position: "absolute", inset: 0, zIndex: 2, padding: "30px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <img src={cocktail.bottleImg} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 20px 20px rgba(0,0,0,0.9))" }} />
+                        </div>
+                      </>
+                    ) : (
+                      <img src={cocktail.img} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    )}
                   </div>
                   <div className="cocktail-content-box" style={{ order: i % 2 === 0 ? 1 : 0, padding: "40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "12px" }}>
