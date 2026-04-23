@@ -28,6 +28,7 @@ const PORTFOLIOS = [
   { id: "beer_low_alc",      label: "Beer & Low Alcohol" },
   { id: "kosher",            label: "Kosher" },
   { id: "intl_wines_spirits", label: "International Wines & Spirits" },
+  { id: "spain",             label: "Vinaio Spain & Italy" },
 ];
 
 const EMPTY_FORM = {

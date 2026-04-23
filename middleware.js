@@ -38,17 +38,20 @@ export async function middleware(request) {
     // Fail silently in case of auth errors during build/edge cases
   }
 
-  // Protect all /portal routes except /portal/login
-  const isPortalRoute = request.nextUrl.pathname.startsWith("/portal");
-  const isLoginRoute = request.nextUrl.pathname === "/portal/login";
+  // 4. Portal and Admin Route Protection
+  const pathname = request.nextUrl.pathname;
+  const isPortalRoute = pathname.startsWith("/portal");
+  const isLoginRoute = pathname === "/portal/login" || pathname === "/portal/register" || pathname === "/portal/reset-password";
+  const isPortalHome = pathname === "/portal" || pathname === "/portal/";
 
-  if (isPortalRoute && !isLoginRoute && !user) {
+  // Redirect to login if user tries to access internal portal sub-pages without being logged in
+  if (isPortalRoute && !isLoginRoute && !isPortalHome && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/portal/login";
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from login page
+  // Redirect authenticated users away from login/register pages
   if (isLoginRoute && user) {
     const url = request.nextUrl.clone();
     url.pathname = "/portal";

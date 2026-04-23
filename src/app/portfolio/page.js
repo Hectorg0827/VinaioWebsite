@@ -124,6 +124,13 @@ function PortfolioContent() {
       img: "/images/portfolios/portfolio_intl_wines_spirits_1775108839217.png",
       brands: ["France", "Argentina"] // Matching against origin
     },
+    { 
+      id: "spain", 
+      title: "Vinaio Spain & Italy", 
+      desc: "Our dedicated European portfolio for Spain and Italy.",
+      img: "/images/hero/hero-vineyard.png", // Using a nice vineyard shot
+      brands: ["Vino La Fuerza", "Cerveza República"]
+    },
   ];
 
   const filtered = products.filter((p) => {

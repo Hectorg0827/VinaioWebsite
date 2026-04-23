@@ -744,8 +744,8 @@ export default function HomePage() {
               >
                 We serve as exclusive US importer for Spain and European craft
                 producers — handling TTB licensing, COLA registration,
-                warehousing, and 26-state distribution so you can focus on what
-                you do best.
+                warehousing, and full distribution across 26 US states,
+                Spain, and Italy so you can focus on what you do best.
               </p>
                 <Link
                 href="/spain"
@@ -800,7 +800,7 @@ export default function HomePage() {
           >
             {[
               { label: "Full Service Distributor", sub: "New York, New Jersey and Florida" },
-              { label: "26-State Distribution",   sub: "Self-distribution in NY, NJ & FL. Distributor network across 26 states." },
+              { label: "International Reach", sub: "Network across 26 US states, full distribution in Spain and Italy." },
               { label: "Curated Portfolio",       sub: "Over 100+ award winning world wide brands" },
               { label: "White Glove Delivery",    sub: "70 Refrigerated delivery trucks" },
             ].map((s, i) => (

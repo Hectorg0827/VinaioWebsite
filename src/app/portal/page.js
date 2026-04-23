@@ -1,8 +1,14 @@
 import { getUser } from "@/lib/supabase/safe";
 import DashboardClient from "./DashboardClient";
+import PortalWelcome from "./PortalWelcome";
 
 export default async function PortalPage() {
   const { user, supabase } = await getUser();
+
+  // If no user, show the elegant welcome screen
+  if (!user) {
+    return <PortalWelcome />;
+  }
 
   let customer = null, orders = [], products = [], licenses = [], catalogs = [];
 
@@ -120,3 +126,4 @@ export default async function PortalPage() {
     />
   );
 }
+
