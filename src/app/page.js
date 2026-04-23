@@ -37,13 +37,14 @@ export default function HomePage() {
   });
   const [logoUrl, setLogoUrl] = useState("/logo.png");
 
-  // Default elegant images from Unsplash to ensure background is NEVER black
+  // Beautiful, moody, high-contrast imagery perfectly suited for the burgundy logo and white text
   const DEFAULT_SLIDES = [
-    "/images/hero/hero-rum.png",
-    "/images/hero/hero-vineyard.png",
-    "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=2048", // Vineyard/Wine
-    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2048", // Barrels
-    "https://images.unsplash.com/photo-1543412849-fd47250680ca?auto=format&fit=crop&q=80&w=2048"  // Bottles/Beach vibe
+    // 1. A beautiful Spanish winery estate at twilight (dark and atmospheric)
+    "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=2048",
+    // 2. Wine being consumed and enjoyed (moody, luxury restaurant aesthetic)
+    "https://images.unsplash.com/photo-1585553616435-2dc0a54e271d?auto=format&fit=crop&q=80&w=2048",
+    // 3. A Rum distillery / dark barrel room
+    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2048"
   ];
 
   useEffect(() => {
@@ -61,12 +62,12 @@ export default function HomePage() {
 
   // Simple slide timer for the "alive" effect
   useEffect(() => {
-    const slideCount = (hero.images && hero.images.length > 0) ? hero.images.length : DEFAULT_SLIDES.length;
+    const slideCount = DEFAULT_SLIDES.length;
     const timer = setInterval(() => {
       setCurrentSlide(s => (s + 1) % slideCount);
     }, 8000); 
     return () => clearInterval(timer);
-  }, [hero.images, DEFAULT_SLIDES.length]);
+  }, []);
 
   const fetchContent = async () => {
     try {
@@ -79,17 +80,12 @@ export default function HomePage() {
         .single();
       
       if (heroData) {
-        let urls = [];
-        try {
-          urls = JSON.parse(heroData.url);
-        } catch (e) {
-          urls = heroData.url?.split("|").filter(Boolean);
-        }
         setHero({ 
           ...heroData, 
           title: heroData.title || "Curating Excellence",
           subtitle: heroData.subtitle || "Transatlantic Spirits & Wine Purveyors",
-          images: (urls && urls.length > 0) ? urls : [heroData.url] 
+          // Ignore DB urls to fix the black screen issue and enforce the new curated slides
+          images: DEFAULT_SLIDES
         });
       }
 
@@ -125,7 +121,7 @@ export default function HomePage() {
     }
   };
 
-  const slides = (hero.images && hero.images.length > 0) ? hero.images : DEFAULT_SLIDES;
+  const slides = DEFAULT_SLIDES;
 
   return (
     <>

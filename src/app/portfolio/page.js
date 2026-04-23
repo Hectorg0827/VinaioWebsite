@@ -128,7 +128,8 @@ function PortfolioContent() {
       id: "spain", 
       title: "Vinaio Spain & Italy", 
       desc: "Our dedicated European portfolio for Spain and Italy.",
-      img: "/images/hero/hero-vineyard.png", // Using a nice vineyard shot
+      img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=2048", // Dark vineyard aesthetic
+      logo: "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
       brands: ["Vino La Fuerza", "Cerveza República"]
     },
   ];
@@ -250,10 +251,14 @@ function PortfolioContent() {
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "24px" }}>
               {PORTFOLIO_CARDS.map((card, i) => {
+                // If the total card count is odd, make the last card span all columns beautifully
+                const isLastAndOdd = i === PORTFOLIO_CARDS.length - 1 && PORTFOLIO_CARDS.length % 2 !== 0;
+                
                 return (
-                  <Reveal key={card.id} delay={i * 0.1}>
-                    <div 
-                      className="portfolio-card"
+                  <div key={card.id} style={{ gridColumn: isLastAndOdd ? "1 / -1" : undefined }}>
+                    <Reveal delay={i * 0.1}>
+                      <div 
+                        className="portfolio-card"
                       style={{ 
                         width: "100%", height: "360px", position: "relative", borderRadius: "16px", 
                         overflow: "hidden", border: `1px solid ${T.cream}`, background: T.paper,
@@ -338,6 +343,18 @@ function PortfolioContent() {
                       })()}
 
                       <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 5 }}>
+                        {card.logo && (
+                          <img 
+                            src={card.logo} 
+                            alt={card.title} 
+                            style={{ 
+                              height: "50px", 
+                              width: "auto",
+                              marginBottom: "16px", 
+                              filter: "brightness(0) invert(1) drop-shadow(0 4px 6px rgba(0,0,0,0.5))" 
+                            }} 
+                          />
+                        )}
                         <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "8px" }}>{card.title}</h3>
                         <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.6, maxWidth: "60%", marginBottom: "16px" }}>{card.desc}</p>
                         
@@ -372,6 +389,7 @@ function PortfolioContent() {
                       </div>
                     </div>
                   </Reveal>
+                </div>
                 );
               })}
             </div>

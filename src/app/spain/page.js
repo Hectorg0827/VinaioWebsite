@@ -65,32 +65,36 @@ export default function SpainPage() {
         
         <div style={{ position: "relative", zIndex: 1, padding: "0 20px" }}>
           <Reveal>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", marginBottom: "24px" }}>
-              <Hr w="40px" c={T.paper} />
-              <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.paper }}>
-                European Distribution
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", marginBottom: "32px" }}>
+              <Hr w="40px" c={T.gold} />
+              <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "6px", textTransform: "uppercase", color: T.gold }}>
+                European Operations
               </span>
-              <Hr w="40px" c={T.paper} />
+              <Hr w="40px" c={T.gold} />
             </div>
-            <h1 style={{ 
-              fontFamily: ff.h, 
-              fontSize: "clamp(48px, 8vw, 100px)", 
-              color: T.paper, 
-              lineHeight: 1, 
-              marginBottom: "32px" 
-            }}>
-              Vinaio Spain <br /> &amp; Italy
-            </h1>
+            
+            <div style={{ marginBottom: "40px" }}>
+              <img 
+                src="https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg" 
+                alt="Vinaio Spain logo" 
+                style={{ height: "clamp(100px, 15vw, 180px)", width: "auto", filter: "brightness(0) invert(1)" }} 
+              />
+            </div>
+
             <p style={{ 
               fontFamily: ff.b, 
-              fontSize: "16px", 
-              color: "rgba(255,255,255,0.8)", 
-              maxWidth: "600px", 
+              fontSize: "18px", 
+              color: "rgba(255,255,255,0.9)", 
+              maxWidth: "720px", 
               margin: "0 auto", 
               lineHeight: 1.8 
             }}>
-              Exclusive import and full-scale distribution across the Iberian and Italian peninsulas. 
-              Bridging the gap between artisanal craft and global markets.
+              Vinaio Spain serves as the strategic cornerstone of our European operations. 
+              With established hubs in Madrid and Barcelona, we provide <strong>exclusive import and 
+              full-scale distribution</strong> across the Iberian and Italian peninsulas. 
+              By bridging the gap between artisanal craft and global markets, we ensure 
+              that the finest products from across Spain and Italy reach our curated network 
+              of retailers, hotels, and partners with white-glove precision.
             </p>
           </Reveal>
         </div>

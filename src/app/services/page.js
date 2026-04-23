@@ -309,10 +309,19 @@ export default function ServicesPage() {
                 </div>
 
                 <div style={{ background: T.deep, padding: "40px", borderRadius: "10px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)", position: "relative", overflow: "hidden" }}>
-                  <div style={{ position: "absolute", top: -20, right: -20, fontSize: "120px", opacity: 0.05, pointerEvents: "none" }}>🇪🇺</div>
-                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "20px" }}>European Origins</h3>
+                  <div style={{ position: "absolute", top: -20, right: -20, fontSize: "120px", opacity: 0.05, pointerEvents: "none" }}>🇪🇸</div>
+                  
+                  <div style={{ marginBottom: "24px" }}>
+                    <img 
+                      src="https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg" 
+                      alt="Vinaio Spain Logo" 
+                      style={{ height: "60px", width: "auto", filter: "brightness(0) invert(1)" }} 
+                    />
+                  </div>
+
+                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.paper, marginBottom: "20px" }}>Vinaio Spain</h3>
                   <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.cream, lineHeight: 1.6, marginBottom: "20px" }}>
-                    Our sourcing teams and quality control operate exactly where our products are born.
+                    Vinaio Spain provides a strategic gateway for European producers, handling direct import and full-scale distribution throughout Spain and Italy.
                   </p>
                   <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", padding: "8px 16px", borderRadius: "6px" }}>
