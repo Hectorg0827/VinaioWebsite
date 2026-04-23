@@ -25,7 +25,7 @@ const RUM_TIMELINE = [
     detail: "Columbus plants the first sugarcane in Hispaniola. Within decades, sugar plantations spread across the Caribbean, setting the stage for a spirit that would define the region.", 
     inGlass: "Every rum begins with sugarcane — its sweetness is the foundation of the spirit.", 
     brand: null,
-    img: "https://images.unsplash.com/photo-1596435031111-cc367a78018e?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/sugarcane_origins.png"
   },
   { 
     year: "1620s", 
@@ -33,7 +33,7 @@ const RUM_TIMELINE = [
     detail: "Caribbean colonists discover that molasses — a byproduct of sugar production — can be fermented and distilled. The result is raw, potent, and unlike anything produced in Europe.", 
     inGlass: "Unaged white rums still carry this original sugarcane purity.", 
     brand: "Macorix Silver",
-    img: "https://images.unsplash.com/photo-1540822601931-e40706536554?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/macorix_silver.png"
   },
   { 
     year: "1655", 
@@ -41,7 +41,7 @@ const RUM_TIMELINE = [
     detail: "The British Navy replaces beer rations with rum. The 'tot' becomes a daily ritual for sailors — cementing rum as the spirit of the sea and the tropics.", 
     inGlass: "Navy-strength dark rums preserve this bold, full-bodied tradition.", 
     brand: "Royal Jamaican Blackstrap",
-    img: "https://images.unsplash.com/photo-1534017772609-b42d763a8a97?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/royal_jamaican_blackstrap.png"
   },
   { 
     year: "1852", 
@@ -49,7 +49,7 @@ const RUM_TIMELINE = [
     detail: "Don Erasmo Bermúdez establishes one of the Dominican Republic's first rum houses. His commitment to quality and barrel aging sets the standard for Dominican rum for the next 170 years.", 
     inGlass: "Bermúdez Añejo carries this founding DNA — rich, complex, and deeply Dominican.", 
     brand: "Bermúdez Ron Añejo",
-    img: "https://images.unsplash.com/photo-1589407137812-78d10ed7df0a?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/rum_bermudez.png"
   },
   { 
     year: "Early 1900s", 
@@ -57,7 +57,7 @@ const RUM_TIMELINE = [
     detail: "The Daiquiri, the Mojito, the Cuba Libre — bartenders in Havana and beyond discover that rum is the most versatile cocktail spirit. It pairs with citrus, sugar, herbs, and spice like nothing else.", 
     inGlass: "Light, clean rums made for mixing remain essential to every cocktail bar.", 
     brand: "Jamaican Lion Gold",
-    img: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/jamaican_lion_gold.png"
   },
   { 
     year: "1970s", 
@@ -65,7 +65,7 @@ const RUM_TIMELINE = [
     detail: "Master blenders apply wine-inspired aging techniques: extended barrel maturation, solera systems, and single-cask releases. Rum begins its journey from party spirit to sipping spirit.", 
     inGlass: "Aged expressions develop dried fruit, tobacco, and cocoa complexity from extra time in oak.", 
     brand: "Puntacana Espléndido",
-    img: "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/rum_bermudez.png"
   },
   { 
     year: "2000s", 
@@ -73,7 +73,7 @@ const RUM_TIMELINE = [
     detail: "Dominican, Jamaican, and Nepalese distillers begin exporting their finest expressions to discerning markets. Authenticity and provenance become the new luxury.", 
     inGlass: "Spiced and infused rums bring cultural botanicals — cinnamon, allspice, Himalayan herbs — to new audiences.", 
     brand: "Khukri Spiced Rum",
-    img: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/khukri_spiced.png"
   },
   { 
     year: "Today", 
@@ -81,7 +81,7 @@ const RUM_TIMELINE = [
     detail: "Through direct partnerships with family-owned distilleries, Vinaio imports authentic, unaltered spirits that tell the story of their origin. No additives, no shortcuts — just the barrel, the blender, and the land.", 
     inGlass: "Every bottle in the Vinaio rum portfolio is a direct line to its source — unfiltered and honest.", 
     brand: null,
-    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/legado_caballo_rum.png"
   },
 ];
 
@@ -106,7 +106,7 @@ const COCKTAIL_RECIPES = [
     brand: "Macorix Silver",
     ingredients: ["2 oz white rum", "1 oz fresh lime juice", "¾ oz simple syrup"],
     method: "Shake vigorously with ice. Strain into a chilled coupe glass. Garnish with a lime wheel.",
-    img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/classic_daiquiri.png"
   },
   {
     name: "Rum Old Fashioned",
@@ -114,7 +114,7 @@ const COCKTAIL_RECIPES = [
     brand: "Bermúdez Ron Añejo",
     ingredients: ["2 oz aged rum", "1 sugar cube", "2 dashes Angostura bitters", "Orange peel"],
     method: "Muddle sugar and bitters. Add rum and a large ice cube. Stir gently for 30 seconds. Express orange peel over the glass.",
-    img: "https://images.unsplash.com/photo-1470338745628-171cf53de3a8?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/rum_old_fashioned.png"
   },
   {
     name: "Cuba Libre",
@@ -122,7 +122,7 @@ const COCKTAIL_RECIPES = [
     brand: "Jamaican Lion Gold",
     ingredients: ["2 oz gold rum", "4 oz cola", "½ oz fresh lime juice", "Lime wedge"],
     method: "Build in a highball glass over ice. Squeeze lime into the glass; add rum, then cola. Stir gently.",
-    img: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/cuba_libre.png"
   },
   {
     name: "Tropical Punch",
@@ -130,7 +130,7 @@ const COCKTAIL_RECIPES = [
     brand: "Khukri Spiced Rum",
     ingredients: ["1½ oz spiced rum", "2 oz pineapple juice", "1 oz orange juice", "½ oz grenadine"],
     method: "Shake all ingredients with ice. Strain into a tall glass filled with crushed ice. Garnish with pineapple and nutmeg.",
-    img: "https://images.unsplash.com/photo-1587223962217-f4e4612681bd?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/tropical_punch.png"
   },
   {
     name: "Premium Sipping Serve",
@@ -138,7 +138,7 @@ const COCKTAIL_RECIPES = [
     brand: "Royal Jamaican 12 Year",
     ingredients: ["2 oz premium aged rum", "1 large clear ice sphere", "Optional: single dash of water"],
     method: "Pour into a crystal tumbler over the ice sphere. Let it sit 30 seconds before your first sip. No garnish needed — let the barrel speak.",
-    img: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/puntacana_sipping.png"
   },
 ];
 
