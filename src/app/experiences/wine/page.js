@@ -115,7 +115,7 @@ const WINE_REGIONS = [
     grapes: ["Tannat", "Malbec", "Petit Verdot", "Quebranta"],
     pairings: "Classic Ceviche, Lomo Saltado, anticuchos, grilled octopus",
     featured: ["Vinaio Selection"],
-    img: "https://images.unsplash.com/photo-1590447158019-883d8d5f8bc7?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800",
     mapColor: "#F9A825"
   },
   {
@@ -126,7 +126,7 @@ const WINE_REGIONS = [
     grapes: ["Cabernet Sauvignon", "Sauvignon Blanc", "Muscat"],
     pairings: "Bandeja Paisa, grilled trout, aged cheeses, arepas de choclo",
     featured: ["Vinaio Selection"],
-    img: "https://images.unsplash.com/photo-1589311693892-d1d73a46618d?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&q=80&w=800",
     mapColor: "#FFD600"
   },
   {
@@ -137,7 +137,7 @@ const WINE_REGIONS = [
     grapes: ["Tannat", "Albariño", "Merlot", "Marselan"],
     pairings: "Traditional Asado, slow-cooked lamb, Chivito, strong blue cheeses",
     featured: ["Monte Toscanini"],
-    img: "https://images.unsplash.com/photo-1543418219-44e30b057ebd?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
     mapColor: "#03A9F4"
   },
   {

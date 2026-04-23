@@ -15,7 +15,7 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
   const openInvoices  = invoices.filter((i) => i.status !== "paid");
   const overdueAmount = invoices
     .filter((i) => i.status === "overdue")
-    .reduce((s, i) => s + (i.amount - i.paid), 0);
+    .reduce((s, i) => s + Number(i.balance || 0), 0);
   const expiringLic   = licenses.filter((l) => l.status === "expiring").length;
   const thisMonthOrds = orders.filter(
     (o) => new Date(o.created_at).getMonth() === new Date().getMonth()

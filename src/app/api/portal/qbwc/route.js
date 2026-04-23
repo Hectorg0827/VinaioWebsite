@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * QuickBooks Web Connector (QBWC) SOAP Bridge
- * This endpoint handles the communication between the office PC and the portal.
+ * QUICKBOOKS WEB CONNECTOR (QBWC) BRIDGE
+ * Vinaio Trade Partner Portal
+ * 
+ * This file handles the SOAP communication between QuickBooks Desktop and Supabase.
  */
 
 export async function GET() {
-  // Returns a basic WSDL if accessed via GET
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   return new NextResponse(`<?xml version="1.0" encoding="UTF-8"?>
     <definitions name="QBWebConnectorSvc"
       targetNamespace="http://developer.intuit.com/"
@@ -17,7 +19,7 @@ export async function GET() {
       xmlns="http://schemas.xmlsoap.org/wsdl/">
       <service name="QBWebConnectorSvc">
         <port name="QBWebConnectorSvcSoap" binding="tns:QBWebConnectorSvcSoap">
-          <soap:address location="${process.env.NEXT_PUBLIC_SITE_URL}/api/portal/qbwc"/>
+          <soap:address location="${siteUrl}/api/portal/qbwc"/>
         </port>
       </service>
     </definitions>`, {
@@ -29,7 +31,6 @@ export async function POST(req) {
   const xml = await req.text();
   const supabase = createAdminClient();
 
-  // Simple XML parsing to find the SOAP method name
   const methodMatch = xml.match(/<[^:]+:(\w+) xmlns/);
   const method = methodMatch ? methodMatch[1] : null;
 
@@ -40,32 +41,24 @@ export async function POST(req) {
   try {
     switch (method) {
       case "authenticate": {
-        const username = xml.match(/<strUserName>(.*?)<\/strUserName>/)?.[1];
         const password = xml.match(/<strPassword>(.*?)<\/strPassword>/)?.[1];
-        
-        // Validate against ADMIN_PASSWORD from env
         const isValid = password === process.env.ADMIN_PASSWORD;
         const sessionId = crypto.randomUUID();
 
-        if (isValid) {
-          // Success: Return [SessionID, ""]
-          // The empty string means "use the default QB company file that is open"
-          responseBody = `
-            <authenticateResponse xmlns="http://developer.intuit.com/">
-              <authenticateResult>
-                <string>${sessionId}</string>
-                <string></string> 
-              </authenticateResult>
-            </authenticateResponse>`;
-        } else {
-          responseBody = `
-            <authenticateResponse xmlns="http://developer.intuit.com/">
-              <authenticateResult>
-                <string>${sessionId}</string>
-                <string>nvu</string>
-              </authenticateResult>
-            </authenticateResponse>`;
-        }
+        // Log check-in
+        await supabase.from("sync_status").insert([{ 
+          status: isValid ? "running" : "error", 
+          message: isValid ? "Office PC connected" : "Auth failed",
+          sync_type: "auth"
+        }]);
+
+        responseBody = `
+          <authenticateResponse xmlns="http://developer.intuit.com/">
+            <authenticateResult>
+              <string>${sessionId}</string>
+              <string>${isValid ? "" : "nvu"}</string> 
+            </authenticateResult>
+          </authenticateResponse>`;
         break;
       }
 
@@ -77,20 +70,17 @@ export async function POST(req) {
         break;
 
       case "sendRequestXML": {
-        // Here we decide what to ask QB for.
-        // For Step 1, let's just ask for Invoices and Customers.
-        // In a real app, you'd check a "sync queue" in Supabase.
         const qbxml = `<?xml version="1.0" ?>
           <?qbxml version="13.0"?>
           <QBXML>
             <QBXMLMsgsRq onError="continueOnError">
               <CustomerQueryRq requestID="1">
-                <MaxReturned>100</MaxReturned>
+                <MaxReturned>50</MaxReturned>
                 <ActiveStatus>ActiveOnly</ActiveStatus>
               </CustomerQueryRq>
               <InvoiceQueryRq requestID="2">
-                <MaxReturned>50</MaxReturned>
-                <IncludeLineItems>true</IncludeLineItems>
+                <MaxReturned>20</MaxReturned>
+                <IncludeLineItems>false</IncludeLineItems>
               </InvoiceQueryRq>
             </QBXMLMsgsRq>
           </QBXML>`;
@@ -103,10 +93,46 @@ export async function POST(req) {
       }
 
       case "receiveResponseXML": {
-        // This is where QB sends the data back.
-        // We would parse the XML and update Supabase.
-        // For now, we'll log it and tell QB we are done (100).
-        console.log("RECEIVED RESPONSE FROM QB");
+        const hresult = xml.match(/<hresult>(.*?)<\/hresult>/)?.[1];
+        const responseData = xml.match(/<strResponse>(.*?)<\/strResponse>/)?.[1] || "";
+        
+        // Basic extraction logic (Regex based for speed and low dependency)
+        if (responseData.includes("CustomerRet")) {
+          // Sync Customers to Supabase
+          const customers = parseQBXMLCustomers(responseData);
+          for (const c of customers) {
+            await supabase.from("customers").upsert({
+              qbd_listid: c.ListID,
+              qbd_editsequence: c.EditSequence,
+              company: c.Name,
+              account_number: c.AccountNumber || c.Name,
+              balance: parseFloat(c.TotalBalance || 0),
+              last_sync_at: new Date().toISOString()
+            }, { onConflict: 'qbd_listid' });
+          }
+        }
+
+        if (responseData.includes("InvoiceRet")) {
+          // Sync Invoices to Supabase
+          const invoices = parseQBXMLInvoices(responseData);
+          for (const inv of invoices) {
+            // Find linked customer by ListID if possible
+            const { data: cust } = await supabase.from("customers").select("id").eq("qbd_listid", inv.CustomerListID).single();
+            
+            await supabase.from("invoices").upsert({
+              id: inv.TxnID,
+              customer_id: cust?.id,
+              qbd_customer_id: inv.CustomerListID,
+              invoice_number: inv.RefNumber,
+              amount: parseFloat(inv.AppliedAmount || inv.Amount || 0),
+              balance: parseFloat(inv.BalanceRemaining || 0),
+              status: parseFloat(inv.BalanceRemaining) === 0 ? 'paid' : 'open',
+              due_date: inv.DueDate,
+              qbd_editsequence: inv.EditSequence,
+              last_sync_at: new Date().toISOString()
+            }, { onConflict: 'id' });
+          }
+        }
 
         responseBody = `
           <receiveResponseXMLResponse xmlns="http://developer.intuit.com/">
@@ -128,9 +154,7 @@ export async function POST(req) {
 
     const envelope = `<?xml version="1.0" encoding="utf-8"?>
       <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          ${responseBody}
-        </soap:Body>
+        <soap:Body>${responseBody}</soap:Body>
       </soap:Envelope>`;
 
     return new NextResponse(envelope, {
@@ -141,4 +165,42 @@ export async function POST(req) {
     console.error("QBWC Bridge Error:", err);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
+}
+
+// ── UTILITIES ────────────────────────────────────────────────────────────────
+
+function parseQBXMLCustomers(xml) {
+  const results = [];
+  const re = /<CustomerRet>([\s\S]*?)<\/CustomerRet>/g;
+  let match;
+  while ((match = re.exec(xml)) !== null) {
+    const inner = match[1];
+    results.push({
+      ListID: inner.match(/<ListID>(.*?)<\/ListID>/)?.[1],
+      EditSequence: inner.match(/<EditSequence>(.*?)<\/EditSequence>/)?.[1],
+      Name: inner.match(/<Name>(.*?)<\/Name>/)?.[1],
+      AccountNumber: inner.match(/<AccountNumber>(.*?)<\/AccountNumber>/)?.[1],
+      TotalBalance: inner.match(/<TotalBalance>(.*?)<\/TotalBalance>/)?.[1]
+    });
+  }
+  return results;
+}
+
+function parseQBXMLInvoices(xml) {
+  const results = [];
+  const re = /<InvoiceRet>([\s\S]*?)<\/InvoiceRet>/g;
+  let match;
+  while ((match = re.exec(xml)) !== null) {
+    const inner = match[1];
+    results.push({
+      TxnID: inner.match(/<TxnID>(.*?)<\/TxnID>/)?.[1],
+      EditSequence: inner.match(/<EditSequence>(.*?)<\/EditSequence>/)?.[1],
+      CustomerListID: inner.match(/<CustomerRef>[\s\S]*?<ListID>(.*?)<\/ListID>/)?.[1],
+      RefNumber: inner.match(/<RefNumber>(.*?)<\/RefNumber>/)?.[1],
+      Amount: inner.match(/<AppliedAmount>(.*?)<\/AppliedAmount>/)?.[1] || inner.match(/<Amount>(.*?)<\/Amount>/)?.[1],
+      BalanceRemaining: inner.match(/<BalanceRemaining>(.*?)<\/BalanceRemaining>/)?.[1],
+      DueDate: inner.match(/<DueDate>(.*?)<\/DueDate>/)?.[1]
+    });
+  }
+  return results;
 }
