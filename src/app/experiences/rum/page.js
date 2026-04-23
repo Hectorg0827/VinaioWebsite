@@ -25,7 +25,7 @@ const RUM_TIMELINE = [
     detail: "Columbus plants the first sugarcane in Hispaniola. Within decades, sugar plantations spread across the Caribbean, setting the stage for a spirit that would define the region.", 
     inGlass: "Every rum begins with sugarcane — its sweetness is the foundation of the spirit.", 
     brand: null,
-    img: "https://images.unsplash.com/photo-1596435031111-cc367a78018e?auto=format&fit=crop&q=80&w=600"
+    img: "/images/experiences/sugarcane_origins.png"
   },
   { 
     year: "1620s", 
@@ -51,7 +51,7 @@ const RUM_TIMELINE = [
     detail: "Don Erasmo Bermúdez establishes one of the Dominican Republic's first rum houses. His commitment to quality and barrel aging sets the standard for Dominican rum for the next 170 years.", 
     inGlass: "Bermúdez Añejo carries this founding DNA — rich, complex, and deeply Dominican.", 
     brand: "Bermúdez Ron Añejo",
-    img: "/images/experiences/bg_barrelroom.png"
+    img: "/images/experiences/rum_bermudez.png"
   },
   { 
     year: "Early 1900s", 
@@ -68,7 +68,7 @@ const RUM_TIMELINE = [
     detail: "Master blenders apply wine-inspired aging techniques: extended barrel maturation, solera systems, and single-cask releases. Rum begins its journey from party spirit to sipping spirit.", 
     inGlass: "Aged expressions develop dried fruit, tobacco, and cocoa complexity from extra time in oak.", 
     brand: "Bermúdez Añejo",
-    img: "/images/experiences/bg_barrelroom.png"
+    img: "/images/experiences/rum_bermudez.png"
   },
   { 
     year: "2000s", 
@@ -120,7 +120,7 @@ const COCKTAIL_RECIPES = [
     brand: "Bermúdez Ron Añejo",
     ingredients: ["2 oz aged rum", "1 sugar cube", "2 dashes Angostura bitters", "Orange peel"],
     method: "Muddle sugar and bitters. Add rum and a large ice cube. Stir gently for 30 seconds. Express orange peel over the glass.",
-    img: "/images/experiences/bg_barrelroom.png"
+    img: "/images/experiences/rum_old_fashioned.png"
   },
   {
     name: "Cuba Libre",

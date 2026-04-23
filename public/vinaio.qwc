@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<QBWCXML>
+    <AppName>Vinaio Trade Portal</AppName>
+    <AppID></AppID>
+    <AppURL>${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/portal/qbwc</AppURL>
+    <AppDescription>Synchronizes Customers and Invoices with the Vinaio Trade Portal.</AppDescription>
+    <AppSupport>${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/about</AppSupport>
+    <UserName>office-admin</UserName>
+    <OwnerID>{90A44FB3-FDCC-4EAF-B933-AFCF115162D1}</OwnerID>
+    <FileID>{57F3A95E-A2CC-4D9D-9D9D-E3F5A67C4148}</FileID>
+    <QBType>QBFS</QBType>
+    <Scheduler>
+        <RunEveryNMinutes>60</RunEveryNMinutes>
+    </Scheduler>
+</QBWCXML>

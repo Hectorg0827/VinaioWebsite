@@ -108,15 +108,37 @@ const WINE_REGIONS = [
     mapColor: "#C62828"
   },
   {
-    name: "Peru & Colombia",
+    name: "Peru",
     iso: "pe",
-    terroir: "Emerging Andean terroirs. From the desert sands of Ica to the tropical highlands, these regions offer rare and unique expressions.",
-    climate: "Desert to Tropical",
-    grapes: ["Muscat", "Tannat", "Criolla"],
-    pairings: "Ceviche, ají de gallina, grilled fish",
+    terroir: "High-altitude Andean vineyards and coastal desert sands. Peru's viticultural history is one of the oldest in the Americas, producing wines with remarkable salinity and freshness.",
+    climate: "Arid Coastal / Andean",
+    grapes: ["Tannat", "Malbec", "Petit Verdot", "Quebranta"],
+    pairings: "Classic Ceviche, Lomo Saltado, anticuchos, grilled octopus",
     featured: ["Vinaio Selection"],
-    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1590447158019-883d8d5f8bc7?auto=format&fit=crop&q=80&w=800",
     mapColor: "#F9A825"
+  },
+  {
+    name: "Colombia",
+    iso: "co",
+    terroir: "Extreme tropical viticulture in the Boyacá highlands. Volcanic soils and high-altitude radiation create unique, concentrated expressions of traditional varietals in the tropics.",
+    climate: "Tropical / High Altitude",
+    grapes: ["Cabernet Sauvignon", "Sauvignon Blanc", "Muscat"],
+    pairings: "Bandeja Paisa, grilled trout, aged cheeses, arepas de choclo",
+    featured: ["Vinaio Selection"],
+    img: "https://images.unsplash.com/photo-1589311693892-d1d73a46618d?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#FFD600"
+  },
+  {
+    name: "Uruguay",
+    iso: "uy",
+    terroir: "Atlantic-influenced maritime terroir. The clay-rich soils of Canelones and the granite hills of Maldonado produce some of the finest Tannat and Albariño in the Southern Hemisphere.",
+    climate: "Humid Maritime",
+    grapes: ["Tannat", "Albariño", "Merlot", "Marselan"],
+    pairings: "Traditional Asado, slow-cooked lamb, Chivito, strong blue cheeses",
+    featured: ["Monte Toscanini"],
+    img: "https://images.unsplash.com/photo-1543418219-44e30b057ebd?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#03A9F4"
   },
   {
     name: "Dominican Republic",
@@ -404,7 +426,6 @@ export default function WorldOfWinesPage() {
                   // 1. Check if it's a Vinaio sourcing region
                   let region = WINE_REGIONS.find(r => 
                     r.name.toLowerCase() === name.toLowerCase() ||
-                    (r.name === "Peru & Colombia" && (name === "Peru" || name === "Colombia")) ||
                     (r.name === "Dominican Republic" && name === "Dominican Rep.")
                   );
                   

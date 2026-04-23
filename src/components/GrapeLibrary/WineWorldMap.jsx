@@ -23,7 +23,7 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
   // Vinaio sourcing regions (ISO ALPHA-2 or matching names)
   const sourcingRegions = [
     "Spain", "France", "Italy", "Portugal", "South Africa", 
-    "Argentina", "Chile", "Peru", "Colombia", "Dominican Rep."
+    "Argentina", "Chile", "Peru", "Colombia", "Uruguay", "Dominican Rep."
   ];
 
   const handleMouseMove = (e) => {
