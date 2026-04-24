@@ -111,16 +111,7 @@ export default function ProductDetailPage({ params }) {
         
         <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Reveal>
-            {/* 1. PRODUCT LOGO */}
-            <div style={{ height: "120px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "32px", position: "relative", zIndex: 1 }}>
-              {logoUrl ? (
-                <img src={logoUrl} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "300px", objectFit: "contain" }} />
-              ) : (
-                <div style={{ padding: "10px 20px", border: `1px solid ${T.wine}40`, color: T.wine, fontFamily: ff.h, letterSpacing: "4px", fontSize: "14px", textTransform: "uppercase" }}>{product.brand}</div>
-              )}
-            </div>
-
-            {/* 2. BRAND NAME & TYPE */}
+            {/* 1. BRAND NAME & TYPE */}
             <h1 style={{ fontFamily: ff.h, fontSize: "clamp(32px, 5vw, 64px)", color: T.ink, lineHeight: 1.1, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "2px", position: "relative", zIndex: 1 }}>
               {product.brand}
             </h1>
@@ -287,22 +278,6 @@ function SuggestionCard({ product }) {
         transition: "transform 0.3s",
         overflow: "hidden"
       }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-5px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
-        <div style={{ 
-          height: "70px", 
-          width: "calc(100% + 48px)", 
-          margin: "-24px -24px 24px -24px", 
-          background: T.ink, 
-          display: "flex", 
-          alignItems: "center", 
-          justifyContent: "center",
-          borderBottom: "1px solid rgba(255,255,255,0.1)"
-        }}>
-           {logo ? (
-             <img src={logo} style={{ maxHeight: "70%", maxWidth: "120px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
-           ) : (
-             <span style={{ fontFamily: ff.h, fontSize: "14px", textTransform: "uppercase", color: "white", letterSpacing: "1.5px" }}>{product.brand}</span>
-           )}
-        </div>
         <div style={{ height: "180px", marginBottom: "20px" }}>
            {bottle && <img src={bottle} style={{ height: "100%", objectFit: "contain" }} />}
         </div>

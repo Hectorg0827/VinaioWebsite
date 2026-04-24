@@ -650,9 +650,6 @@ function FeaturedCard({ product }) {
       {bottle && <img src={bottle} alt={product.name} style={{ position: "absolute", right: "-10%", top: "20%", height: "80%", objectFit: "contain", opacity: 0.2, pointerEvents: "none" }} />}
       <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 20% 20%, ${T.wineDeep}40 0%, transparent 70%)` }} />
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: "100%", gap: "20px" }}>
-        <div style={{ height: "60px", display: "flex", alignItems: "center" }}>
-          {logo ? <img src={logo} alt={product.brand} style={{ maxHeight: "100%", maxWidth: "150px", objectFit: "contain", filter: "brightness(0) invert(1)" }} /> : <span style={{ fontFamily: ff.h, color: T.gold, fontSize: "20px", textTransform: "uppercase" }}>{product.brand}</span>}
-        </div>
         <div>
           <span style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.gold, display: "block", marginBottom: "8px" }}>{categories} · {product.origin}</span>
           <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "4px", lineHeight: 1.1 }}>{product.brand}</h3>
@@ -695,34 +692,6 @@ function ProductCard({ product, isEliteView = false }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={{ 
-        height: "100px", 
-        padding: "20px", 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "center", 
-        background: isEliteView
-          ? "linear-gradient(180deg, rgba(18,16,15,0.95) 0%, rgba(36,30,27,0.95) 100%)"
-          : T.ink,
-        borderBottom: isEliteView ? `1px solid ${T.gold}33` : `1px solid rgba(255,255,255,0.1)` 
-      }}>
-        {logo ? (
-          <img 
-            src={logo} 
-            alt={`${product.brand} logo`} 
-            style={{
-              maxWidth: "80%",
-              maxHeight: "80%",
-              objectFit: "contain",
-              filter: isEliteView ? "brightness(0) invert(1) sepia(0.3) saturate(1.5)" : "brightness(0) invert(1)"
-            }} 
-          />
-        ) : (
-          <span style={{ fontFamily: ff.h, color: isEliteView ? T.gold : "white", fontSize: "18px", textTransform: "uppercase", letterSpacing: "2px" }}>
-            {product.brand}
-          </span>
-        )}
-      </div>
       <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px", flexGrow: 1 }}>
         {isEliteView && (
           <span style={{
