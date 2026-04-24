@@ -49,13 +49,14 @@ export default function HomePage() {
 
   useEffect(() => {
     // Cinematic Intro Timing
+    // The logo entrance takes 1.6s. We wait an additional 2.5s before fading.
     setTimeout(() => {
       setIntroFading(true);
       setTimeout(() => {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
-      }, 1000); // Shorter exit blast duration
-    }, 5500); // Reduced total sequence time from 6s to 5.5s
+      }, 1000); // Exit blast duration
+    }, 4500); // Total sequence time: 4.5s (0.2s start + 1.6s entry + 2.7s hold)
 
     fetchContent();
   }, []);
@@ -148,40 +149,7 @@ export default function HomePage() {
              />
            ))}
 
-                                   {/* Cinematic Exploding Sub Logos */}
-           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             {INTRO_LOGOS.map((url, i) => (
-               <div 
-                 key={"sub-" + i}
-                 style={{ 
-                   position: "absolute",
-                   display: "flex",
-                   alignItems: "center",
-                   justifyContent: "center",
-                     opacity: 0,
-                     filter: `drop-shadow(1.5px 0 0 ${T.wine}) drop-shadow(-1.5px 0 0 ${T.wine}) drop-shadow(0 1.5px 0 ${T.wine}) drop-shadow(0 -1.5px 0 ${T.wine}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
-                     animation: introFading ? "none" : `explodeLogo 1.6s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
-                     animationDelay: `${i * 1.1}s`
-                 }}
-               >
-                 <div
-                   style={{
-                     width: "280px",
-                     height: "150px",
-                     background: T.wine,
-                     WebkitMaskImage: `url('${url}')`,
-                     WebkitMaskSize: "contain",
-                     WebkitMaskRepeat: "no-repeat",
-                     WebkitMaskPosition: "center",
-                     maskImage: `url('${url}')`,
-                     maskSize: "contain",
-                     maskRepeat: "no-repeat",
-                     maskPosition: "center",
-                   }}
-                 />
-               </div>
-             ))}
-           </div>
+           {/* Cinematic Exploding Sub Logos removed for a faster, immediate main logo entrance */}
 
            {/* The dramatic Logo */}
            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -201,7 +169,7 @@ export default function HomePage() {
                  opacity: 0,
                   filter: `drop-shadow(2px 0 0 ${T.wine}) drop-shadow(-2px 0 0 ${T.wine}) drop-shadow(0 2px 0 ${T.wine}) drop-shadow(0 -2px 0 ${T.wine}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
                   animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.6s both cubic-bezier(0.2, 0.8, 0.2, 1)",
-                  animationDelay: introFading ? "0s" : "4.4s"
+                  animationDelay: introFading ? "0s" : "0.2s"
                }} 
              />
            </div>
