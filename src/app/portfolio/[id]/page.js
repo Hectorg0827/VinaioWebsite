@@ -106,7 +106,7 @@ export default function ProductDetailPage({ params }) {
       }}>
         <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 70%)` }} />
         {logoUrl && (
-          <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${logoUrl}')`, backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "contain", opacity: 0.05, transform: "scale(1.2)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", inset: 0, backgroundImage: `url('${logoUrl}')`, backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "contain", opacity: 0.1, transform: "scale(1.4)", mixBlendMode: "multiply", filter: "grayscale(100%)", pointerEvents: "none" }} />
         )}
         
         <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -167,10 +167,13 @@ export default function ProductDetailPage({ params }) {
           {/* RIGHT: Product Details */}
           <div>
             <Reveal delay={0.1}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
                 <Hr w="40px" c={T.wine} />
-                <h2 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink }}>Product Story</h2>
+                <h2 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink, lineHeight: 1.1 }}>{product.brand}</h2>
               </div>
+              <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.wine, fontStyle: "italic", fontWeight: 500, marginBottom: "32px", marginLeft: "52px" }}>
+                {product.type || (product.categories && product.categories[0]) || "Wine"}
+              </p>
               
               <p style={{ fontFamily: ff.b, fontSize: "17px", color: T.deep, lineHeight: 1.8, marginBottom: "40px" }}>
                 {product.description_en || product.description}
@@ -179,25 +182,24 @@ export default function ProductDetailPage({ params }) {
               {/* Technical Grid */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", padding: "40px 0", borderTop: `1px solid ${T.cream}` }}>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Origin</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.origin}</p>
-                  <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.muted }}>{product.region}</p>
-                </div>
-                <div>
                   <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Producer</h4>
                   <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.producer || product.brand}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Category</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{(product.categories || []).join(", ")}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Brand Name</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.brand}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Format / Unit</h4>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Varietal or Style</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.type || (product.categories || []).join(", ")}</p>
+                </div>
+                <div>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Format</h4>
                   <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.format || product.unit}</p>
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>SKU</h4>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600 }}>{product.sku || product.product_code}</p>
+                  <h4 style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase", color: T.muted, marginBottom: "8px" }}>Tags</h4>
+                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.ink, fontWeight: 600, textTransform: "capitalize" }}>{(product.tags || []).join(", ") || "N/A"}</p>
                 </div>
               </div>
 

@@ -180,24 +180,17 @@ export default function ContactPage() {
           {/* ── Sidebar ── */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <Reveal delay={0.15}>
-              {/* Sales rep card */}
+              {/* Contact Info card */}
               <div style={{ padding: "32px", background: T.paper, border: `1px solid ${T.cream}`, borderRadius: "10px" }}>
-                <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, marginBottom: "16px" }}>Your Sales Rep</p>
-                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
-                  <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: T.wineGlow, border: `2px solid ${T.wine}20`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: ff.h, fontSize: "22px", color: T.wine }}>
-                    H
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: ff.b, fontSize: "15px", fontWeight: 600, color: T.ink }}>Katja Kohl</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted }}>Customer Service</p>
-                  </div>
+                <div style={{ marginBottom: "28px" }}>
+                  <img src="/logo.png" alt="Vinaio Imports" style={{ height: "32px", width: "auto" }} />
                 </div>
                 {[
                   { label: "Phone", value: "(718) 842-7201", href: "tel:+17188427201" },
-                  { label: "Email", value: "c.s@vinaioimports.com", href: "mailto:c.s@vinaioimports.com" },
+                  { label: "Email", value: "cs@vinaioimports.com", href: "mailto:cs@vinaioimports.com" },
                 ].map((c) => (
-                  <div key={c.label} style={{ marginBottom: "12px" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "2px" }}>{c.label}</p>
+                  <div key={c.label} style={{ marginBottom: "16px" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "4px" }}>{c.label}</p>
                     <a href={c.href} style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, textDecoration: "none" }}>{c.value}</a>
                   </div>
                 ))}
