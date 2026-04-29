@@ -75,7 +75,7 @@ export default function SpainPage() {
             
             <div style={{ marginBottom: "40px" }}>
               <img 
-                src="https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Spain%20logo.svg" 
+                src="/images/logos/vinaio-spain.svg" 
                 alt="Vinaio Spain logo" 
                 style={{ height: "clamp(100px, 15vw, 180px)", width: "auto", filter: "brightness(0) invert(1)" }} 
               />

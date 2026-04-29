@@ -129,7 +129,7 @@ function PortfolioContent() {
       title: "Vinaio Spain & Italy", 
       desc: "Our dedicated European portfolio for Spain and Italy.",
       img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=2048", // Dark vineyard aesthetic
-      logo: "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
+      logo: "/images/logos/vinaio-spain.svg",
       brands: ["Vino La Fuerza", "Cerveza República"]
     },
   ];
@@ -287,60 +287,6 @@ function PortfolioContent() {
                         zIndex: 2 
                       }} />
                       
-                      {/* Product bottle overlays - USING REAL CATALOG IMAGES */}
-                      {(() => {
-                        const bottleShots = card.brands.map(bName => {
-                          const prod = products.find(p => {
-                            const brand = (p.brand || "").toLowerCase();
-                            const producer = (p.producer || "").toLowerCase();
-                            const target = bName.toLowerCase();
-                            return brand.includes(target) || producer.includes(target);
-                          });
-                          
-                          if (!prod) return null;
-                          
-                          // Prioritize image_url, then construct Bunny.net URL from image_file
-                          let url = prod.imageUrl || prod.image_url;
-                          if (!url && prod.image_file && !prod.image_file.includes('placeholder.png')) {
-                            url = `https://vinaio-bottles.b-cdn.net/${encodeURI(prod.image_file)}`;
-                          }
-                          
-                          return url || null;
-                        }).filter(Boolean);
-
-                        return (
-                          <div style={{ 
-                            position: "absolute", top: "5%", right: "8%", bottom: "5%", left: "40%", 
-                            display: "flex", alignItems: "flex-end", justifyContent: "flex-end", 
-                            gap: "-45px", zIndex: 4, pointerEvents: "none"
-                          }}>
-                            {bottleShots.map((shot, idx) => {
-                              const total = bottleShots.length;
-                              // Stagger height: Middle ones taller
-                              const isMiddle = idx > 0 && idx < total - 1;
-                              const height = total > 3 ? (isMiddle ? "95%" : "80%") : (idx === 1 ? "100%" : "85%");
-                              const rotation = total > 3 ? (idx - (total-1)/2) * 4 : (idx === 0 ? -6 : idx === 2 ? 6 : 0);
-                              const translateY = isMiddle ? -12 : 0;
-
-                              return (
-                                <img 
-                                  key={idx} 
-                                  src={shot} 
-                                  alt="authentic product" 
-                                  style={{ 
-                                    height: height, 
-                                    objectFit: "contain",
-                                    marginRight: total > 3 ? "-80px" : "-70px",
-                                    filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.6))",
-                                    transform: `rotate(${rotation}deg) translateY(${translateY}px)`,
-                                    transition: "all 0.5s ease"
-                                  }} 
-                                />
-                              );
-                            })}
-                          </div>
-                        );
-                      })()}
 
                       <div style={{ position: "absolute", bottom: "32px", left: "32px", right: "32px", zIndex: 5 }}>
                         {card.logo && (

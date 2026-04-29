@@ -313,7 +313,7 @@ export default function ServicesPage() {
                   
                   <div style={{ marginBottom: "32px", display: "flex", justifyContent: "center" }}>
                     <img 
-                      src="https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Spain%20logo.svg" 
+                      src="/images/logos/vinaio-spain.svg" 
                       alt="Vinaio Spain Logo" 
                       style={{ height: "120px", filter: "brightness(0) invert(1)" }} 
                     />

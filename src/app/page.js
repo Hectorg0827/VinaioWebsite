@@ -17,7 +17,7 @@ const FALLBACK_LOGOS = [
 
 // Sub-logos exclusively for the cinematic intro sequence
 const INTRO_LOGOS = [
-  "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
+  "/images/logos/vinaio-spain.svg",
   "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Elite%20logo.svg",
   "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Caribbean%20logo.svg",
   "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Logistics%20logo.svg"
@@ -673,7 +673,7 @@ export default function HomePage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <Reveal>
               <img 
-                src="https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Spain%20logo.svg" 
+                src="/images/logos/vinaio-spain.svg" 
                 alt="Vinaio Spain" 
                 style={{ height: "100px", marginBottom: "40px", filter: "brightness(0.9)" }} 
               />
