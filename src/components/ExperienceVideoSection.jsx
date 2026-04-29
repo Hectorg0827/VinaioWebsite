@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { T, ff } from "@/lib/theme";
 import Reveal from "./Reveal";
 import Hr from "./Hr";
@@ -11,6 +11,7 @@ export default function ExperienceVideoSection({ experience }) {
   const [loading, setLoading] = useState(true);
   const playersRef = useRef({});
   const scriptLoadedRef = useRef(false);
+  const supabase = createClient();
 
   useEffect(() => {
     async function fetchVideos() {
