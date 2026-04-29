@@ -189,9 +189,9 @@ function StickySubnav({ sections, activeSection }) {
       position: "sticky",
       top: 0,
       zIndex: 800,
-      background: "rgba(10,10,10,0.95)",
+      background: "rgba(255,253,249,0.95)",
       backdropFilter: "blur(16px)",
-      borderBottom: "1px solid rgba(255,255,255,0.1)",
+      borderBottom: `1px solid ${T.taupe}`,
       padding: "0 56px",
     }}>
       <div style={{
@@ -217,8 +217,8 @@ function StickySubnav({ sections, activeSection }) {
               letterSpacing: "2px",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: activeSection === s.id ? "#FFFFFF" : "rgba(255,255,255,0.45)",
-              borderBottom: activeSection === s.id ? "2px solid #FFFFFF" : "2px solid transparent",
+              color: activeSection === s.id ? T.wine : T.muted,
+              borderBottom: activeSection === s.id ? `2px solid ${T.wine}` : "2px solid transparent",
               whiteSpace: "nowrap",
               transition: "all 0.3s",
               fontWeight: activeSection === s.id ? 700 : 400,
@@ -253,7 +253,7 @@ export default function HouseOfRumPage() {
   }, []);
 
   return (
-    <main style={{ background: T.ink, minHeight: "100vh", color: T.paper }}>
+    <main style={{ background: T.bg, minHeight: "100vh", color: T.ink }}>
       <style>{`
         .rum-section { padding: 120px 56px; }
         .timeline-grid { display: grid; grid-template-columns: 1fr 200px; gap: 32px; align-items: start; }
@@ -262,8 +262,9 @@ export default function HouseOfRumPage() {
           gap: 0;
           border-radius: 20px;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.1);
-          background: rgba(255,255,255,0.05);
+          border: 1px solid ${T.cream};
+          background: ${T.paper};
+          box-shadow: 0 10px 40px rgba(0,0,0,0.03);
         }
         .cocktail-grid-even { grid-template-columns: 300px 1fr; }
         .cocktail-grid-odd { grid-template-columns: 1fr 300px; }
@@ -283,29 +284,28 @@ export default function HouseOfRumPage() {
         }
       `}</style>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §1 — HERO
-      ══════════════════════════════════════════════════════════════════ */}
+      {/* 1 — HERO (Remains dark for mystique, but fades to site bg) */}
       <section style={{
         height: "85vh",
         position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        overflow: "hidden"
+        overflow: "hidden",
+        background: T.ink
       }}>
         <img
           src="/images/experiences/rum_experience.png"
           alt="Vinaio House of Rum"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }}
         />
-        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 0%, ${T.ink} 100%)` }} />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 0%, ${T.bg} 100%)` }} />
 
         <div style={{ position: "relative", textAlign: "center", padding: "0 20px", zIndex: 10 }}>
           <Reveal>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", marginBottom: "24px" }}>
               <Hr w="40px" c={T.gold} />
-              <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold }}>
+              <span style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "5px", textTransform: "uppercase", color: T.gold, fontWeight: 700 }}>
                 Heritage & Craft
               </span>
               <Hr w="40px" c={T.gold} />
@@ -313,7 +313,7 @@ export default function HouseOfRumPage() {
             <h1 style={{
               fontFamily: ff.h,
               fontSize: "clamp(48px, 8vw, 100px)",
-              color: T.paper,
+              color: T.ink,
               lineHeight: 1,
               marginBottom: "32px",
               fontWeight: 400
@@ -323,7 +323,7 @@ export default function HouseOfRumPage() {
             <p style={{
               fontFamily: ff.b,
               fontSize: "17px",
-              color: "rgba(255,255,255,0.7)",
+              color: T.deep,
               maxWidth: "650px",
               margin: "0 auto 48px",
               lineHeight: 1.7,
@@ -340,11 +340,14 @@ export default function HouseOfRumPage() {
                 fontSize: "10px",
                 letterSpacing: "4px",
                 textTransform: "uppercase",
-                color: T.gold,
-                border: `1px solid ${T.gold}40`,
-                padding: "16px 40px",
+                color: "white",
+                background: T.wine,
+                padding: "18px 48px",
                 textDecoration: "none",
                 transition: "all 0.3s",
+                borderRadius: "4px",
+                fontWeight: 700,
+                boxShadow: "0 10px 30px rgba(114, 47, 55, 0.2)"
               }}
             >
               Begin the Journey
@@ -353,29 +356,25 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §2 — STICKY SUBNAV
-      ══════════════════════════════════════════════════════════════════ */}
+      {/* 2 — STICKY SUBNAV */}
       {showNav && <StickySubnav sections={SECTIONS} activeSection={activeSection} />}
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §3 — THE ORIGINS OF RUM
-      ══════════════════════════════════════════════════════════════════ */}
-      <section id="origins" className="rum-section" style={{ background: T.ink }}>
+      {/* 3 — THE ORIGINS OF RUM */}
+      <section id="origins" className="rum-section" style={{ background: T.bg }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               The Origins of Rum
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "80px" }}>
-              Rum was not invented — it was discovered. In the heat and humidity of the Caribbean, sugarcane juice fermented naturally, and colonists learned to capture its spirit in copper stills. This is that story.
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "80px" }}>
+              Rum was not invented — it was discovered. In the heat and humidity of the Caribbean, sugarcane juice fermented naturally, and colonists learned to capture its spirit in copper stills.
             </p>
           </Reveal>
 
           {/* Timeline */}
           <div style={{ position: "relative", paddingLeft: "40px" }}>
-            <div style={{ position: "absolute", left: "12px", top: 0, bottom: 0, width: "2px", background: "rgba(255,255,255,0.1)" }} />
+            <div style={{ position: "absolute", left: "12px", top: 0, bottom: 0, width: "2px", background: T.taupe }} />
 
             {RUM_TIMELINE.map((item, i) => (
               <Reveal key={item.year} delay={i * 0.1}>
@@ -388,52 +387,53 @@ export default function HouseOfRumPage() {
                     height: "12px",
                     borderRadius: "50%",
                     background: T.gold,
-                    boxShadow: `0 0 20px ${T.gold}40`,
                   }} />
                   
                   <div className="timeline-grid">
                     <div>
-                      <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.gold, marginBottom: "8px", fontWeight: 700 }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "12px", letterSpacing: "3px", color: T.wine, marginBottom: "8px", fontWeight: 700 }}>
                         {item.year}
                       </p>
-                      <h3 style={{ fontFamily: ff.h, fontSize: "28px", color: T.paper, marginBottom: "16px" }}>
+                      <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.ink, marginBottom: "16px" }}>
                         {item.event}
                       </h3>
-                      <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, marginBottom: "20px" }}>
+                      <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.deep, lineHeight: 1.8, marginBottom: "20px" }}>
                         {item.detail}
                       </p>
                     </div>
                     {item.bgImg && item.bottleImg ? (
-                      <div style={{ position: "relative", height: "180px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)" }}>
-                        <img src={item.bgImg} alt="Background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, filter: "brightness(0.7)" }} />
+                      <div style={{ position: "relative", height: "180px", borderRadius: "12px", overflow: "hidden", border: `1px solid ${T.cream}` }}>
+                        <img src={item.bgImg} alt="Background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, filter: "brightness(0.9)" }} />
                         <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", alignItems: "center", justifyItems: "center", padding: "10px" }}>
-                             <img src={item.bottleImg} alt={item.event} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.8))" }} />
+                             <img src={item.bottleImg} alt={item.event} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.2))" }} />
                         </div>
                       </div>
                     ) : item.img ? (
-                      <div style={{ height: "180px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)", background: item.img.includes('b-cdn.net') ? 'transparent' : 'rgba(255,255,255,0.02)', display: "flex", alignItems: "center", justifyContent: "center", padding: item.img.includes('b-cdn.net') ? '10px' : '0' }}>
-                        <img src={item.img} alt={item.event} style={{ width: "100%", height: "100%", objectFit: item.img.includes('b-cdn.net') ? "contain" : "cover" }} />
+                      <div style={{ height: "180px", borderRadius: "12px", overflow: "hidden", border: `1px solid ${T.cream}`, background: T.paper, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <img src={item.img} alt={item.event} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                     ) : null}
                   </div>
 
                   <div className="timeline-brand-box" style={{ 
                     padding: "24px", 
-                    background: "rgba(255,255,255,0.06)", 
+                    background: T.paper, 
                     borderRadius: "12px", 
-                    borderLeft: `2px solid ${T.gold}`,
+                    border: `1px solid ${T.cream}`,
+                    borderLeft: `3px solid ${T.wine}`,
                     display: "flex",
                     flexDirection: "column",
-                    gap: "12px"
+                    gap: "12px",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.02)"
                   }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.4)", fontStyle: "italic", lineHeight: 1.6 }}>
-                      <strong style={{ color: T.gold, textTransform: "uppercase", fontSize: "10px", letterSpacing: "1px", fontStyle: "normal", marginRight: "8px" }}>In the Glass:</strong>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, fontStyle: "italic", lineHeight: 1.6 }}>
+                      <strong style={{ color: T.wine, textTransform: "uppercase", fontSize: "10px", letterSpacing: "1px", fontStyle: "normal", marginRight: "8px" }}>In the Glass:</strong>
                       {item.inGlass}
                     </p>
                     {item.brand && (
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "4px" }}>
-                        <span style={{ fontFamily: ff.b, fontSize: "10px", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "1px" }}>Related Vinaio Spirit:</span>
-                        <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "13px", color: T.gold, textDecoration: "none", borderBottom: `1px solid ${T.gold}80`, paddingBottom: "2px" }}>
+                        <span style={{ fontFamily: ff.b, fontSize: "10px", color: T.warm, textTransform: "uppercase", letterSpacing: "1px" }}>Related Vinaio Spirit:</span>
+                        <Link href="/portfolio" style={{ fontFamily: ff.b, fontSize: "13px", color: T.wine, textDecoration: "none", borderBottom: `1px solid ${T.wine}40`, fontWeight: 600 }}>
                           {item.brand} →
                         </Link>
                       </div>
@@ -446,19 +446,17 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §4 — THE BARREL ROOM
-      ══════════════════════════════════════════════════════════════════ */}
+      {/* 4 — THE BARREL ROOM (Stays dark for cellar vibe, but refined) */}
       <section id="barrel" className="rum-section" style={{ background: T.ink, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(194,163,85,0.12) 0%, transparent 60%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(194,163,85,0.15) 0%, transparent 60%)" }} />
         <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
             <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
               The Barrel Room
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
-              In the Caribbean, barrels breathe faster. The tropical heat accelerates the exchange between spirit and wood, producing in 5 years what might take 15 in Scotland. This is tropical maturation — and it is the secret behind Dominican rum&apos;s depth.
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.6)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+              In the Caribbean, barrels breathe faster. The tropical heat accelerates the exchange between spirit and wood, producing in 5 years what might take 15 in Scotland. This is tropical maturation.
             </p>
           </Reveal>
 
@@ -470,19 +468,26 @@ export default function HouseOfRumPage() {
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.1}>
                 <div style={{
-                  background: "rgba(255,255,255,0.06)",
+                  background: "rgba(255,255,255,0.04)",
                   border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "16px",
-                  padding: "40px 32px",
-                  transition: "border-color 0.3s",
+                  borderRadius: "20px",
+                  padding: "48px 32px",
+                  transition: "all 0.3s ease",
                   height: "100%",
+                  textAlign: "center"
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = T.gold;
+                  e.currentTarget.style.background = "rgba(255,255,255,0.07)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                  e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+                }}
                 >
-                  <div style={{ fontSize: "28px", marginBottom: "20px" }}>{item.icon}</div>
-                  <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.gold, marginBottom: "12px" }}>{item.title}</h3>
-                  <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}>{item.detail}</p>
+                  <div style={{ fontSize: "32px", marginBottom: "24px" }}>{item.icon}</div>
+                  <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.gold, marginBottom: "16px" }}>{item.title}</h3>
+                  <p style={{ fontFamily: ff.b, fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}>{item.detail}</p>
                 </div>
               </Reveal>
             ))}
@@ -490,18 +495,16 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §5 — HOW TO TASTE RUM
-      ══════════════════════════════════════════════════════════════════ */}
-      <section id="tasting" className="rum-section" style={{ background: T.ink }}>
+      {/* 5 — HOW TO TASTE RUM */}
+      <section id="tasting" className="rum-section" style={{ background: T.paper }}>
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               How to Taste Rum
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
-              Rum is often consumed casually, but its complexity rivals any whisky or cognac. Slowing down reveals a world of flavor most people miss.
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+              Rum complexity rivals any whisky or cognac. Slowing down reveals a world of flavor most people miss.
             </p>
           </Reveal>
 
@@ -513,29 +516,29 @@ export default function HouseOfRumPage() {
                   gridTemplateColumns: "100px 1fr",
                   gap: "32px",
                   padding: "48px 0",
-                  borderBottom: i < TASTING_STEPS.length - 1 ? "1px solid rgba(255,255,255,0.1)" : "none",
+                  borderBottom: i < TASTING_STEPS.length - 1 ? `1px solid ${T.cream}` : "none",
                   alignItems: "start",
                 }}>
                   <div style={{ textAlign: "center" }}>
                     <div style={{
-                      color: T.gold,
+                      color: T.wine,
                       fontFamily: ff.h,
-                      fontSize: "56px",
+                      fontSize: "64px",
                       lineHeight: 1,
                       marginBottom: "8px",
                     }}>
-                      {i + 1}
+                      0{i + 1}
                     </div>
-                    <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.wine, fontWeight: 700 }}>
                       {step.step}
                     </p>
                   </div>
                   <div>
-                    <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.paper, lineHeight: 1.7, marginBottom: "16px" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "17px", color: T.ink, lineHeight: 1.7, marginBottom: "16px", fontWeight: 500 }}>
                       {step.instruction}
                     </p>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>
-                      <strong style={{ color: "rgba(255,255,255,0.6)" }}>What to look for:</strong> {step.look}
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.6 }}>
+                      <strong style={{ color: T.deep }}>What to look for:</strong> {step.look}
                     </p>
                   </div>
                 </div>
@@ -545,18 +548,16 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §6 — RUM BY STYLE
-      ══════════════════════════════════════════════════════════════════ */}
-      <section id="styles" className="rum-section" style={{ background: T.ink }}>
+      {/* 6 — RUM BY STYLE */}
+      <section id="styles" className="rum-section" style={{ background: T.bg }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               Rum by Style
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
-              Not all rum is created equal. From crystalline whites to velvety aged expressions, each style serves a different purpose and palate.
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+              From crystalline whites to velvety aged expressions, each style serves a different purpose and palate.
             </p>
           </Reveal>
 
@@ -564,32 +565,39 @@ export default function HouseOfRumPage() {
             {RUM_STYLES.map((rum, i) => (
               <Reveal key={rum.style} delay={i * 0.08}>
                 <div style={{
-                  background: rum.color,
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  borderRadius: "16px",
+                  background: T.paper,
+                  border: `1px solid ${T.cream}`,
+                  borderRadius: "20px",
                   overflow: "hidden",
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  transition: "border-color 0.3s",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.02)"
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = T.gold;
+                  e.currentTarget.style.transform = "translateY(-5px)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = T.cream;
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
                 >
                   <div style={{ padding: "32px 24px", flexGrow: 1 }}>
-                    <h3 style={{ fontFamily: ff.h, fontSize: "22px", color: T.paper, marginBottom: "12px" }}>{rum.style}</h3>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginBottom: "16px" }}>{rum.profile}</p>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "12px" }}>{rum.style}</h3>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.6, marginBottom: "20px" }}>{rum.profile}</p>
 
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: "4px" }}>Character</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.6)", marginBottom: "16px", fontStyle: "italic" }}>{rum.character}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "6px", fontWeight: 700 }}>Character</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.deep, marginBottom: "20px", fontStyle: "italic" }}>{rum.character}</p>
 
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: "4px" }}>Best for</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "12px", color: "rgba(255,255,255,0.6)" }}>{rum.use}</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "6px", fontWeight: 700 }}>Best for</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.deep }}>{rum.use}</p>
                   </div>
 
-                  <div style={{ background: "rgba(194,163,85,0.12)", padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.gold, marginBottom: "2px" }}>Vinaio Pick</p>
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: T.paper, fontWeight: 600 }}>{rum.featured}</p>
+                  <div style={{ background: `${T.gold}10`, padding: "16px 24px", borderTop: `1px solid ${T.cream}` }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: T.gold, marginBottom: "4px", fontWeight: 700 }}>Vinaio Pick</p>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.wine, fontWeight: 700 }}>{rum.featured}</p>
                   </div>
                 </div>
               </Reveal>
@@ -598,18 +606,16 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §7 — COCKTAIL STUDIO
-      ══════════════════════════════════════════════════════════════════ */}
-      <section id="cocktails" className="rum-section" style={{ background: T.ink }}>
+      {/* 7 — COCKTAIL STUDIO */}
+      <section id="cocktails" className="rum-section" style={{ background: T.cream }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
               The Cocktail Studio
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
-              Five signature serves — from the timeless Daiquiri to the contemplative sipping ritual. Each paired with a Vinaio rum recommendation.
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+              Five signature serves — from the timeless Daiquiri to the contemplative sipping ritual.
             </p>
           </Reveal>
 
@@ -617,33 +623,33 @@ export default function HouseOfRumPage() {
             {COCKTAIL_RECIPES.map((cocktail, i) => (
               <Reveal key={cocktail.name} delay={i * 0.08}>
                 <div className={`cocktail-grid ${i % 2 === 0 ? "cocktail-grid-even" : "cocktail-grid-odd"}`}>
-                  <div className="cocktail-img-box" style={{ order: i % 2 === 0 ? 0 : 1, height: "320px", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.2)", position: "relative", overflow: "hidden" }}>
+                  <div className="cocktail-img-box" style={{ order: i % 2 === 0 ? 0 : 1, height: "350px", display: "flex", alignItems: "center", justifyContent: "center", background: T.ink, position: "relative", overflow: "hidden" }}>
                     {cocktail.bgImg ? (
                       <>
                         <img src={cocktail.bgImg} alt="Bar Setting" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, filter: "brightness(0.6)" }} />
                         <div style={{ position: "absolute", inset: 0, zIndex: 2, padding: "30px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <img src={cocktail.bottleImg} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 20px 20px rgba(0,0,0,0.9))" }} />
+                          <img src={cocktail.bottleImg} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 15px 30px rgba(0,0,0,0.4))" }} />
                         </div>
                       </>
                     ) : (
                       <img src={cocktail.img} alt={cocktail.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     )}
                   </div>
-                  <div className="cocktail-content-box" style={{ order: i % 2 === 0 ? 1 : 0, padding: "40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                    <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "12px" }}>
+                  <div className="cocktail-content-box" style={{ order: i % 2 === 0 ? 1 : 0, padding: "48px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.wine, marginBottom: "16px", fontWeight: 700 }}>
                       {cocktail.spirit} · {cocktail.brand}
                     </p>
-                    <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper, marginBottom: "20px" }}>{cocktail.name}</h3>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink, marginBottom: "24px" }}>{cocktail.name}</h3>
 
-                    <div style={{ marginBottom: "20px" }}>
+                    <div style={{ marginBottom: "24px" }}>
                       {cocktail.ingredients.map(ing => (
-                        <p key={ing} style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                        <p key={ing} style={{ fontFamily: ff.b, fontSize: "14px", color: T.deep, padding: "6px 0", borderBottom: `1px solid ${T.taupe}30` }}>
                           {ing}
                         </p>
                       ))}
                     </div>
 
-                    <p style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.4)", lineHeight: 1.7, fontStyle: "italic" }}>
+                    <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.muted, lineHeight: 1.7, fontStyle: "italic" }}>
                       {cocktail.method}
                     </p>
                   </div>
@@ -654,18 +660,16 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §8 — DISTILLERY STORIES
-      ══════════════════════════════════════════════════════════════════ */}
-      <section id="distillers" className="rum-section" style={{ background: T.ink }}>
+      {/* 8 — DISTILLERY STORIES */}
+      <section id="distillers" className="rum-section" style={{ background: T.bg }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <Reveal>
             <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
-              The Distilleries Behind Our Portfolio
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
+              Distillery Heritage
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.5)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
-              Vinaio does not just import rum. We partner with the families, blenders, and master distillers who have been shaping Caribbean spirit culture for generations.
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+              Vinaio partners with the families, blenders, and master distillers who have been shaping Caribbean spirit culture for generations.
             </p>
           </Reveal>
 
@@ -673,35 +677,36 @@ export default function HouseOfRumPage() {
             {DISTILLERY_STORIES.map((dist, i) => (
               <Reveal key={dist.name} delay={i * 0.1}>
                 <div className="distillery-card" style={{
-                  background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "20px",
-                  padding: "48px",
-                  transition: "border-color 0.3s",
+                  background: T.paper,
+                  border: `1px solid ${T.cream}`,
+                  borderRadius: "24px",
+                  padding: "56px",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.02)"
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = T.gold}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}
+                onMouseEnter={e => e.currentTarget.style.borderColor = T.wine}
+                onMouseLeave={e => e.currentTarget.style.borderColor = T.cream}
                 >
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "8px" }}>
-                    <h3 style={{ fontFamily: ff.h, fontSize: "32px", color: T.paper }}>{dist.name}</h3>
-                    <span style={{ fontFamily: ff.b, fontSize: "12px", color: T.gold }}>Est. {dist.founded}</span>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "12px", flexWrap: "wrap" }}>
+                    <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.ink }}>{dist.name}</h3>
+                    <span style={{ fontFamily: ff.b, fontSize: "14px", color: T.wine, fontWeight: 700 }}>Est. {dist.founded}</span>
                   </div>
-                  <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: "20px" }}>
+                  <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, marginBottom: "24px", fontWeight: 700 }}>
                     {dist.location}
                   </p>
-                  <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "24px" }}>
+                  <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.deep, lineHeight: 1.8, marginBottom: "32px" }}>
                     {dist.heritage}
                   </p>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `1px solid ${T.cream}`, paddingTop: "24px", flexWrap: "wrap", gap: "20px" }}>
                     <div>
-                      <p style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>Signature Expression</p>
-                      <p style={{ fontFamily: ff.b, fontSize: "14px", color: T.gold, fontWeight: 600 }}>{dist.signature}</p>
+                      <p style={{ fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: T.warm, marginBottom: "4px" }}>Signature Expression</p>
+                      <p style={{ fontFamily: ff.b, fontSize: "16px", color: T.wine, fontWeight: 700 }}>{dist.signature}</p>
                     </div>
                     <Link href="/portfolio" style={{
-                      fontFamily: ff.b, fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase",
-                      color: T.ink, background: T.gold, padding: "12px 24px", borderRadius: "4px", textDecoration: "none", fontWeight: 600
+                      fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase",
+                      color: "white", background: T.ink, padding: "14px 32px", borderRadius: "4px", textDecoration: "none", fontWeight: 700
                     }}>
-                      Explore →
+                      View Collection →
                     </Link>
                   </div>
                 </div>
@@ -711,22 +716,20 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          §9 — FINAL CTA
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="rum-section" style={{ textAlign: "center", background: T.ink }}>
+      {/* 9 — FINAL CTA */}
+      <section className="rum-section" style={{ textAlign: "center", background: T.wineMetal, color: "white" }}>
         <Reveal>
-          <Hr w="32px" c={T.gold} style={{ margin: "0 auto 24px" }} />
-          <h2 style={{ fontFamily: ff.h, fontSize: "48px", color: T.paper, marginBottom: "20px" }}>Continue Exploring</h2>
-          <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.45)", maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.8 }}>
-            Browse the full Vinaio spirits and rum portfolio — or discover our world of wines.
+          <Hr w="40px" c={T.gold} style={{ margin: "0 auto 32px" }} />
+          <h2 style={{ fontFamily: ff.h, fontSize: "56px", color: "white", marginBottom: "24px" }}>Continue the Journey</h2>
+          <p style={{ fontFamily: ff.b, fontSize: "17px", color: "rgba(255,255,255,0.7)", maxWidth: "550px", margin: "0 auto 48px", lineHeight: 1.8 }}>
+            Browse the full Vinaio spirits portfolio or immerse yourself in our world of wines.
           </p>
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/portfolio" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.ink, background: T.gold, padding: "18px 40px", borderRadius: "4px", textDecoration: "none", fontWeight: 600 }}>
-              Explore Full Portfolio
+          <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/portfolio" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "12px", letterSpacing: "4px", textTransform: "uppercase", color: T.wine, background: "white", padding: "20px 48px", borderRadius: "4px", textDecoration: "none", fontWeight: 700, boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}>
+              Full Portfolio
             </Link>
-            <Link href="/experiences/wine" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: T.gold, background: "transparent", border: `1px solid ${T.gold}40`, padding: "18px 40px", borderRadius: "4px", textDecoration: "none" }}>
-              Enter World of Wines →
+            <Link href="/experiences/wine" style={{ display: "inline-block", fontFamily: ff.b, fontSize: "12px", letterSpacing: "4px", textTransform: "uppercase", color: "white", background: "transparent", border: "1px solid rgba(255,255,255,0.3)", padding: "20px 48px", borderRadius: "4px", textDecoration: "none", fontWeight: 700 }}>
+              World of Wines →
             </Link>
           </div>
         </Reveal>

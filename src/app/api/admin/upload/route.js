@@ -53,16 +53,20 @@ export async function POST(req) {
       throw new Error("Failed to initialize Supabase Admin client.");
     }
 
-    const buffer = await file.arrayBuffer();
+    // Convert to Uint8Array — some Supabase versions reject raw ArrayBuffer
+    const buffer = new Uint8Array(await file.arrayBuffer());
     const { data, error } = await supabase.storage
       .from(bucket)
       .upload(storagePath, buffer, {
-        contentType: file.type,
+        contentType: file.type || "application/octet-stream",
         cacheControl: "3600",
-        upsert: false,
+        upsert: true,
       });
 
-    if (error) throw error;
+    if (error) {
+      console.error(`Supabase Storage Error [bucket=${bucket}, path=${storagePath}]:`, error.message);
+      throw error;
+    }
 
     const { data: { publicUrl } } = supabase.storage
       .from(bucket)

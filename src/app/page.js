@@ -654,73 +654,85 @@ export default function HomePage() {
         className="homepage-section"
         style={{
           background: T.editorialGrey,
-          padding: "100px 56px",
+          padding: "120px 56px",
           position: "relative",
           overflow: "hidden",
+          textAlign: "center"
         }}
       >
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(ellipse 60% 60% at 80% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+            background: `radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
           }}
         />
         <div
           style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}
         >
-          <div style={{ maxWidth: "600px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <Reveal>
-              <Hr w="32px" c={T.wine} style={{ marginBottom: "24px" }} />
+              <img 
+                src="https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg" 
+                alt="Vinaio Spain" 
+                style={{ height: "100px", marginBottom: "40px", filter: "brightness(0.9)" }} 
+              />
+              <Hr w="40px" c={T.wine} style={{ margin: "0 auto 32px" }} />
               <p
                 style={{
                   fontFamily: ff.b,
-                  fontSize: "10px",
-                  letterSpacing: "4px",
+                  fontSize: "11px",
+                  letterSpacing: "5px",
                   textTransform: "uppercase",
                   color: T.wine,
-                  marginBottom: "20px",
+                  marginBottom: "24px",
+                  fontWeight: 600
                 }}
               >
-                Vinaio Spain &amp; Europe
+                European Distribution Hub
               </p>
-                <h2
+              <h2
                 style={{
                   fontFamily: ff.h,
-                  fontSize: "clamp(36px, 5vw, 60px)",
+                  fontSize: "clamp(36px, 5vw, 64px)",
                   color: T.ink,
                   lineHeight: 1.1,
-                  marginBottom: "24px",
+                  marginBottom: "32px",
                 }}
               >
-                Your gateway to the US market
+                Your Gateway to Europe
               </h2>
-                <p
+              <p
                 style={{
                   fontFamily: ff.b,
-                  fontSize: "15px",
+                  fontSize: "17px",
                   color: "rgba(0,0,0,0.7)",
                   lineHeight: 1.8,
-                  marginBottom: "40px",
+                  marginBottom: "48px",
+                  maxWidth: "700px",
+                  margin: "0 auto 48px"
                 }}
               >
-                We serve as exclusive US importer for Spain and European craft
-                producers — handling TTB licensing, COLA registration,
-                warehousing, and full distribution across 26 US states,
-                Spain, and Italy so you can focus on what you do best.
+                Vinaio Spain is your strategic partner for European expansion. 
+                As a premier importer and distributor, we provide a direct corridor into 
+                the heart of Spain and Italy, managing complex logistics and market 
+                integration so your products can reach the most celebrated tables in Europe.
               </p>
-                <Link
+              <Link
                 href="/spain"
                 style={{
                   display: "inline-block",
                   fontFamily: ff.b,
-                  fontSize: "10.5px",
-                  letterSpacing: "3px",
+                  fontSize: "11px",
+                  letterSpacing: "4px",
                   textTransform: "uppercase",
-                  fontWeight: 600,
-                  color: T.wine,
-                  border: `1px solid ${T.wine}40`,
-                  padding: "14px 32px",
+                  fontWeight: 700,
+                  color: "white",
+                  background: T.wine,
+                  padding: "18px 48px",
+                  borderRadius: "4px",
+                  boxShadow: "0 10px 30px rgba(155, 35, 53, 0.2)",
+                  textDecoration: "none"
                 }}
               >
                 Explore Vinaio Spain →
