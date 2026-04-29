@@ -129,7 +129,7 @@ function PortfolioContent() {
       title: "Vinaio Spain & Italy", 
       desc: "Our dedicated European portfolio for Spain and Italy.",
       img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=2048", // Dark vineyard aesthetic
-      logo: "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
+      logo: "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
       brands: ["Vino La Fuerza", "Cerveza República"]
     },
   ];
