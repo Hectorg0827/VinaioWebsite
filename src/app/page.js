@@ -56,7 +56,7 @@ export default function HomePage() {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
       }, 1000); // Exit blast duration
-    }, 4500); // Total sequence time: 4.5s (0.2s start + 1.6s entry + 2.7s hold)
+    }, 100); // Start the opening effect immediately
 
     fetchContent();
   }, []);
@@ -151,28 +151,7 @@ export default function HomePage() {
 
            {/* Cinematic Exploding Sub Logos removed for a faster, immediate main logo entrance */}
 
-           {/* The dramatic Logo */}
-           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             <div
-               style={{ 
-                 height: "140px", 
-                 width: "500px", 
-                 background: T.wine,
-                 WebkitMaskImage: `url('${logoUrl}')`,
-                 WebkitMaskSize: "contain",
-                 WebkitMaskRepeat: "no-repeat",
-                 WebkitMaskPosition: "center",
-                 maskImage: `url('${logoUrl}')`,
-                 maskSize: "contain",
-                 maskRepeat: "no-repeat",
-                 maskPosition: "center",
-                 opacity: 0,
-                  filter: `drop-shadow(2px 0 0 ${T.wine}) drop-shadow(-2px 0 0 ${T.wine}) drop-shadow(0 2px 0 ${T.wine}) drop-shadow(0 -2px 0 ${T.wine}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
-                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.6s both cubic-bezier(0.2, 0.8, 0.2, 1)",
-                  animationDelay: introFading ? "0s" : "0.2s"
-               }} 
-             />
-           </div>
+           {/* Logo removed to start immediately with the opening effect */}
         </div>
       )}
 
@@ -297,9 +276,21 @@ export default function HomePage() {
               marginBottom: "40px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              width: "100%",
+              position: "relative"
             }}
           >
+            {/* The White Contrast Strip */}
+            <div style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              height: "80px",
+              background: "rgba(255, 255, 255, 0.15)",
+              backdropFilter: "blur(10px)",
+              zIndex: -1
+            }} />
             <div
               className="hero-logo-wrapper"
               style={{
