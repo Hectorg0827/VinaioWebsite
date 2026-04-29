@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import SmartLink from "@/components/SmartLink";
 import GrapeLibrary from "@/components/GrapeLibrary/GrapeLibrary";
 import WineWorldMap from "@/components/GrapeLibrary/WineWorldMap";
+import ExperienceVideoSection from "@/components/ExperienceVideoSection";
 import wineKnowledge from "@/data/global-wine-knowledge.json";
 
 /* ── SVG Icons (replacing emojis with premium line art) ─────────────────── */
@@ -30,6 +31,7 @@ const IconWineGlass = () => (
 /* ── Navigation sections ─────────────────────────────────────────────────── */
 const SECTIONS = [
   { id: "journey",     label: "Journey" },
+  { id: "videos",      label: "Videos" },
   { id: "winemap",     label: "Map" },
   { id: "regions",     label: "Regions" },
   { id: "grapes",      label: "Grapes" },
@@ -787,6 +789,9 @@ export default function WorldOfWinesPage() {
           </div>
         </div>
       </section>
+
+      {/* 7.5 — VISUAL STORIES */}
+      <ExperienceVideoSection experience="wine" />
 
       {/* ══════════════════════════════════════════════════════════════════
           §8 — PRODUCER STORIES

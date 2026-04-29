@@ -5,10 +5,12 @@ import Link from "next/link";
 import { T, ff } from "@/lib/theme";
 import Hr from "@/components/Hr";
 import Reveal from "@/components/Reveal";
+import ExperienceVideoSection from "@/components/ExperienceVideoSection";
 
 /* ── Navigation sections ─────────────────────────────────────────────────── */
 const SECTIONS = [
   { id: "origins",    label: "Origins" },
+  { id: "videos",     label: "Videos" },
   { id: "barrel",     label: "Barrel Room" },
   { id: "tasting",    label: "How to Taste" },
   { id: "styles",     label: "By Style" },
@@ -715,6 +717,9 @@ export default function HouseOfRumPage() {
           </div>
         </div>
       </section>
+
+      {/* 8.5 — VISUAL STORIES */}
+      <ExperienceVideoSection experience="rum" />
 
       {/* 9 — FINAL CTA */}
       <section className="rum-section" style={{ textAlign: "center", background: T.wineMetal, color: "white" }}>
