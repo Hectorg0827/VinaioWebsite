@@ -196,11 +196,13 @@ export default function HomePage() {
         @media (max-width: 1024px) {
           .hero-content { padding: 0 5vw !important; }
           .hero-logo-wrapper { height: 60px !important; width: 240px !important; }
+          .hero-contrast-strip { height: 70px !important; }
           .homepage-section { padding: 80px 24px !important; }
         }
         @media (max-width: 768px) {
           .homepage-section { padding: 60px 20px !important; }
           .hero-logo-wrapper { height: 50px !important; width: 200px !important; }
+          .hero-contrast-strip { height: 60px !important; }
           .experience-grid { grid-template-columns: 1fr !important; }
           .experience-card { height: 380px !important; }
         }
@@ -282,15 +284,20 @@ export default function HomePage() {
             }}
           >
             {/* The White Contrast Strip */}
-            <div style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              height: "80px",
-              background: "rgba(255, 255, 255, 0.15)",
-              backdropFilter: "blur(10px)",
-              zIndex: -1
-            }} />
+            <div 
+              className="hero-contrast-strip"
+              style={{
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "100vw",
+                top: "-5px",
+                height: "90px",
+                background: "rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(10px)",
+                zIndex: -1
+              }} 
+            />
             <div
               className="hero-logo-wrapper"
               style={{
