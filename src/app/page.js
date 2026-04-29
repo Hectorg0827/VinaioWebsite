@@ -195,14 +195,14 @@ export default function HomePage() {
         /* Responsive Homepage Styles */
         @media (max-width: 1024px) {
           .hero-content { padding: 0 5vw !important; }
-          .hero-logo-wrapper { height: 60px !important; width: 240px !important; }
-          .hero-contrast-strip { height: 70px !important; }
+          .hero-logo-wrapper { height: 90px !important; width: 340px !important; }
+          .hero-contrast-strip { height: 110px !important; }
           .homepage-section { padding: 80px 24px !important; }
         }
         @media (max-width: 768px) {
           .homepage-section { padding: 60px 20px !important; }
-          .hero-logo-wrapper { height: 50px !important; width: 200px !important; }
-          .hero-contrast-strip { height: 60px !important; }
+          .hero-logo-wrapper { height: 70px !important; width: 260px !important; }
+          .hero-contrast-strip { height: 85px !important; }
           .experience-grid { grid-template-columns: 1fr !important; }
           .experience-card { height: 380px !important; }
         }
@@ -291,19 +291,19 @@ export default function HomePage() {
                 left: "50%",
                 transform: "translateX(-50%)",
                 width: "100vw",
-                top: "-5px",
-                height: "90px",
-                background: "rgba(255, 255, 255, 0.15)",
-                backdropFilter: "blur(10px)",
+                top: "-10px",
+                height: "140px",
+                background: "rgba(255, 255, 255, 0.18)",
+                backdropFilter: "blur(12px)",
                 zIndex: -1
               }} 
             />
             <div
               className="hero-logo-wrapper"
               style={{
-                height: "80px",
-                width: "300px",
-                background: T.wine,
+                height: "120px",
+                width: "450px",
+                background: "#9B2335",
                 WebkitMaskImage: `url('${logoUrl}')`,
                 WebkitMaskSize: "contain",
                 WebkitMaskRepeat: "no-repeat",
@@ -318,7 +318,7 @@ export default function HomePage() {
                   drop-shadow(-2px 0 0 white) 
                   drop-shadow(0 2px 0 white) 
                   drop-shadow(0 -2px 0 white) 
-                  drop-shadow(0 10px 20px rgba(0,0,0,0.3))
+                  drop-shadow(0 12px 24px rgba(0,0,0,0.4))
                 `
               }} 
             />
