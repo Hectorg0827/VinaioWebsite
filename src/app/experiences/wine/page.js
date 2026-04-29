@@ -379,6 +379,9 @@ export default function WorldOfWinesPage() {
         </div>
       </section>
 
+      {/* 3.25 — VISUAL STORIES */}
+      <ExperienceVideoSection experience="wine" />
+
       {/* ══════════════════════════════════════════════════════════════════
           §3.5 — INTERACTIVE WINE MAP
       ══════════════════════════════════════════════════════════════════ */}
@@ -789,9 +792,6 @@ export default function WorldOfWinesPage() {
           </div>
         </div>
       </section>
-
-      {/* 7.5 — VISUAL STORIES */}
-      <ExperienceVideoSection experience="wine" />
 
       {/* ══════════════════════════════════════════════════════════════════
           §8 — PRODUCER STORIES

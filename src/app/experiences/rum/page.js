@@ -448,6 +448,9 @@ export default function HouseOfRumPage() {
         </div>
       </section>
 
+      {/* 3.5 — VISUAL STORIES */}
+      <ExperienceVideoSection experience="rum" />
+
       {/* 4 — THE BARREL ROOM (Stays dark for cellar vibe, but refined) */}
       <section id="barrel" className="rum-section" style={{ background: T.ink, position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(194,163,85,0.15) 0%, transparent 60%)" }} />
@@ -717,9 +720,6 @@ export default function HouseOfRumPage() {
           </div>
         </div>
       </section>
-
-      {/* 8.5 — VISUAL STORIES */}
-      <ExperienceVideoSection experience="rum" />
 
       {/* 9 — FINAL CTA */}
       <section className="rum-section" style={{ textAlign: "center", background: T.wineMetal, color: "white" }}>
