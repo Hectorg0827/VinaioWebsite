@@ -24,6 +24,7 @@ export async function POST(req) {
     }
 
     // 1. Create Supabase Auth User
+    console.log("Attempting to create Auth user for:", email);
     const { data: authData, error: authError } = await admin.auth.admin.createUser({
       email,
       password,
@@ -32,11 +33,12 @@ export async function POST(req) {
     });
 
     if (authError) {
-      console.error("Auth Error:", authError);
-      return NextResponse.json({ error: authError.message }, { status: 400 });
+      console.error("❌ Supabase Auth Error:", authError);
+      return NextResponse.json({ error: `Auth Error: ${authError.message}` }, { status: 400 });
     }
 
     const userId = authData.user.id;
+    console.log("✅ Auth user created:", userId);
 
     // 2. Create/Update Customer Profile
     const { error: profileError } = await admin
@@ -66,9 +68,11 @@ export async function POST(req) {
 
     // 4. Send Welcome Email via Resend
     const resendKey = process.env.RESEND_API_KEY;
-    if (resendKey) {
+    console.log("Checking Resend configuration...");
+    if (resendKey && resendKey !== "re_test_123") {
       try {
-        await fetch("https://api.resend.com/emails", {
+        console.log("Sending welcome email via Resend...");
+        const resendResponse = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${resendKey}`,
@@ -118,9 +122,17 @@ export async function POST(req) {
             `,
           }),
         });
+        const resendData = await resendResponse.json();
+        if (resendResponse.ok) {
+          console.log("✅ Welcome email sent successfully:", resendData.id);
+        } else {
+          console.error("❌ Resend API Error:", resendData);
+        }
       } catch (emailErr) {
-        console.error("Welcome email failed to send:", emailErr);
+        console.error("❌ Welcome email failed to send:", emailErr);
       }
+    } else {
+      console.warn("⚠️ Resend API Key missing or placeholder. Skipping email.");
     }
 
     return NextResponse.json({ success: true, userId });
