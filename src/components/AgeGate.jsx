@@ -6,6 +6,8 @@ import { T, ff } from "@/lib/theme";
 export default function AgeGate() {
   const [show, setShow] = useState(false);
   const [error, setError] = useState(false);
+  const [animatingOut, setAnimatingOut] = useState(false);
+  const [splitDoors, setSplitDoors] = useState(false);
 
   useEffect(() => {
     // Check if the user has already verified their age
@@ -19,7 +21,17 @@ export default function AgeGate() {
 
   const handleYes = () => {
     localStorage.setItem("vinaio_age_verified", "true");
-    setShow(false);
+    setAnimatingOut(true);
+    
+    // 1. Fade out the modal content
+    setTimeout(() => {
+      setSplitDoors(true); // 2. Trigger the split doors animation
+      
+      // 3. Remove from DOM entirely after doors slide away
+      setTimeout(() => {
+        setShow(false);
+      }, 800);
+    }, 300);
   };
 
   const handleNo = () => {
@@ -34,14 +46,42 @@ export default function AgeGate() {
         position: "fixed",
         inset: 0,
         zIndex: 99999,
-        background: "rgba(26,24,21,0.95)",
-        backdropFilter: "blur(12px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "24px"
+        pointerEvents: animatingOut ? "none" : "auto",
+        overflow: "hidden"
       }}
     >
+      {/* Top Door */}
+      <div 
+        style={{
+          position: "absolute",
+          top: 0, left: 0, right: 0,
+          height: "50vh",
+          background: "rgba(26,24,21,0.98)", // T.ink very dark
+          backdropFilter: "blur(12px)",
+          transform: splitDoors ? "translateY(-100%)" : "translateY(0)",
+          transition: "transform 0.8s cubic-bezier(0.7, 0, 0.3, 1)",
+          zIndex: 1
+        }}
+      />
+      
+      {/* Bottom Door */}
+      <div 
+        style={{
+          position: "absolute",
+          bottom: 0, left: 0, right: 0,
+          height: "50vh",
+          background: "rgba(26,24,21,0.98)", // T.ink very dark
+          backdropFilter: "blur(12px)",
+          transform: splitDoors ? "translateY(100%)" : "translateY(0)",
+          transition: "transform 0.8s cubic-bezier(0.7, 0, 0.3, 1)",
+          zIndex: 1
+        }}
+      />
+
+      {/* Modal Content */}
       <div 
         style={{
           background: T.paper,
@@ -51,14 +91,21 @@ export default function AgeGate() {
           maxWidth: "480px",
           width: "100%",
           textAlign: "center",
-          boxShadow: "0 20px 40px rgba(0,0,0,0.4)"
+          boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+          opacity: animatingOut ? 0 : 1,
+          transform: animatingOut ? "scale(0.95)" : "scale(1)",
+          transition: "opacity 0.3s ease, transform 0.3s ease",
+          zIndex: 2,
+          margin: "0 24px" // mobile padding
         }}
       >
         <div style={{ marginBottom: "32px", display: "flex", justifyContent: "center" }}>
-          {/* We use a simple text logo for the gate if we don't have the branding fetched yet */}
-          <h1 style={{ fontFamily: ff.h, fontSize: "28px", color: T.wine, letterSpacing: "4px", textTransform: "uppercase" }}>
-            Vinaio
-          </h1>
+          {/* Vinaio Imports Logo */}
+          <img 
+            src="/images/logos/vinaio-imports.svg" 
+            alt="Vinaio Imports Logo" 
+            style={{ width: "220px", height: "auto" }}
+          />
         </div>
 
         <h2 style={{ fontFamily: ff.h, fontSize: "24px", color: T.ink, marginBottom: "16px" }}>

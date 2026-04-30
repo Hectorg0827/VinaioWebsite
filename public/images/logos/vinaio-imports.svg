@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400&amp;display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&amp;display=swap');
+      .text { font-family: 'Cinzel', serif; fill: #8B1C31; text-anchor: middle; }
+      .vinaio { font-size: 110px; letter-spacing: 20px; font-weight: 400; }
+      .imports { font-family: 'DM Sans', sans-serif; font-size: 32px; letter-spacing: 28px; font-weight: 500; fill: #8B1C31; text-anchor: middle; }
+      .line { stroke: #8B1C31; stroke-width: 4; }
+    </style>
+    <!-- Mask to hide the crossbar of the A to match the exact VINAIO brand mark -->
+    <mask id="crossbar-mask">
+      <rect width="600" height="200" fill="white" />
+      <!-- Cut out the crossbar area roughly where the A is -->
+      <rect x="290" y="70" width="40" height="15" fill="black" />
+    </mask>
+  </defs>
+  
+  <g mask="url(#crossbar-mask)">
+    <text x="315" y="105" class="text vinaio">VINAIO</text>
+  </g>
+  <line x1="140" y1="130" x2="480" y2="130" class="line" />
+  <!-- Shifted slightly right to account for tracking visually -->
+  <text x="325" y="180" class="imports">IMPORTS, LTD.</text>
+</svg>
