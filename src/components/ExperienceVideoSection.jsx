@@ -56,57 +56,6 @@ export default function ExperienceVideoSection({ experience }) {
 
     fetchVideos();
 
-    // Load YouTube API script
-    if (!window.YT) {
-      if (!document.getElementById("youtube-api-script")) {
-        const tag = document.createElement("script");
-        tag.id = "youtube-api-script";
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName("script")[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      }
-    } else {
-      scriptLoadedRef.current = true;
-    }
-
-    window.onYouTubeIframeAPIReady = () => {
-      scriptLoadedRef.current = true;
-    };
-  }, [experience]);
-
-  const onPlayerStateChange = (event, videoId) => {
-    // 1 is playing
-    if (event.data === 1) {
-      // Pause all other videos
-      Object.keys(playersRef.current).forEach((id) => {
-        if (id !== videoId && playersRef.current[id] && playersRef.current[id].pauseVideo) {
-          playersRef.current[id].pauseVideo();
-        }
-      });
-    }
-  };
-
-  const initPlayer = (id, youtubeId) => {
-    if (playersRef.current[id]) return;
-
-    if (window.YT && window.YT.Player) {
-      playersRef.current[id] = new window.YT.Player(`player-${id}`, {
-        height: "100%",
-        width: "100%",
-        videoId: youtubeId,
-        playerVars: {
-          playsinline: 1,
-          modestbranding: 1,
-          rel: 0,
-        },
-        events: {
-          onStateChange: (event) => onPlayerStateChange(event, id),
-        },
-      });
-    }
-  };
-
-  // Extract YouTube ID from URL (handles watch?v=, embed/, shorts/, youtu.be/)
   const getYouTubeId = (url) => {
     if (!url) return null;
     const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([^& \n<?#]+)/);
@@ -164,14 +113,12 @@ export default function ExperienceVideoSection({ experience }) {
                       paddingBottom: "56.25%", // 16:9
                       background: T.ink
                     }}>
-                      <div
-                        id={`player-${v.id || i}`}
-                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-                      />
-                      <PlayerInitializer 
-                        id={v.id || i} 
-                        youtubeId={youtubeId} 
-                        initFn={initPlayer} 
+                      <iframe
+                        src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1`}
+                        title={v.title}
+                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
                       />
                     </div>
                     <div style={{ padding: "24px" }}>
@@ -193,19 +140,4 @@ export default function ExperienceVideoSection({ experience }) {
       </div>
     </section>
   );
-}
-
-// Simple helper to trigger initialization once script is ready
-function PlayerInitializer({ id, youtubeId, initFn }) {
-  useEffect(() => {
-    const checkAndInit = () => {
-      if (window.YT && window.YT.Player) {
-        initFn(id, youtubeId);
-      } else {
-        setTimeout(checkAndInit, 500);
-      }
-    };
-    checkAndInit();
-  }, [id, youtubeId, initFn]);
-  return null;
 }

@@ -313,17 +313,32 @@ export default function HouseOfRumPage() {
               </span>
               <Hr w="40px" c={T.gold} />
             </div>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "32px" }}>
-              <img 
-                src="/images/experiences/house_of_rum_logo.png" 
-                alt="Vinaio House of Rum"
-                style={{
-                  maxWidth: "500px",
-                  width: "90%",
-                  height: "auto",
-                  filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.15))"
-                }}
-              />
+            <div style={{ marginBottom: "32px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{ 
+                fontFamily: "Georgia, serif", 
+                fontSize: "clamp(48px, 8vw, 80px)", 
+                color: T.wine, 
+                letterSpacing: "12px", 
+                lineHeight: 1,
+                marginBottom: "16px",
+                display: "flex",
+                alignItems: "center"
+              }}>
+                V I N <span style={{ display: "inline-block", transform: "scaleY(1.1)", margin: "0 4px" }}>Λ</span> I O
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px", width: "100%", maxWidth: "420px" }}>
+                <div style={{ flex: 1, height: "1px", background: T.wine }} />
+                <span style={{ 
+                  fontFamily: "Georgia, serif", 
+                  fontSize: "15px", 
+                  letterSpacing: "4px", 
+                  color: T.wine,
+                  textTransform: "uppercase"
+                }}>
+                  House of Rum
+                </span>
+                <div style={{ flex: 1, height: "1px", background: T.wine }} />
+              </div>
             </div>
             <p style={{
               fontFamily: ff.b,
