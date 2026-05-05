@@ -55,6 +55,7 @@ export default function ExperienceVideoSection({ experience }) {
     }
 
     fetchVideos();
+  }, [experience]);
 
   const getYouTubeId = (url) => {
     if (!url) return null;
