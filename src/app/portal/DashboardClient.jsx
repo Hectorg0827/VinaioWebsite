@@ -15,7 +15,7 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
   const openInvoices  = invoices.filter((i) => i.status !== "paid");
   const overdueAmount = invoices
     .filter((i) => i.status === "overdue")
-    .reduce((s, i) => s + (i.amount - i.paid), 0);
+    .reduce((s, i) => s + Number(i.balance || 0), 0);
   const expiringLic   = licenses.filter((l) => l.status === "expiring").length;
   const thisMonthOrds = orders.filter(
     (o) => new Date(o.created_at).getMonth() === new Date().getMonth()
@@ -121,7 +121,9 @@ export default function DashboardClient({ customer, invoices, orders, licenses, 
                 </span>
                 <span style={{ fontFamily: ff.b, fontSize: "12px", color: T.muted, marginLeft: "16px" }}>
                   {new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                  {o.order_items?.[0]?.count ? ` · ${o.order_items[0].count} items` : ""}
+                  {(o.order_items?.length ?? 0) > 0
+                    ? ` · ${o.order_items.reduce((sum, item) => sum + (item.qty ?? 0), 0)} items`
+                    : ""}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>

@@ -1,8 +1,14 @@
 import { getUser } from "@/lib/supabase/safe";
 import DashboardClient from "./DashboardClient";
+import PortalWelcome from "./PortalWelcome";
 
 export default async function PortalPage() {
   const { user, supabase } = await getUser();
+
+  // If no user, show the elegant welcome screen
+  if (!user) {
+    return <PortalWelcome />;
+  }
 
   let customer = null, orders = [], products = [], licenses = [], catalogs = [];
 
@@ -39,9 +45,15 @@ export default async function PortalPage() {
       );
     }
 
-    // Normalize customer to DashboardClient shape
+    // Normalize customer and keep both legacy/new keys consumed by portal components
     if (c.data) {
       customer = {
+        // legacy keys used in DashboardClient
+        company:       c.data.company        ?? "Your Account",
+        account_number:c.data.account_number ?? "—",
+        credit_limit:  c.data.credit_limit   ?? 0,
+        balance:       c.data.balance        ?? 0,
+        // newer aliases used by other portal surfaces
         name:          c.data.company        ?? "Your Account",
         contact:       user.email?.split("@")[0] ?? "User",
         email:         user.email             ?? "",
@@ -60,14 +72,16 @@ export default async function PortalPage() {
     // Normalize orders
     if (ord.data?.length) {
       orders = ord.data.map((o) => ({
-        id:     o.id,
-        date:   new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-        items:  (o.order_items ?? []).map((li) => ({
+        id:          o.id,
+        created_at:  o.created_at,
+        order_items: o.order_items ?? [],
+        date:        new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        items:       (o.order_items ?? []).map((li) => ({
           name: li.products?.name ?? "Product",
           qty:  li.qty,
         })),
-        total:  o.total  ?? 0,
-        status: o.status ?? "Processing",
+        total:       o.total  ?? 0,
+        status:      o.status ?? "Processing",
       }));
     }
 
@@ -112,3 +126,4 @@ export default async function PortalPage() {
     />
   );
 }
+

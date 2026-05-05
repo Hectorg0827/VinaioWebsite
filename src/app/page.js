@@ -17,10 +17,10 @@ const FALLBACK_LOGOS = [
 
 // Sub-logos exclusively for the cinematic intro sequence
 const INTRO_LOGOS = [
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Spain%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Elite%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Caribbean%20logo.svg",
-  "https://vinaio-bottles.b-cdn.net/logos/Vinaio%20Logistics%20logo.svg"
+  "/images/logos/vinaio-spain.svg",
+  "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Elite%20logo.svg",
+  "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Caribbean%20logo.svg",
+  "https://vinaio-bottles-cdn.b-cdn.net/logos/Vinaio%20Logistics%20logo.svg"
 ];
 
 export default function HomePage() {
@@ -37,36 +37,38 @@ export default function HomePage() {
   });
   const [logoUrl, setLogoUrl] = useState("/logo.png");
 
-  // Default elegant images from Unsplash to ensure background is NEVER black
+  // Beautiful, moody, high-contrast imagery perfectly suited for the burgundy logo and white text
   const DEFAULT_SLIDES = [
-    "/images/hero/hero-rum.png",
-    "/images/hero/hero-vineyard.png",
-    "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=2048", // Vineyard/Wine
-    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2048", // Barrels
-    "https://images.unsplash.com/photo-1543412849-fd47250680ca?auto=format&fit=crop&q=80&w=2048"  // Bottles/Beach vibe
+    // 1. A beautiful Spanish winery estate at twilight (dark and atmospheric)
+    "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=2048",
+    // 2. Wine being consumed and enjoyed (moody, luxury restaurant aesthetic)
+    "https://images.unsplash.com/photo-1585553616435-2dc0a54e271d?auto=format&fit=crop&q=80&w=2048",
+    // 3. A Rum distillery / dark barrel room
+    "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&q=80&w=2048"
   ];
 
   useEffect(() => {
     // Cinematic Intro Timing
+    // The logo entrance takes 1.6s. We wait an additional 2.5s before fading.
     setTimeout(() => {
       setIntroFading(true);
       setTimeout(() => {
         setIntroFinished(true);
         setLoaded(true); // Fade in the main site content after intro
-      }, 1000); // Shorter exit blast duration
-    }, 5500); // Reduced total sequence time from 6s to 5.5s
+      }, 1000); // Exit blast duration
+    }, 100); // Start the opening effect immediately
 
     fetchContent();
   }, []);
 
   // Simple slide timer for the "alive" effect
   useEffect(() => {
-    const slideCount = (hero.images && hero.images.length > 0) ? hero.images.length : DEFAULT_SLIDES.length;
+    const slideCount = DEFAULT_SLIDES.length;
     const timer = setInterval(() => {
       setCurrentSlide(s => (s + 1) % slideCount);
     }, 8000); 
     return () => clearInterval(timer);
-  }, [hero.images, DEFAULT_SLIDES.length]);
+  }, []);
 
   const fetchContent = async () => {
     try {
@@ -79,17 +81,12 @@ export default function HomePage() {
         .single();
       
       if (heroData) {
-        let urls = [];
-        try {
-          urls = JSON.parse(heroData.url);
-        } catch (e) {
-          urls = heroData.url?.split("|").filter(Boolean);
-        }
         setHero({ 
           ...heroData, 
           title: heroData.title || "Curating Excellence",
           subtitle: heroData.subtitle || "Transatlantic Spirits & Wine Purveyors",
-          images: (urls && urls.length > 0) ? urls : [heroData.url] 
+          // Ignore DB urls to fix the black screen issue and enforce the new curated slides
+          images: DEFAULT_SLIDES
         });
       }
 
@@ -125,7 +122,7 @@ export default function HomePage() {
     }
   };
 
-  const slides = (hero.images && hero.images.length > 0) ? hero.images : DEFAULT_SLIDES;
+  const slides = DEFAULT_SLIDES;
 
   return (
     <>
@@ -152,63 +149,9 @@ export default function HomePage() {
              />
            ))}
 
-                                   {/* Cinematic Exploding Sub Logos */}
-           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             {INTRO_LOGOS.map((url, i) => (
-               <div 
-                 key={"sub-" + i}
-                 style={{ 
-                   position: "absolute",
-                   display: "flex",
-                   alignItems: "center",
-                   justifyContent: "center",
-                     opacity: 0,
-                     filter: `drop-shadow(1.5px 0 0 ${T.wine}) drop-shadow(-1.5px 0 0 ${T.wine}) drop-shadow(0 1.5px 0 ${T.wine}) drop-shadow(0 -1.5px 0 ${T.wine}) drop-shadow(0 6px 15px rgba(0,0,0,0.25))`,
-                     animation: introFading ? "none" : `explodeLogo 1.6s both cubic-bezier(0.165, 0.84, 0.44, 1)`,
-                     animationDelay: `${i * 1.1}s`
-                 }}
-               >
-                 <div
-                   style={{
-                     width: "280px",
-                     height: "150px",
-                     background: T.wine,
-                     WebkitMaskImage: `url('${url}')`,
-                     WebkitMaskSize: "contain",
-                     WebkitMaskRepeat: "no-repeat",
-                     WebkitMaskPosition: "center",
-                     maskImage: `url('${url}')`,
-                     maskSize: "contain",
-                     maskRepeat: "no-repeat",
-                     maskPosition: "center",
-                   }}
-                 />
-               </div>
-             ))}
-           </div>
+           {/* Cinematic Exploding Sub Logos removed for a faster, immediate main logo entrance */}
 
-           {/* The dramatic Logo */}
-           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             <div
-               style={{ 
-                 height: "140px", 
-                 width: "500px", 
-                 background: T.wine,
-                 WebkitMaskImage: `url('${logoUrl}')`,
-                 WebkitMaskSize: "contain",
-                 WebkitMaskRepeat: "no-repeat",
-                 WebkitMaskPosition: "center",
-                 maskImage: `url('${logoUrl}')`,
-                 maskSize: "contain",
-                 maskRepeat: "no-repeat",
-                 maskPosition: "center",
-                 opacity: 0,
-                  filter: `drop-shadow(2px 0 0 ${T.wine}) drop-shadow(-2px 0 0 ${T.wine}) drop-shadow(0 2px 0 ${T.wine}) drop-shadow(0 -2px 0 ${T.wine}) drop-shadow(0 10px 20px rgba(0,0,0,0.35))`,
-                  animation: introFading ? "shatterBlast 1s forwards cubic-bezier(0.4, 0, 0.2, 1)" : "logoEntrance 1.6s both cubic-bezier(0.2, 0.8, 0.2, 1)",
-                  animationDelay: introFading ? "0s" : "4.4s"
-               }} 
-             />
-           </div>
+           {/* Logo removed to start immediately with the opening effect */}
         </div>
       )}
 
@@ -252,12 +195,14 @@ export default function HomePage() {
         /* Responsive Homepage Styles */
         @media (max-width: 1024px) {
           .hero-content { padding: 0 5vw !important; }
-          .hero-logo-wrapper { height: 60px !important; width: 240px !important; }
+          .hero-logo-wrapper { height: 90px !important; width: 340px !important; }
+          .hero-contrast-strip { height: 110px !important; }
           .homepage-section { padding: 80px 24px !important; }
         }
         @media (max-width: 768px) {
           .homepage-section { padding: 60px 20px !important; }
-          .hero-logo-wrapper { height: 50px !important; width: 200px !important; }
+          .hero-logo-wrapper { height: 70px !important; width: 260px !important; }
+          .hero-contrast-strip { height: 85px !important; }
           .experience-grid { grid-template-columns: 1fr !important; }
           .experience-card { height: 380px !important; }
         }
@@ -333,15 +278,32 @@ export default function HomePage() {
               marginBottom: "40px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              width: "100%",
+              position: "relative"
             }}
           >
+            {/* The White Contrast Strip */}
+            <div 
+              className="hero-contrast-strip"
+              style={{
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "100vw",
+                top: "-10px",
+                height: "140px",
+                background: "rgba(255, 255, 255, 0.18)",
+                backdropFilter: "blur(12px)",
+                zIndex: -1
+              }} 
+            />
             <div
               className="hero-logo-wrapper"
               style={{
-                height: "80px",
-                width: "300px",
-                background: T.wine,
+                height: "120px",
+                width: "450px",
+                background: "#9B2335",
                 WebkitMaskImage: `url('${logoUrl}')`,
                 WebkitMaskSize: "contain",
                 WebkitMaskRepeat: "no-repeat",
@@ -356,7 +318,7 @@ export default function HomePage() {
                   drop-shadow(-2px 0 0 white) 
                   drop-shadow(0 2px 0 white) 
                   drop-shadow(0 -2px 0 white) 
-                  drop-shadow(0 10px 20px rgba(0,0,0,0.3))
+                  drop-shadow(0 12px 24px rgba(0,0,0,0.4))
                 `
               }} 
             />
@@ -692,73 +654,85 @@ export default function HomePage() {
         className="homepage-section"
         style={{
           background: T.editorialGrey,
-          padding: "100px 56px",
+          padding: "120px 56px",
           position: "relative",
           overflow: "hidden",
+          textAlign: "center"
         }}
       >
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(ellipse 60% 60% at 80% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+            background: `radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
           }}
         />
         <div
           style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}
         >
-          <div style={{ maxWidth: "600px" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <Reveal>
-              <Hr w="32px" c={T.wine} style={{ marginBottom: "24px" }} />
+              <img 
+                src="/images/logos/vinaio-spain.svg" 
+                alt="Vinaio Spain" 
+                style={{ height: "100px", marginBottom: "40px", filter: "brightness(0.9)" }} 
+              />
+              <Hr w="40px" c={T.wine} style={{ margin: "0 auto 32px" }} />
               <p
                 style={{
                   fontFamily: ff.b,
-                  fontSize: "10px",
-                  letterSpacing: "4px",
+                  fontSize: "11px",
+                  letterSpacing: "5px",
                   textTransform: "uppercase",
                   color: T.wine,
-                  marginBottom: "20px",
+                  marginBottom: "24px",
+                  fontWeight: 600
                 }}
               >
-                Vinaio Spain &amp; Europe
+                European Distribution Hub
               </p>
-                <h2
+              <h2
                 style={{
                   fontFamily: ff.h,
-                  fontSize: "clamp(36px, 5vw, 60px)",
+                  fontSize: "clamp(36px, 5vw, 64px)",
                   color: T.ink,
                   lineHeight: 1.1,
-                  marginBottom: "24px",
+                  marginBottom: "32px",
                 }}
               >
-                Your gateway to the US market
+                Your Gateway to Europe
               </h2>
-                <p
+              <p
                 style={{
                   fontFamily: ff.b,
-                  fontSize: "15px",
+                  fontSize: "17px",
                   color: "rgba(0,0,0,0.7)",
                   lineHeight: 1.8,
-                  marginBottom: "40px",
+                  marginBottom: "48px",
+                  maxWidth: "700px",
+                  margin: "0 auto 48px"
                 }}
               >
-                We serve as exclusive US importer for Spain and European craft
-                producers — handling TTB licensing, COLA registration,
-                warehousing, and 26-state distribution so you can focus on what
-                you do best.
+                Vinaio Spain is your strategic partner for European expansion. 
+                As a premier importer and distributor, we provide a direct corridor into 
+                the heart of Spain and Italy, managing complex logistics and market 
+                integration so your products can reach the most celebrated tables in Europe.
               </p>
-                <Link
+              <Link
                 href="/spain"
                 style={{
                   display: "inline-block",
                   fontFamily: ff.b,
-                  fontSize: "10.5px",
-                  letterSpacing: "3px",
+                  fontSize: "11px",
+                  letterSpacing: "4px",
                   textTransform: "uppercase",
-                  fontWeight: 600,
-                  color: T.wine,
-                  border: `1px solid ${T.wine}40`,
-                  padding: "14px 32px",
+                  fontWeight: 700,
+                  color: "white",
+                  background: T.wine,
+                  padding: "18px 48px",
+                  borderRadius: "4px",
+                  boxShadow: "0 10px 30px rgba(155, 35, 53, 0.2)",
+                  textDecoration: "none"
                 }}
               >
                 Explore Vinaio Spain →
@@ -800,7 +774,7 @@ export default function HomePage() {
           >
             {[
               { label: "Full Service Distributor", sub: "New York, New Jersey and Florida" },
-              { label: "26-State Distribution",   sub: "Self-distribution in NY, NJ & FL. Distributor network across 26 states." },
+              { label: "International Reach", sub: "Network across 26 US states, full distribution in Spain and Italy." },
               { label: "Curated Portfolio",       sub: "Over 100+ award winning world wide brands" },
               { label: "White Glove Delivery",    sub: "70 Refrigerated delivery trucks" },
             ].map((s, i) => (

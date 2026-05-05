@@ -8,18 +8,9 @@ export const metadata = {
 
 export default async function PortalLayout({ children }) {
   // Defence-in-depth auth check (middleware is the primary guard)
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase.auth.getUser();
-    const isLoginPage = false; // layout doesn't know the exact path; middleware handles redirect
-    if (!data?.user) {
-      // Only redirect if Supabase is actually configured
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      if (supabaseUrl) redirect("/portal/login");
-    }
-  } catch {
-    // Supabase not configured — allow render with mock data
-  }
+  // Auth check is primarily handled by middleware. 
+  // We allow layout to render so the PortalWelcome can be shown on /portal.
+  // Internal subpages are protected by middleware redirecting to /portal/login.
 
   return <>{children}</>;
 }

@@ -7,6 +7,7 @@ import AdminMediaManager from "@/components/AdminMediaManager";
 import AdminTeamManager from "@/components/AdminTeamManager";
 import AdminCustomerManager from "@/components/AdminCustomerManager";
 import AdminCatalogManager from "@/components/AdminCatalogManager";
+import AdminUserManager from "@/components/AdminUserManager";
 import AdminAnalytics from "@/components/AdminAnalytics";
 import Hr from "@/components/Hr";
 import { ALL_CATEGORIES, ORIGINS } from "@/data/products";
@@ -28,6 +29,7 @@ const PORTFOLIOS = [
   { id: "beer_low_alc",      label: "Beer & Low Alcohol" },
   { id: "kosher",            label: "Kosher" },
   { id: "intl_wines_spirits", label: "International Wines & Spirits" },
+  { id: "spain",             label: "Vinaio Spain & Italy" },
 ];
 
 const EMPTY_FORM = {
@@ -548,6 +550,7 @@ export default function AdminDashboard({ initialProducts, isLive }) {
         {activeTab === "team" && <AdminTeamManager />}
         {activeTab === "catalogs" && <AdminCatalogManager />}
         {activeTab === "analytics" && <AdminAnalytics />}
+        {activeTab === "admins" && <AdminUserManager />}
       </main>
 
       {/* ── Global Header Overlay ── */}

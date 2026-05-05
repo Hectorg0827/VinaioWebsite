@@ -13,6 +13,7 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
   const [lastMouse, setLastMouse] = useState({ x: 0, y: 0 });
 
   const [isTouch, setIsTouch] = useState(false);
+  const [hoveredSubRegion, setHoveredSubRegion] = useState(null);
   const svgRef = useRef(null);
   const isLight = theme === "light";
 
@@ -20,10 +21,44 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
     setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
+  // Map of sub-regions relative to country bounding box (0-1 percentages)
+  const SUB_REGIONS = {
+    "Spain": [
+      { name: "Rioja", rx: 0.55, ry: 0.25, grapes: ["Tempranillo", "Garnacha", "Viura"] },
+      { name: "Ribera del Duero", rx: 0.45, ry: 0.35, grapes: ["Tinto Fino (Tempranillo)"] },
+      { name: "Priorat", rx: 0.85, ry: 0.3, grapes: ["Garnacha", "Cariñena"] },
+      { name: "Rías Baixas", rx: 0.1, ry: 0.15, grapes: ["Albariño"] },
+      { name: "Andalucía (Jerez)", rx: 0.4, ry: 0.8, grapes: ["Palomino", "Pedro Ximénez"] }
+    ],
+    "France": [
+      { name: "Bordeaux", rx: 0.3, ry: 0.6, grapes: ["Cabernet Sauvignon", "Merlot"] },
+      { name: "Burgundy", rx: 0.65, ry: 0.4, grapes: ["Pinot Noir", "Chardonnay"] },
+      { name: "Champagne", rx: 0.6, ry: 0.2, grapes: ["Chardonnay", "Pinot Noir"] },
+      { name: "Rhône Valley", rx: 0.7, ry: 0.65, grapes: ["Syrah", "Grenache"] }
+    ],
+    "Italy": [
+      { name: "Tuscany", rx: 0.4, ry: 0.45, grapes: ["Sangiovese", "Vernaccia"] },
+      { name: "Piedmont", rx: 0.2, ry: 0.2, grapes: ["Nebbiolo", "Barbera"] },
+      { name: "Veneto", rx: 0.5, ry: 0.2, grapes: ["Glera", "Corvina"] },
+      { name: "Sicily", rx: 0.6, ry: 0.85, grapes: ["Nero d'Avola", "Etna Rosso"] },
+      { name: "Puglia", rx: 0.8, ry: 0.6, grapes: ["Primitivo", "Negroamaro"] }
+    ],
+    "South Africa": [
+      { name: "Stellenbosch", rx: 0.2, ry: 0.8, grapes: ["Cabernet Sauvignon", "Chenin Blanc"] },
+      { name: "Swartland", rx: 0.15, ry: 0.7, grapes: ["Syrah", "Chenin Blanc"] }
+    ],
+    "Argentina": [
+      { name: "Mendoza", rx: 0.3, ry: 0.4, grapes: ["Malbec", "Cabernet Franc"] },
+      { name: "Patagonia", rx: 0.4, ry: 0.7, grapes: ["Pinot Noir", "Malbec"] }
+    ]
+  };
+
+  const [countryBBox, setCountryBBox] = useState(null);
+
   // Vinaio sourcing regions (ISO ALPHA-2 or matching names)
   const sourcingRegions = [
     "Spain", "France", "Italy", "Portugal", "South Africa", 
-    "Argentina", "Chile", "Peru", "Colombia", "Dominican Rep."
+    "Argentina", "Chile", "Peru", "Colombia", "Uruguay", "Dominican Rep."
   ];
 
   const handleMouseMove = (e) => {
@@ -57,6 +92,34 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
   const resetMap = () => {
     setZoom(1);
     setOffset({ x: 0, y: 0 });
+    setCountryBBox(null);
+    onRegionSelect(null);
+  };
+
+  const handleCountryClick = (e, country) => {
+    if (onRegionSelect) onRegionSelect(country.name);
+    
+    // Zoom to country BBox
+    try {
+      const bbox = e.target.getBBox();
+      setCountryBBox(bbox);
+      
+      const padding = 30;
+      const scaleX = 900 / (bbox.width + padding * 2);
+      const scaleY = 600 / (bbox.height + padding * 2);
+      const newZoom = Math.min(scaleX, scaleY, 6); // Max zoom 6 for clarity
+      
+      const cx = bbox.x + bbox.width / 2;
+      const cy = bbox.y + bbox.height / 2;
+      
+      const newOffsetX = 450 - cx * newZoom;
+      const newOffsetY = 300 - cy * newZoom;
+      
+      setZoom(newZoom);
+      setOffset({ x: newOffsetX, y: newOffsetY });
+    } catch (err) {
+      console.warn("Could not calculate SVG BBox for zoom");
+    }
   };
 
   const getFormat = (country) => {
@@ -278,10 +341,55 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
                   cursor: "pointer"
                 }}
                 onMouseEnter={() => setHovered(country)}
-                onClick={() => onRegionSelect(country.name)}
+                onClick={(e) => handleCountryClick(e, country)}
               />
             );
           })}
+
+          {/* Render Sub-Regions if a country is selected and zoomed */}
+          {selectedRegion && countryBBox && SUB_REGIONS[selectedRegion] && (
+            <g>
+              {SUB_REGIONS[selectedRegion].map((sub, i) => {
+                const cx = countryBBox.x + countryBBox.width * sub.rx;
+                const cy = countryBBox.y + countryBBox.height * sub.ry;
+                const isHovered = hoveredSubRegion?.name === sub.name;
+                
+                return (
+                  <g key={i} 
+                    onMouseEnter={(e) => {
+                      e.stopPropagation();
+                      setHoveredSubRegion(sub);
+                    }}
+                    onMouseLeave={() => setHoveredSubRegion(null)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <circle 
+                      cx={cx} cy={cy} r={3 / zoom} 
+                      fill={isLight ? T.paper : T.ink} 
+                      stroke={T.gold} 
+                      strokeWidth={1.5 / zoom}
+                      style={{ transition: "all 0.3s", transformOrigin: `${cx}px ${cy}px`, transform: isHovered ? "scale(1.5)" : "scale(1)" }}
+                    />
+                    <text 
+                      x={cx} y={cy - (6 / zoom)} 
+                      textAnchor="middle" 
+                      fill={isLight ? T.ink : T.paper}
+                      fontSize={10 / zoom}
+                      fontFamily={ff.b}
+                      fontWeight="bold"
+                      style={{
+                        opacity: isHovered ? 1 : 0.7,
+                        textShadow: isLight ? "0 1px 3px rgba(255,255,255,0.8)" : "0 1px 3px rgba(0,0,0,0.8)",
+                        transition: "all 0.3s"
+                      }}
+                    >
+                      {sub.name}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          )}
         </svg>
       </div>
 
@@ -313,7 +421,18 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
             )}
           </div>
 
-          {activeKnowledge ? (
+          {hoveredSubRegion ? (
+            <div>
+              <div style={{ marginBottom: "10px" }}>
+                <p style={labelStyle}>Region Profile</p>
+                <p style={valueStyle}>{hoveredSubRegion.name}</p>
+              </div>
+              <div>
+                <p style={labelStyle}>Signature Grapes</p>
+                <p style={{ ...valueStyle, fontStyle: "italic", lineHeight: "1.4" }}>{hoveredSubRegion.grapes.join(", ")}</p>
+              </div>
+            </div>
+          ) : activeKnowledge ? (
             <div>
               <div style={{ marginBottom: "10px" }}>
                 <p style={labelStyle}>Notable Grapes</p>
@@ -323,7 +442,7 @@ export default function WineWorldMap({ onRegionSelect, selectedRegion, theme = "
                 <p style={labelStyle}>Terroir Profile</p>
                 <p style={{ ...valueStyle, fontStyle: "italic", lineHeight: "1.4" }}>"{activeKnowledge.terroir_vibe}"</p>
               </div>
-              <p style={{ fontSize: "10px", color: T.gold, marginTop: "12px", letterSpacing: "1px" }}>CLICK TO EXPLORE ESTATES</p>
+              <p style={{ fontSize: "10px", color: T.gold, marginTop: "12px", letterSpacing: "1px" }}>CLICK TO EXPLORE REGIONS & ESTATES</p>
             </div>
           ) : (
             <p style={{ fontSize: "12px", color: T.muted }}>No specific wine data available for this region yet.</p>

@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { cookies }      from "next/headers";
 import { getAdminToken } from "@/lib/admin/auth";
+import { authenticateAdmin, generateSessionToken } from "@/lib/admin/userAuth";
 
 // ── In-memory rate limiter ────────────────────────────────────────────────────
-// Limits to 10 attempts per IP per 15 minutes.
-// Note: works per serverless instance — sufficient for a low-traffic admin panel.
 const attempts = new Map(); // ip -> { count, resetAt }
 const MAX_ATTEMPTS   = 10;
 const WINDOW_MS      = 15 * 60 * 1000; // 15 minutes
@@ -32,12 +31,7 @@ function clearAttempts(ip) {
 
 // ── Handler ───────────────────────────────────────────────────────────────────
 export async function POST(req) {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) {
-    return NextResponse.json({ error: "Admin panel not configured." }, { status: 503 });
-  }
-
-  // Identify requester by IP (Vercel forwards real IP in x-forwarded-for)
+  // Identify requester by IP
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim()
     ?? req.headers.get("x-real-ip")
     ?? "unknown";
@@ -52,31 +46,40 @@ export async function POST(req) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const { password } = body;
+  const { username, password } = body;
 
-  console.log("[ADMIN AUTH] Attempt from IP:", ip);
-  console.log("[ADMIN AUTH] Password set in ENV:", adminPassword ? "YES (length " + adminPassword.length + ")" : "NO");
-  console.log("[ADMIN AUTH] Received password:", password ? "YES (length " + password.length + ")" : "NO");
+  let sessionToken = null;
 
-  if (typeof password !== "string" || password !== adminPassword) {
-    console.error("[ADMIN AUTH] Authentication failed.");
-    recordFailure(ip);
-    return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
+  // 1. Try Multi-user Auth (if username provided)
+  if (username && password) {
+    const user = await authenticateAdmin(username, password);
+    if (user) {
+      sessionToken = await generateSessionToken(user);
+    }
+  } 
+  
+  // 2. Fallback to Legacy Auth (if only password provided or user not found)
+  if (!sessionToken && password && !username) {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (adminPassword && password === adminPassword) {
+      sessionToken = await getAdminToken();
+    }
   }
 
-  console.log("[ADMIN AUTH] Authentication successful.");
+  if (!sessionToken) {
+    recordFailure(ip);
+    return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
+  }
 
-  // Correct password — clear rate limit and set HMAC token cookie
+  // Success — clear rate limit and set cookie
   clearAttempts(ip);
-  const token = await getAdminToken();
-
   const cookieStore = await cookies();
-  cookieStore.set("admin_auth", token, {
+  cookieStore.set("admin_auth", sessionToken, {
     httpOnly: true,
     secure:   process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge:   60 * 60 * 8, // 8 hours
-    path:     "/",         // accessible to all routes (API and UI)
+    path:     "/",
   });
 
   return NextResponse.json({ ok: true });

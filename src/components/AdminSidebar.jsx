@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { id: "team",      label: "Team Members",      icon: "👥" },
   { id: "catalogs",  label: "Customer Catalogs", icon: "📁" },
   { id: "analytics", label: "Portal Analytics",  icon: "📊" },
+  { id: "admins",    label: "Admin Access",      icon: "🔐" },
 ];
 
 export default function AdminSidebar({ activeTab, onTabChange, isLive }) {

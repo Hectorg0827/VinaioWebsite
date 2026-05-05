@@ -79,10 +79,14 @@ const RAW_PRODUCTS = [
   },
 ];
 
-export const PRODUCTS = RAW_PRODUCTS.map(p => ({
-  ...p,
-  portfolios: ["all"]
-}));
+export const PRODUCTS = RAW_PRODUCTS.map(p => {
+  const portfolios = ["all"];
+  // Logic to auto-tag for Spain/Europe portfolio
+  if (p.id === "fuerza" || p.id === "latuya" || p.origin === "Spain" || p.origin === "Italy") {
+    portfolios.push("spain");
+  }
+  return { ...p, portfolios };
+});
 
 // ─── All available categories ─────────────────────────────────────────────────
 // Edit this list to add new category filter options on the Portfolio page.

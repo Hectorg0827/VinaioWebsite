@@ -8,20 +8,21 @@ import Reveal from "@/components/Reveal";
 import SmartLink from "@/components/SmartLink";
 import GrapeLibrary from "@/components/GrapeLibrary/GrapeLibrary";
 import WineWorldMap from "@/components/GrapeLibrary/WineWorldMap";
+import ExperienceVideoSection from "@/components/ExperienceVideoSection";
 import wineKnowledge from "@/data/global-wine-knowledge.json";
 
 /* ── SVG Icons (replacing emojis with premium line art) ─────────────────── */
 const IconGlobe = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.paper} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.wine} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
 );
 const IconGrape = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.paper} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="3"/><circle cx="8" cy="13" r="3"/><circle cx="16" cy="13" r="3"/><circle cx="12" cy="18" r="3"/><path d="M12 2v3"/><path d="M10 3l4 2"/></svg>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.wine} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="3"/><circle cx="8" cy="13" r="3"/><circle cx="16" cy="13" r="3"/><circle cx="12" cy="18" r="3"/><path d="M12 2v3"/><path d="M10 3l4 2"/></svg>
 );
 const IconPlate = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.paper} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.wine} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
 );
 const IconCalendar = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.paper} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.wine} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
 );
 const IconWineGlass = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="M6 2l.93 6.97c.29 2.19 2.12 3.83 4.33 3.83h1.48c2.21 0 4.04-1.64 4.33-3.83L18 2"/></svg>
@@ -30,6 +31,7 @@ const IconWineGlass = () => (
 /* ── Navigation sections ─────────────────────────────────────────────────── */
 const SECTIONS = [
   { id: "journey",     label: "Journey" },
+  { id: "videos",      label: "Videos" },
   { id: "winemap",     label: "Map" },
   { id: "regions",     label: "Regions" },
   { id: "grapes",      label: "Grapes" },
@@ -108,15 +110,37 @@ const WINE_REGIONS = [
     mapColor: "#C62828"
   },
   {
-    name: "Peru & Colombia",
+    name: "Peru",
     iso: "pe",
-    terroir: "Emerging Andean terroirs. From the desert sands of Ica to the tropical highlands, these regions offer rare and unique expressions.",
-    climate: "Desert to Tropical",
-    grapes: ["Muscat", "Tannat", "Criolla"],
-    pairings: "Ceviche, ají de gallina, grilled fish",
+    terroir: "High-altitude Andean vineyards and coastal desert sands. Peru's viticultural history is one of the oldest in the Americas, producing wines with remarkable salinity and freshness.",
+    climate: "Arid Coastal / Andean",
+    grapes: ["Tannat", "Malbec", "Petit Verdot", "Quebranta"],
+    pairings: "Classic Ceviche, Lomo Saltado, anticuchos, grilled octopus",
     featured: ["Vinaio Selection"],
-    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
+    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800",
     mapColor: "#F9A825"
+  },
+  {
+    name: "Colombia",
+    iso: "co",
+    terroir: "Extreme tropical viticulture in the Boyacá highlands. Volcanic soils and high-altitude radiation create unique, concentrated expressions of traditional varietals in the tropics.",
+    climate: "Tropical / High Altitude",
+    grapes: ["Cabernet Sauvignon", "Sauvignon Blanc", "Muscat"],
+    pairings: "Bandeja Paisa, grilled trout, aged cheeses, arepas de choclo",
+    featured: ["Vinaio Selection"],
+    img: "https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#FFD600"
+  },
+  {
+    name: "Uruguay",
+    iso: "uy",
+    terroir: "Atlantic-influenced maritime terroir. The clay-rich soils of Canelones and the granite hills of Maldonado produce some of the finest Tannat and Albariño in the Southern Hemisphere.",
+    climate: "Humid Maritime",
+    grapes: ["Tannat", "Albariño", "Merlot", "Marselan"],
+    pairings: "Traditional Asado, slow-cooked lamb, Chivito, strong blue cheeses",
+    featured: ["Monte Toscanini"],
+    img: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&q=80&w=800",
+    mapColor: "#03A9F4"
   },
   {
     name: "Dominican Republic",
@@ -323,16 +347,19 @@ export default function WorldOfWinesPage() {
             </p>
           </Reveal>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px", alignItems: "stretch" }}>
             {[
               { icon: <IconGlobe />, label: "By Region", desc: "Spain, Italy, South Africa, France, South America", anchor: "regions" },
               { icon: <IconGrape />, label: "By Grape", desc: "Tempranillo, Albariño, Cabernet, Garnacha, Chenin Blanc", anchor: "grapes" },
               { icon: <IconPlate />, label: "By Pairing", desc: "Steak, seafood, pasta, cheese, celebration", anchor: "pairings" },
               { icon: <IconCalendar />, label: "By Occasion", desc: "Summer, dinner party, date night, beginner picks", anchor: "collections" },
             ].map((path, i) => (
-              <Reveal key={path.label} delay={i * 0.1}>
+              <Reveal key={path.label} delay={i * 0.1} style={{ height: "100%" }}>
                        <div style={{
-                        display: "block",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        height: "100%",
                         padding: "40px 24px",
                         background: T.bg,
                         border: `1px solid ${T.cream}`,
@@ -342,6 +369,7 @@ export default function WorldOfWinesPage() {
                         transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
                         cursor: "pointer",
                       }}
+                      onClick={() => document.getElementById(path.anchor)?.scrollIntoView({ behavior: "smooth", block: "start" })}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = T.wine; e.currentTarget.style.transform = "translateY(-6px)"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = T.cream; e.currentTarget.style.transform = "translateY(0)"; }}
                     >
@@ -354,6 +382,9 @@ export default function WorldOfWinesPage() {
           </div>
         </div>
       </section>
+
+      {/* 3.25 — VISUAL STORIES */}
+      <ExperienceVideoSection experience="wine" />
 
       {/* ══════════════════════════════════════════════════════════════════
           §3.5 — INTERACTIVE WINE MAP
@@ -404,7 +435,6 @@ export default function WorldOfWinesPage() {
                   // 1. Check if it's a Vinaio sourcing region
                   let region = WINE_REGIONS.find(r => 
                     r.name.toLowerCase() === name.toLowerCase() ||
-                    (r.name === "Peru & Colombia" && (name === "Peru" || name === "Colombia")) ||
                     (r.name === "Dominican Republic" && name === "Dominican Rep.")
                   );
                   
@@ -635,14 +665,14 @@ export default function WorldOfWinesPage() {
       {/* ══════════════════════════════════════════════════════════════════
           §5 — GRAPE LIBRARY
       ══════════════════════════════════════════════════════════════════ */}
-      <section id="grapes" style={{ padding: "120px 56px", background: T.bg }}>
+      <section id="grapes" style={{ padding: "120px 56px", background: T.ink }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <Reveal>
-            <Hr w="32px" c={T.wine} style={{ marginBottom: "28px" }} />
-            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.ink, marginBottom: "20px" }}>
+            <Hr w="32px" c={T.gold} style={{ marginBottom: "28px" }} />
+            <h2 style={{ fontFamily: ff.h, fontSize: "42px", color: T.paper, marginBottom: "20px" }}>
               The Grape Library
             </h2>
-            <p style={{ fontFamily: ff.b, fontSize: "15px", color: T.muted, maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
+            <p style={{ fontFamily: ff.b, fontSize: "15px", color: "rgba(255,255,255,0.7)", maxWidth: "600px", lineHeight: 1.8, marginBottom: "64px" }}>
               Every varietal tells a different story on the palate. Learn the character of the grapes behind our portfolio — and find your next favorite bottle.
             </p>
           </Reveal>

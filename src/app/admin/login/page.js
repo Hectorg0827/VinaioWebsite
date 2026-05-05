@@ -7,6 +7,7 @@ import Hr from "@/components/Hr";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,13 +19,14 @@ export default function AdminLoginPage() {
     const res = await fetch("/api/admin/auth", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ username, password }),
     });
     if (res.ok) {
       router.push("/admin");
       router.refresh();
     } else {
-      setError("Incorrect password.");
+      const data = await res.json();
+      setError(data.error || "Invalid credentials.");
     }
     setLoading(false);
   };
@@ -41,14 +43,25 @@ export default function AdminLoginPage() {
         <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "36px 32px" }}>
           <form onSubmit={submit}>
             <label style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, display: "block", marginBottom: "8px" }}>
-              Admin Password
+              Username
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Leave blank for legacy login"
+              style={{ width: "100%", padding: "13px 16px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", color: T.paper, fontFamily: ff.b, fontSize: "14px", outline: "none", boxSizing: "border-box", marginBottom: "20px" }}
+            />
+
+            <label style={{ fontFamily: ff.b, fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", color: T.warm, display: "block", marginBottom: "8px" }}>
+              Password
             </label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter admin password"
+              placeholder="Enter password"
               style={{ width: "100%", padding: "13px 16px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", color: T.paper, fontFamily: ff.b, fontSize: "14px", outline: "none", boxSizing: "border-box", marginBottom: "20px" }}
             />
             {error && <p style={{ fontFamily: ff.b, fontSize: "12px", color: T.red, marginBottom: "12px" }}>{error}</p>}
@@ -61,9 +74,6 @@ export default function AdminLoginPage() {
             </button>
           </form>
         </div>
-        <p style={{ fontFamily: ff.b, fontSize: "11px", color: T.warm, textAlign: "center", marginTop: "20px" }}>
-          Set <code style={{ color: T.gold }}>ADMIN_PASSWORD</code> in your environment variables.
-        </p>
       </div>
     </section>
   );

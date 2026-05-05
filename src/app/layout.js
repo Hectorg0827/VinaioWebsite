@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PageTransition from "@/components/PageTransition";
+import AgeGate from "@/components/AgeGate";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -70,6 +71,7 @@ export default function RootLayout({ children }) {
         <Suspense fallback={null}>
           <Analytics />
           <PageTransition />
+          <AgeGate />
         </Suspense>
         <Nav />
         <ErrorBoundary>
