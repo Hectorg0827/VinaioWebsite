@@ -115,7 +115,7 @@ export default function ExperienceVideoSection({ experience }) {
                       background: T.ink
                     }}>
                       <iframe
-                        src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1`}
+                        src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
                         title={v.title}
                         style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
