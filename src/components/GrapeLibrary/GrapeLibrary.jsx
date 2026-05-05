@@ -42,7 +42,9 @@ export default function GrapeLibrary({ selectedRegionName = null }) {
   const [localRegion, setLocalRegion] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeColor, setActiveColor] = useState("All");
+  const [activeRegion, setActiveRegion] = useState("All"); // New Region Filter
   const [selectedGrape, setSelectedGrape] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(10); // Pagination
 
   // Sync internal state with external prop (the map selection)
   useEffect(() => {
@@ -74,16 +76,26 @@ export default function GrapeLibrary({ selectedRegionName = null }) {
     const matchesSearch = g.name.toLowerCase().includes(searchQuery.toLowerCase());
     
     let matchesRegion = true;
+    // Map selection filter
     if (localRegion) {
       const mappedRegions = COUNTRY_REGION_MAP[localRegion] || [localRegion];
       const grapeRegions = g.regions || [];
-      // Pass if grape lists this country or one of its known sub-regions
       matchesRegion = grapeRegions.some(r => mappedRegions.includes(r) || r === localRegion);
+    } 
+    // Dropdown selection filter
+    else if (activeRegion !== "All") {
+      const grapeRegions = g.regions || [];
+      matchesRegion = grapeRegions.some(r => r.includes(activeRegion));
     }
     
     const matchesColor = activeColor === "All" || g.color === activeColor;
     return matchesSearch && matchesRegion && matchesColor;
   });
+
+  const displayedGrapes = filteredGrapes.slice(0, visibleCount);
+
+  // Extract unique regions from all grapes for the dropdown
+  const allRegions = Array.from(new Set(grapes.flatMap(g => g.regions || []))).sort();
 
   return (
     <div style={{ position: "relative" }}>
@@ -96,51 +108,80 @@ export default function GrapeLibrary({ selectedRegionName = null }) {
         gap: "24px", 
         marginBottom: "48px",
         padding: "32px",
-        background: T.paper,
+        background: "rgba(255,255,255,0.02)",
         borderRadius: "16px",
-        border: `1px solid ${T.cream}`
+        border: `1px solid rgba(255,255,255,0.1)`
       }}>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          {["All", "Red", "White", "Rosé"].map(color => (
-            <button
-              key={color}
-              onClick={() => setActiveColor(color)}
-              style={{
-                padding: "8px 20px",
-                background: activeColor === color ? T.wine : "transparent",
-                color: activeColor === color ? T.paper : T.muted,
-                border: `1px solid ${activeColor === color ? T.wine : T.cream}`,
-                borderRadius: "30px",
-                fontFamily: ff.b,
-                fontSize: "12px",
-                cursor: "pointer",
-                transition: "all 0.3s"
-              }}
-            >
-              {color}
-            </button>
-          ))}
+        <div style={{ display: "flex", gap: "16px", alignItems: "center", flexWrap: "wrap" }}>
+          {/* Color Filter */}
+          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            {["All", "Red", "White", "Rosé"].map(color => (
+              <button
+                key={color}
+                onClick={() => { setActiveColor(color); setVisibleCount(10); }}
+                style={{
+                  padding: "8px 20px",
+                  background: activeColor === color ? T.wine : "transparent",
+                  color: activeColor === color ? T.paper : "rgba(255,255,255,0.7)",
+                  border: `1px solid ${activeColor === color ? T.wine : "rgba(255,255,255,0.2)"}`,
+                  borderRadius: "30px",
+                  fontFamily: ff.b,
+                  fontSize: "12px",
+                  cursor: "pointer",
+                  transition: "all 0.3s"
+                }}
+              >
+                {color}
+              </button>
+            ))}
+          </div>
+
+          {/* Region Dropdown Filter */}
+          <select 
+            value={activeRegion}
+            onChange={(e) => { setActiveRegion(e.target.value); setLocalRegion(null); setVisibleCount(10); }}
+            style={{
+              padding: "10px 20px",
+              background: "rgba(0,0,0,0.2)",
+              color: "rgba(255,255,255,0.9)",
+              border: `1px solid rgba(255,255,255,0.2)`,
+              borderRadius: "30px",
+              fontFamily: ff.b,
+              fontSize: "12px",
+              outline: "none",
+              cursor: "pointer",
+              WebkitAppearance: "none",
+              MozAppearance: "none",
+              appearance: "none",
+              minWidth: "160px"
+            }}
+          >
+            <option value="All" style={{ color: T.ink }}>All Regions</option>
+            {allRegions.map(r => (
+              <option key={r} value={r} style={{ color: T.ink }}>{r}</option>
+            ))}
+          </select>
         </div>
 
-        <div style={{ position: "relative", width: "320px" }}>
+        <div style={{ position: "relative", width: "100%", maxWidth: "320px" }}>
           <input 
             type="text" 
             placeholder="Search varieties (e.g. Malbec)"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(10); }}
             style={{
               width: "100%",
               padding: "12px 20px 12px 44px",
-              background: T.bg,
-              border: `1px solid ${T.cream}`,
+              background: "rgba(0,0,0,0.3)",
+              border: `1px solid rgba(255,255,255,0.1)`,
               borderRadius: "8px",
               fontFamily: ff.b,
               fontSize: "14px",
               outline: "none",
-              color: T.ink
+              color: T.paper
             }}
           />
-          <svg style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)" }} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <svg style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)" }} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </div>
       </div>
 
@@ -179,16 +220,41 @@ export default function GrapeLibrary({ selectedRegionName = null }) {
         </div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "24px" }}>
-          {filteredGrapes.map((grape, i) => (
-            <Reveal key={grape.id} delay={i * 0.05}>
-              <GrapeCard grape={grape} onClick={setSelectedGrape} />
+          {displayedGrapes.map((grape, i) => (
+            <Reveal key={grape.id} delay={(i % 10) * 0.05}>
+              <GrapeCard grape={grape} onClick={setSelectedGrape} isDark={true} />
             </Reveal>
           ))}
         </div>
       )}
 
+      {!loading && filteredGrapes.length > visibleCount && (
+        <div style={{ textAlign: "center", marginTop: "64px" }}>
+          <button
+            onClick={() => setVisibleCount(prev => prev + 10)}
+            style={{
+              padding: "16px 40px",
+              background: "transparent",
+              color: T.gold,
+              border: `1px solid ${T.gold}`,
+              borderRadius: "30px",
+              fontFamily: ff.b,
+              fontSize: "13px",
+              letterSpacing: "2px",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "all 0.4s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = T.gold; e.currentTarget.style.color = T.ink; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = T.gold; }}
+          >
+            See More Varieties
+          </button>
+        </div>
+      )}
+
       {!loading && filteredGrapes.length === 0 && (
-        <div style={{ textAlign: "center", padding: "80px 0", color: T.muted, fontFamily: ff.b }}>
+        <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.6)", fontFamily: ff.b }}>
           No varieties found for {localRegion || "your selection"}.
           <br/>
           <button 

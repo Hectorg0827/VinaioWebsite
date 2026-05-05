@@ -238,6 +238,7 @@ function StickySubnav({ sections, activeSection }) {
 export default function HouseOfRumPage() {
   const [activeSection, setActiveSection] = useState("origins");
   const [showNav, setShowNav] = useState(false);
+  const [barrelModal, setBarrelModal] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -312,16 +313,18 @@ export default function HouseOfRumPage() {
               </span>
               <Hr w="40px" c={T.gold} />
             </div>
-            <h1 style={{
-              fontFamily: ff.h,
-              fontSize: "clamp(48px, 8vw, 100px)",
-              color: T.ink,
-              lineHeight: 1,
-              marginBottom: "32px",
-              fontWeight: 400
-            }}>
-              Vinaio House of Rum
-            </h1>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "32px" }}>
+              <img 
+                src="/images/experiences/house_of_rum_logo.png" 
+                alt="Vinaio House of Rum"
+                style={{
+                  maxWidth: "500px",
+                  width: "90%",
+                  height: "auto",
+                  filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.15))"
+                }}
+              />
+            </div>
             <p style={{
               fontFamily: ff.b,
               fontSize: "17px",
@@ -467,9 +470,39 @@ export default function HouseOfRumPage() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
             {[
-              { title: "American Oak", detail: "The workhorse barrel. Previously used for bourbon, it imparts vanilla, caramel, and coconut notes.", icon: "🪵" },
-              { title: "Tropical Aging", detail: "Caribbean heat causes 6-8% 'angel's share' per year — far more than temperate climates. Every year matters.", icon: "🌡️" },
-              { title: "Solera System", detail: "A fractional blending method where young rum is gradually married with older stock, creating extraordinary complexity.", icon: "⚗️" },
+              { 
+                title: "American Oak", 
+                detail: "The workhorse barrel. Previously used for bourbon, it imparts vanilla, caramel, and coconut notes.", 
+                icon: "🪵",
+                expandedDetail: "Ex-bourbon American Oak (Quercus alba) is the global standard for rum maturation. The tight grain and char level from its previous life impart rich lactones (coconut) and vanillins (vanilla). Because it previously held bourbon, the harsh tannins have already been extracted, allowing the rum to age smoothly without becoming overly astringent.",
+                stats: [
+                  { label: "Wood Origin", value: "Missouri / Kentucky, USA" },
+                  { label: "Key Flavors", value: "Vanilla, Caramel, Coconut, Baking Spice" },
+                  { label: "Char Level", value: "Typically #3 or #4 (Alligator Char)" }
+                ]
+              },
+              { 
+                title: "Tropical Aging", 
+                detail: "Caribbean heat causes 6-8% 'angel's share' per year — far more than temperate climates. Every year matters.", 
+                icon: "🌡️",
+                expandedDetail: "In the Caribbean, barrels breathe faster. High heat and humidity cause the pores of the oak to expand, accelerating the extraction of flavor compounds and the esterification process. A rum aged for 5 years in the Dominican Republic can extract as much oak character as a Scotch whisky aged for 15 years in temperate climates.",
+                stats: [
+                  { label: "Angel's Share", value: "6% - 8% Annually (vs 2% in Scotland)" },
+                  { label: "Maturation Speed", value: "Roughly 2.5x to 3x faster than temperate" },
+                  { label: "Profile Impact", value: "Intense, rapid flavor integration" }
+                ]
+              },
+              { 
+                title: "Solera System", 
+                detail: "A fractional blending method where young rum is gradually married with older stock, creating extraordinary complexity.", 
+                icon: "⚗️",
+                expandedDetail: "Originally developed for sherry, the Solera system stacks barrels in tiers (criaderas). As rum is drawn from the bottom tier (the solera) for bottling, it is replenished with slightly younger rum from the tier above. This creates a fractional blend that ensures absolute consistency and a cascading complexity where the 'mother' rum lives forever.",
+                stats: [
+                  { label: "Method", value: "Fractional Blending" },
+                  { label: "Age Statements", value: "Typically represents the oldest drop in the blend" },
+                  { label: "Benefit", value: "Unmatched consistency year over year" }
+                ]
+              },
             ].map((item, i) => (
               <Reveal key={item.title} delay={i * 0.1}>
                 <div style={{
@@ -479,8 +512,10 @@ export default function HouseOfRumPage() {
                   padding: "48px 32px",
                   transition: "all 0.3s ease",
                   height: "100%",
-                  textAlign: "center"
+                  textAlign: "center",
+                  cursor: "pointer"
                 }}
+                onClick={() => setBarrelModal(item)}
                 onMouseEnter={e => {
                   e.currentTarget.style.borderColor = T.gold;
                   e.currentTarget.style.background = "rgba(255,255,255,0.07)";
@@ -739,6 +774,60 @@ export default function HouseOfRumPage() {
           </div>
         </Reveal>
       </section>
+
+      {/* BARREL ROOM MODAL */}
+      {barrelModal && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 9999,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "rgba(0,0,0,0.8)",
+          backdropFilter: "blur(10px)",
+          padding: "20px"
+        }}
+        onClick={() => setBarrelModal(null)}
+        >
+          <div style={{
+            background: T.ink,
+            border: `1px solid ${T.gold}`,
+            borderRadius: "24px",
+            maxWidth: "700px",
+            width: "100%",
+            padding: "48px",
+            position: "relative",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
+          }}
+          onClick={e => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setBarrelModal(null)}
+              style={{ position: "absolute", top: "24px", right: "24px", background: "transparent", border: "none", color: "white", fontSize: "20px", cursor: "pointer", outline: "none" }}
+            >
+              ✕
+            </button>
+            <div style={{ fontSize: "48px", marginBottom: "24px", textAlign: "center" }}>{barrelModal.icon}</div>
+            <h3 style={{ fontFamily: ff.h, fontSize: "36px", color: T.gold, marginBottom: "24px", textAlign: "center" }}>{barrelModal.title}</h3>
+            <p style={{ fontFamily: ff.b, fontSize: "16px", color: "rgba(255,255,255,0.8)", lineHeight: 1.8, marginBottom: "40px", textAlign: "center" }}>
+              {barrelModal.expandedDetail}
+            </p>
+            <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: "16px", padding: "24px" }}>
+              <p style={{ fontFamily: ff.b, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: T.gold, marginBottom: "16px", textAlign: "center" }}>Technical Specs</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {barrelModal.stats.map(stat => (
+                  <div key={stat.label} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "8px" }}>
+                    <span style={{ fontFamily: ff.b, fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>{stat.label}</span>
+                    <span style={{ fontFamily: ff.b, fontSize: "13px", color: "white", fontWeight: 600, textAlign: "right" }}>{stat.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }

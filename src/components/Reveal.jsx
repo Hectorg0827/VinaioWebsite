@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Reveal({ children, delay = 0 }) {
+export default function Reveal({ children, delay = 0, style = {} }) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
 
@@ -35,7 +35,8 @@ export default function Reveal({ children, delay = 0 }) {
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)",
         transition: `opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
-        pointerEvents: "auto"
+        pointerEvents: "auto",
+        ...style
       }}
     >
       {children}
